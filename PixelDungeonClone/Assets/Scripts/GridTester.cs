@@ -11,7 +11,7 @@ public class GridTester : MonoBehaviour
     //private Grid<int> grid;
     private Pathfinding pathfinding;
 
-    private Player player;
+    private PlayerMovement player;
 
     public Tilemap ground;
 
@@ -19,7 +19,7 @@ public class GridTester : MonoBehaviour
     void Start()
     {
         pathfinding = new Pathfinding(40, 40, ground);
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<PlayerMovement>();
         //grid = new Grid<int>(width, height, 1, transform.position, () => 0);
     }
 

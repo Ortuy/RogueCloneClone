@@ -1,0 +1,128 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class PlayerMovement : MonoBehaviour
+{
+    private Rigidbody2D body;
+
+    public List<Vector2> path;
+
+    public float movementSpeed;
+
+    private int currentPathIndex;
+
+    private bool pathChangeQueued;
+
+    public static PlayerMovement instance;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if(instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+        
+        body = GetComponent<Rigidbody2D>();
+        path = null;
+    }
+    
+    // Update is called once per frame
+    void Update()
+    {
+        //DoPlayerTurn();
+    }
+
+    public void DoPlayerTurn()
+    {
+        /**
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (path == null)
+            {
+                path = Pathfinding.instance.FindPath(transform.position, GridTester.GetMouseWorldPosition());
+                currentPathIndex = 0;
+            }
+            else
+            {
+                pathChangeQueued = true;
+            }
+        }**/
+        MoveOnPath();        
+    }
+
+    public void QueueMovement(Vector2 target)
+    {
+        if (path == null)
+        {
+            path = Pathfinding.instance.FindPath(transform.position, target);
+            currentPathIndex = 0;
+        }
+        else
+        {
+            pathChangeQueued = true;
+        }
+    }
+
+    private void MoveOnPath()
+    {
+        if (path != null)
+        {
+            Vector2 targetPos = path[currentPathIndex];
+
+            if(Pathfinding.instance.FindEnemyOnTile(targetPos))
+            {
+                path = null;
+                currentPathIndex = 0;
+            }
+            else
+            {
+                if (Vector2.Distance(transform.position, targetPos) > 0.05f)
+                {
+                    Vector2 movementDir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
+
+                    body.velocity = movementDir * movementSpeed;
+                }
+                else
+                {
+                    transform.position = targetPos;
+                    if (pathChangeQueued)
+                    {
+                        path = Pathfinding.instance.FindPath(transform.position, GridTester.GetMouseWorldPosition());
+                        currentPathIndex = 0;
+                        pathChangeQueued = false;
+                    }
+                    else
+                    {
+                        currentPathIndex++;
+                        if (currentPathIndex >= path.Count)
+                        {
+                            StopMovement();
+                        }
+                    }
+                    if(currentPathIndex != 1)
+                    {
+                        TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+                    }                   
+                }
+            }            
+        }
+        else
+        {
+            body.velocity = Vector2.zero;
+        }
+    }
+
+    public void StopMovement()
+    {
+        path = null;
+        currentPathIndex = 0;
+        body.velocity = Vector2.zero;
+    }
+}

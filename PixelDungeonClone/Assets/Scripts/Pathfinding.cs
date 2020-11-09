@@ -36,8 +36,6 @@ public class Pathfinding
         }
     }
 
-
-
     public Grid<PathNode> GetGrid()
     {
         return grid;
@@ -192,5 +190,17 @@ public class Pathfinding
             }
         }
         return lowestFCostNode;
+    }
+
+    public bool FindEnemyOnTile(Vector2 target)
+    {
+        if (Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Enemies")))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }
