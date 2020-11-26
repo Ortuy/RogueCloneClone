@@ -8,62 +8,40 @@ public class PlayerActions : MonoBehaviour
 {
     private bool attackQueued;
 
-    private GameObject attackTarget;
+    private Enemy attackTarget;
 
     private Rigidbody2D body;
-
-    public static PlayerActions instance;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-
         body = GetComponent<Rigidbody2D>();
     }  
 
-    // Update is called once per frame
-    void Update()
-    {
-        //DoPlayerTurn();
-    }
-
     public void DoPlayerTurn()
     {
-        /**
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (Pathfinding.instance.FindEnemyOnTile(GridTester.GetMouseWorldPosition()))
-            {
-                attackQueued = true;
-                attackTarget = FindEnemy(GridTester.GetMouseWorldPosition()).gameObject;
-            }
-            else
-            {
-                attackQueued = false;
-                attackTarget = null;
-            }
-        }**/
-
+        //Attacking:
         if (attackTarget != null)
         {
             var distance = Vector2.Distance(transform.position, attackTarget.transform.position);
-            if (distance <= 1.5f && attackQueued && body.velocity == Vector2.zero)
+            if (distance <= 1.5f && attackQueued && body.velocity == Vector2.zero && Player.instance.actionState == ActionState.WAITING)
             {
-                Destroy(attackTarget);
-                PlayerMovement.instance.StopMovement();
-                attackTarget = null;
-            }
-
-            TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+                var baseDamage = Player.stats.GetRandomDamageValue();
+                StartCoroutine(Attack(attackTarget, baseDamage));            
+            }         
         }
+    }
+
+    IEnumerator Attack(Enemy target, int damage)
+    {
+        Player.movement.StopMovement();
+        Player.instance.actionState = ActionState.ACTIVE;
+        yield return new WaitForSeconds(0.5f);
+        target.TakeDamage(damage, Player.stats.getAccuracy(), transform.position);
+        attackQueued = false;
+        attackTarget = null;
+        Player.instance.actionState = ActionState.WAITING;
+        TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 
     public void QueueAttack(bool targetFound)
@@ -71,7 +49,7 @@ public class PlayerActions : MonoBehaviour
         if (targetFound)
         {
             attackQueued = true;
-            attackTarget = FindEnemy(GridTester.GetMouseWorldPosition()).gameObject;
+            attackTarget = FindEnemy(GridTester.GetMouseWorldPosition());
         }
         else
         {
@@ -80,11 +58,53 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    public Collider2D FindEnemy(Vector2 target)
+    public void Pass()
     {
-        var enemy = Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Enemies"));
+        if(TurnManager.instance.turnState == TurnState.PLAYER)
+        {
+            TurnManager.instance.SwitchTurn();
+        }
+    }
 
-        return enemy;
+    public void PickUpItem()
+    {
+        if (TurnManager.instance.turnState == TurnState.PLAYER)
+        {
+            ItemPickup itemPickup = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")).GetComponent<ItemPickup>();
+            GoldPickup goldPickup = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")).GetComponent<GoldPickup>();
+
+            if (itemPickup != null)
+            {
+                InventoryManager.instance.AddItem(itemPickup.itemInside, out bool itemDelivered);
+                if (itemDelivered)
+                {
+                    Destroy(itemPickup.gameObject);
+                }
+            }
+            if (goldPickup != null)
+            {
+                InventoryManager.instance.AddGold(goldPickup.amount);
+
+                Destroy(goldPickup.gameObject);
+            }
+            TurnManager.instance.SwitchTurn();
+            UIManager.instance.pickUpButton.gameObject.SetActive(false);
+        }        
+    }
+
+    public Enemy FindEnemy(Vector2 target)
+    {
+        var enemyCollider = Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Enemies"));
+
+        if(enemyCollider.TryGetComponent(out Enemy enemy))
+        {
+            return enemy;
+        }
+        else
+        {
+            return null;
+        }
+        
     }
 
     public List<Collider2D> FindEnemiesNearby(Vector2 target, float range)

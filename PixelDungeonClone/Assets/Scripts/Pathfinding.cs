@@ -203,4 +203,51 @@ public class Pathfinding
             return false;
         }
     }
+
+    public bool FindPlayerOnTile(Vector2 target)
+    {
+        if (new Vector2(Player.instance.transform.position.x, Player.instance.transform.position.y) == target)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    //A bit clunky
+    public bool CheckLineOfSight(Vector2 origin, Vector2 target)
+    {
+        grid.GetXY(origin, out int oX, out int oY);
+        grid.GetXY(target, out int tX, out int tY);
+
+        Vector2 originCell0 = new Vector2(oX + 0.1f, oY + 0.1f);
+        Vector2 originCell1 = new Vector2(oX + 0.9f, oY + 0.9f);
+        Vector2 originCell2 = new Vector2(oX + 0.9f, oY + 0.1f);
+        Vector2 originCell3 = new Vector2(oX + 0.1f, oY + 0.9f);
+        Vector2 targetCell = new Vector2(tX + 0.5f, tY + 0.5f);
+
+        var wallCheck0 = Physics2D.Raycast(originCell0, targetCell - originCell0, Vector2.Distance(originCell0, targetCell), LayerMask.GetMask("Walls"));
+        var wallCheck1 = Physics2D.Raycast(originCell1, targetCell - originCell1, Vector2.Distance(originCell1, targetCell), LayerMask.GetMask("Walls"));
+        var wallCheck2 = Physics2D.Raycast(originCell2, targetCell - originCell2, Vector2.Distance(originCell2, targetCell), LayerMask.GetMask("Walls"));
+        var wallCheck3 = Physics2D.Raycast(originCell3, targetCell - originCell3, Vector2.Distance(originCell3, targetCell), LayerMask.GetMask("Walls"));
+
+        /**
+        Debug.DrawLine(originCell0, targetCell, Color.red, 50);
+        Debug.DrawLine(originCell1, targetCell, Color.red, 50);
+        Debug.DrawLine(originCell2, targetCell, Color.red, 50);
+        Debug.DrawLine(originCell3, targetCell, Color.red, 50);
+        **/    
+
+        if (wallCheck0 && wallCheck1 && wallCheck2 && wallCheck3)
+        {
+            //Debug.Log("LoS: " + false);
+            return false;
+        }
+        else
+        {
+            return true;
+        }        
+    }
 }
