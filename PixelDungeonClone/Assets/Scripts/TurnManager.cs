@@ -10,9 +10,9 @@ public class TurnManager : MonoBehaviour
 
     public TurnState turnState = TurnState.PLAYER;
 
-    [SerializeField]
-    private Transform enemy;
-    private bool enemyMoveUp;
+    public List<Enemy> enemies;
+
+    private int currentActingEnemy;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +25,7 @@ public class TurnManager : MonoBehaviour
         {
             instance = this;
         }
+        SpawnEnemy(new Vector2(10.5f, 6.5f));
     }
 
     // Update is called once per frame
@@ -32,43 +33,64 @@ public class TurnManager : MonoBehaviour
     {
         if(turnState == TurnState.PLAYER)
         {
-            PlayerMovement.instance.DoPlayerTurn();
-            PlayerActions.instance.DoPlayerTurn();
+            Player.instance.DoPlayerTurn();
         }
         else
         {
-            EnemyTurnTest();
+            //Enemy turn handling
+            //In the future every enemy will have to wait for the one before to take its turn
+            Player.movement.StopMovement(false);
+
+            if(currentActingEnemy >= enemies.Count)
+            {
+                SwitchTurn();
+            }
+            else
+            {
+                enemies[currentActingEnemy].DoTurn();
+                /**
+                if (enemies[currentActingEnemy].actionState == ActionState.WAITING)
+                {
+                    enemies[currentActingEnemy].DoTurn();
+                }
+                **/
+            }
+
+            /**
+            for(int i = 0; i < enemies.Count; i++)
+            {
+                enemies[i].DoTurn();
+            }
+            SwitchTurn();
+            **/
         }
     }
 
-    //Placeholder enemy handling
-    //"Real" enemies will handle all that in their own scripts
-    //Like the player
-    public void EnemyTurnTest()
+    public void SpawnEnemy(Vector2 position)
     {
-        Debug.Log("EnemyTurn");
-        
-        if (enemyMoveUp)
+        GameObject enemyToSpawn = ObjectPooler.instance.GetNewPooledObject();
+        if(enemyToSpawn != null && enemyToSpawn.GetComponent<Enemy>() != null)
         {
-            enemy.position += Vector3.up;
+            enemyToSpawn.transform.position = position;
+            enemies.Add(enemyToSpawn.GetComponent<Enemy>());
+            enemyToSpawn.SetActive(true);
         }
-        else
-        {
-            enemy.position -= Vector3.up;
-        }
+    }
 
-        enemyMoveUp = !enemyMoveUp;
-        
-        SwitchTurn();
+    public void PassToNextEnemy()
+    {
+        currentActingEnemy++;
     }
 
     public void SwitchTurn()
     {
         turnState = (turnState == TurnState.PLAYER) ? TurnState.ENEMY : TurnState.PLAYER;
+        currentActingEnemy = 0;
     }
 
     public void SwitchTurn(TurnState turn)
     {
         turnState = turn;
+        currentActingEnemy = 0;
     }
 }

@@ -38,22 +38,22 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !MouseBlocker.mouseBlocked)
         {
             Vector2 mousePos = GetMouseWorldPosition();
             
 
             if(Pathfinding.instance.FindEnemyOnTile(mousePos))
             {
-                PlayerActions.instance.QueueAttack(true);
+                Player.actions.QueueAttack(true);
             }
             else
             {
                 Pathfinding.instance.GetGrid().GetXY(mousePos, out int x, out int y);
                 clickFX.transform.position = new Vector2(x + 0.5f, y + 0.5f);
                 clickFX.Play();
-                PlayerActions.instance.QueueAttack(false);
-                PlayerMovement.instance.QueueMovement(mousePos);
+                Player.actions.QueueAttack(false);
+                Player.movement.QueueMovement(mousePos);
             }
 
             /**
@@ -62,6 +62,14 @@ public class InputManager : MonoBehaviour
             pathfinding.GetGrid().GetXY(player.transform.position, out int playerX, out int playerY);
             List<PathNode> path = pathfinding.FindPath(playerX, playerY, x, y);  
             **/
+        }
+        if(Input.GetMouseButtonDown(1) && !MouseBlocker.mouseBlocked)
+        {
+            if(TurnManager.instance.turnState == TurnState.PLAYER)
+            {
+                TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+            }
+            //Debug.Log("LoS: " + Pathfinding.instance.CheckLineOfSight(Player.instance.transform.position, GetMouseWorldPosition()));
         }
     }
 

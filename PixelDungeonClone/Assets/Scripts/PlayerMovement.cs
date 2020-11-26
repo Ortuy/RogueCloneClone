@@ -10,16 +10,19 @@ public class PlayerMovement : MonoBehaviour
     public List<Vector2> path;
 
     public float movementSpeed;
-
+    
     private int currentPathIndex;
 
     private bool pathChangeQueued;
 
-    public static PlayerMovement instance;
+    public bool debugMode;
+
+    //public static PlayerMovement instance;
 
     // Start is called before the first frame update
     void Start()
     {
+        /**
         if(instance != null)
         {
             Destroy(gameObject);
@@ -27,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             instance = this;
-        }
+        }**/
         
         body = GetComponent<Rigidbody2D>();
         path = null;
@@ -62,6 +65,13 @@ public class PlayerMovement : MonoBehaviour
         if (path == null)
         {
             path = Pathfinding.instance.FindPath(transform.position, target);
+            if (path != null && debugMode)
+            {
+                for (int i = 0; i < path.Count - 1; i++)
+                {
+                    Debug.DrawLine(path[i], path[i + 1], Color.cyan, 1000);
+                }
+            }           
             currentPathIndex = 0;
         }
         else
@@ -78,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
 
             if(Pathfinding.instance.FindEnemyOnTile(targetPos))
             {
+                Debug.Log("Enemy!");
                 path = null;
                 currentPathIndex = 0;
             }
@@ -123,6 +134,17 @@ public class PlayerMovement : MonoBehaviour
     {
         path = null;
         currentPathIndex = 0;
+        body.velocity = Vector2.zero;
+    }
+
+    public void StopMovement(bool abandonPath)
+    {
+        if(abandonPath)
+        {
+            path = null;
+            currentPathIndex = 0;
+        }
+        
         body.velocity = Vector2.zero;
     }
 }
