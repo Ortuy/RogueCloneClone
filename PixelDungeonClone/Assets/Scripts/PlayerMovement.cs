@@ -114,6 +114,14 @@ public class PlayerMovement : MonoBehaviour
                         currentPathIndex++;
                         if (currentPathIndex >= path.Count)
                         {
+                            if(Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")) && !Physics2D.OverlapCircle(transform.position, 2f, LayerMask.GetMask("Enemies")))
+                            {
+                                Player.actions.QueueItemPickup();
+                            }
+                            else
+                            {
+                                UIManager.instance.pickUpButton.gameObject.SetActive(true);
+                            }
                             StopMovement();
                         }
                     }

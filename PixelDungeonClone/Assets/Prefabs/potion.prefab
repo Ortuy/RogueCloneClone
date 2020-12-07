@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 6458202566825076960}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 3.5, y: 3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -95,11 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a60e510cf0374d4ca1747cbbe088c33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Potion
+  itemInside: {fileID: 0}
   amount: 4
-  strengthRequired: 0
-  stackable: 1
-  requiresStrength: 0
 --- !u!58 &6458202566825076964
 CircleCollider2D:
   m_ObjectHideFlags: 0

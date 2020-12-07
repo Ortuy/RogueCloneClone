@@ -19,6 +19,10 @@ public class InputManager : MonoBehaviour
 
     public ParticleSystem clickFX;
 
+    public LevelGenerator temp;
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +35,7 @@ public class InputManager : MonoBehaviour
             instance = this;
         }
 
-        pathfinding = new Pathfinding(40, 40, ground);
+        //pathfinding = new Pathfinding(width, height, Vector3.zero, ground);
         player = FindObjectOfType<PlayerMovement>();
     }
 
@@ -50,7 +54,10 @@ public class InputManager : MonoBehaviour
             else
             {
                 Pathfinding.instance.GetGrid().GetXY(mousePos, out int x, out int y);
-                clickFX.transform.position = new Vector2(x + 0.5f, y + 0.5f);
+                Debug.Log("mouse pos: " + new Vector2(x, y));
+
+                Debug.Log("TEST: " + Pathfinding.instance.GetGrid().GetWorldPosition(x, y) + " = " + mousePos);
+                clickFX.transform.position = new Vector2(Pathfinding.instance.GetGrid().GetWorldPosition(x, y).x + 0.5f, Pathfinding.instance.GetGrid().GetWorldPosition(x, y).y + 0.5f);
                 clickFX.Play();
                 Player.actions.QueueAttack(false);
                 Player.movement.QueueMovement(mousePos);

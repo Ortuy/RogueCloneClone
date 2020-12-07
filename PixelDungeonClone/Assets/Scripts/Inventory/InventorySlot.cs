@@ -16,14 +16,14 @@ public class InventorySlot : MonoBehaviour
 
     public void UpdateItem(Item item)
     {
-        itemButton.interactable = true;       
+        itemButton.interactable = true;
 
         itemIcon.sprite = item.itemImage;
         
-        if(item.stackable && item.amount > 0)
+        if(item.stackable && item.amount > 1)
         {
             amountText.gameObject.SetActive(true);
-            amountText.text = "" + item.amount;
+            amountText.text = "x" + item.amount;
         }
         else
         {
@@ -39,6 +39,11 @@ public class InventorySlot : MonoBehaviour
         {
             requirementText.gameObject.SetActive(false);
         }
+    }
+
+    public bool IsEmpty()
+    {
+        return !itemButton.interactable;
     }
 
     public void ResetItem()

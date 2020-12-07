@@ -25,47 +25,62 @@ public class TurnManager : MonoBehaviour
         {
             instance = this;
         }
-        SpawnEnemy(new Vector2(10.5f, 6.5f));
+        /**
+        Enemy temp = SpawnManager.instance.SpawnEnemy(0, new Vector2(10.5f, 6.5f));
+        if(temp != null)
+        {
+            enemies.Add(temp);
+        }**/
+        //SpawnEnemy(new Vector2(10.5f, 6.5f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(turnState == TurnState.PLAYER)
+        if(Pathfinding.instance != null)
         {
-            Player.instance.DoPlayerTurn();
-        }
-        else
-        {
-            //Enemy turn handling
-            //In the future every enemy will have to wait for the one before to take its turn
-            Player.movement.StopMovement(false);
-
-            if(currentActingEnemy >= enemies.Count)
+            if (turnState == TurnState.PLAYER)
             {
-                SwitchTurn();
+                Player.instance.DoPlayerTurn();
             }
             else
             {
-                enemies[currentActingEnemy].DoTurn();
-                /**
-                if (enemies[currentActingEnemy].actionState == ActionState.WAITING)
+                Player.movement.StopMovement(false);
+
+                if (currentActingEnemy >= enemies.Count)
                 {
-                    enemies[currentActingEnemy].DoTurn();
+                    SwitchTurn();
                 }
+                else
+                {
+                    if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7)
+                    {
+                        enemies[currentActingEnemy].DoTurn();
+                    }
+                    else
+                    {
+                        PassToNextEnemy();
+                    }
+                    /**
+                    if (enemies[currentActingEnemy].actionState == ActionState.WAITING)
+                    {
+                        enemies[currentActingEnemy].DoTurn();
+                    }
+                    **/
+                }
+
+                /**
+                for(int i = 0; i < enemies.Count; i++)
+                {
+                    enemies[i].DoTurn();
+                }
+                SwitchTurn();
                 **/
             }
-
-            /**
-            for(int i = 0; i < enemies.Count; i++)
-            {
-                enemies[i].DoTurn();
-            }
-            SwitchTurn();
-            **/
-        }
+        }       
     }
 
+    /**
     public void SpawnEnemy(Vector2 position)
     {
         GameObject enemyToSpawn = ObjectPooler.instance.GetNewPooledObject();
@@ -76,6 +91,7 @@ public class TurnManager : MonoBehaviour
             enemyToSpawn.SetActive(true);
         }
     }
+    **/
 
     public void PassToNextEnemy()
     {
