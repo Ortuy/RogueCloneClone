@@ -5699,11 +5699,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fd11ca3c4f8036644b9ac43fc0734a45, type: 2}
   - {fileID: 11400000, guid: 9d74480aa199e1f49a6216442f4bc64f, type: 2}
   - {fileID: 11400000, guid: e2d5b242cb4aae847b7665a164140e59, type: 2}
-  itemPool:
-  - {fileID: 11400000, guid: 0c5ae139e1e283f4ebf10c2e61efef3b, type: 2}
-  - {fileID: 11400000, guid: 3d41994a85087de4cb2121e3c07576a5, type: 2}
-  - {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
-  itemWeightPool: 010000000100000003000000
+  dropTable: {fileID: 11400000, guid: 2f05a8a2608184e40b6429a932967676, type: 2}
   minItems: 4
   maxItems: 8
   minEnemies: 7
