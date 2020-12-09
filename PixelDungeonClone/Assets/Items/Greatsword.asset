@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Greatsword
   description: A long, heavy blade. It retains its deadly edge despite the obvious
-    wear.
+    wear. Overgrown with flakes of rust and dried blood, it has proven its worth
+    a thousand times. This particular greatsword deals 8-12 base damage.
   itemImage: {fileID: 21300000, guid: ab016cbb094f48f409b18153ca65354c, type: 3}
   amount: 1
   strengthRequired: 16
   stackable: 0
   requiresStrength: 1
   type: 1
-  statChangeMin: 8
-  statChangeMax: 12
+  statChangeMin: 10
+  statChangeMax: 14
+  effectID: 0

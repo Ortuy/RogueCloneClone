@@ -34,6 +34,13 @@ public class UIManager : MonoBehaviour
     public GameObject itemMenu;
     public Text itemMenuText, itemDescriptionText;
 
+    public GameObject pauseMenu;
+
+    public Image fadeImage;
+    private bool fadeIn, fadeOut;
+    public bool fadeInDone, fadeOutDone;
+    public float fadeLength;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +53,44 @@ public class UIManager : MonoBehaviour
             instance = this;
         }
         DontDestroyOnLoad(gameObject);
+        SceneManager.sceneLoaded += OnLevelLoaded;
+        StartFadeIn();
+    }
+
+    private void Update()
+    {
+        if(Input.GetButtonDown("Cancel") && TurnManager.instance.turnState == TurnState.PLAYER)
+        {
+            TogglePauseMenu();
+        }
+
+        if(fadeIn)
+        {
+            fadeImage.color = new Color(0, 0, 0, fadeImage.color.a - (Time.deltaTime / fadeLength));
+            if(fadeImage.color.a <= 0)
+            {
+                fadeImage.color = new Color(0, 0, 0, 0);
+                fadeIn = false;
+                fadeImage.gameObject.SetActive(false);
+                fadeInDone = true;
+                MouseBlocker.mouseBlocked = false;
+            }
+        }
+        else if (fadeOut)
+        {
+            fadeImage.color = new Color(0, 0, 0, fadeImage.color.a + (Time.deltaTime / fadeLength));
+            if (fadeImage.color.a >= 1)
+            {
+                fadeImage.color = new Color(0, 0, 0, 1);
+                fadeOut = false; ;
+                fadeOutDone = true;                
+            }
+        }
+    }
+
+    void OnLevelLoaded(Scene scene, LoadSceneMode mode)
+    {
+        StartFadeIn();
     }
 
     public void ToggleInventory()
@@ -129,5 +174,46 @@ public class UIManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void TogglePauseMenu()
+    {
+        if (pauseMenu.activeInHierarchy)
+        {
+            pauseMenu.SetActive(false);
+            Time.timeScale = 1;
+        }
+        else
+        {
+            pauseMenu.SetActive(true);
+            Time.timeScale = 0;
+            inventory.SetActive(false);
+            itemMenu.SetActive(false);
+            characterMenu.SetActive(false);
+        }
+    }
+
+    public void StartFadeIn()
+    {
+        fadeInDone = false;
+        fadeImage.gameObject.SetActive(true);
+        fadeIn = true;
+    }
+
+    public void StartFadeOut()
+    {
+        fadeOutDone = false;
+        fadeImage.gameObject.SetActive(true);
+        fadeOut = true;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnLevelLoaded;
     }
 }

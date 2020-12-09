@@ -135,8 +135,19 @@ public class InventoryManager : MonoBehaviour
         {
             if(inventoryItems[slotID].type == ItemType.POTION)
             {
-                SubtractItem(slotID);
-                Player.stats.Heal(5);
+                switch (inventoryItems[slotID].effectID)
+                {
+                    case 0:
+                        Player.stats.Heal(5);
+                        break;
+                    case 1:
+                        Player.stats.IncreaseStrength();
+                        break;
+                    case 2:
+                        Player.stats.LevelUp();
+                        break;
+                }
+                SubtractItem(slotID);               
             }
             else if (inventoryItems[slotID].type == ItemType.WEAPON && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
             {

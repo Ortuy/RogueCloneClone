@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65b26ba3e5a4f714dbdef37b2c75c316, type: 3}
+  m_Name: DentedBreastplate
+  m_EditorClassIdentifier: 
+  itemName: Dented Breastplate
+  description: "A beaten up, mangled steel breastplate. Wearing it might be far from
+    comfortable, but it\u2019s surely preferable to being far from safe. This particular
+    breastplate will absorb 4-8 points of damage per hit."
+  itemImage: {fileID: 21300000, guid: 37420d3e7417c1945ae54ce7fb81e035, type: 3}
+  amount: 1
+  strengthRequired: 15
+  stackable: 0
+  requiresStrength: 1
+  type: 2
+  statChangeMin: 4
+  statChangeMax: 8
+  effectID: 0

@@ -55,8 +55,10 @@ public class LevelGenerator : MonoBehaviour
     public Tile[] wallBottomTiles, wallTopTiles;
 
     [Header("Room Content")]
-    public Item[] itemPool;
-    public int[] itemWeightPool;
+    [SerializeField]
+    private ItemDropTable dropTable;
+    //public Item[] itemPool;
+    //public int[] itemWeightPool;
     public int minItems, maxItems, minEnemies, maxEnemies;
     public int[] enemyPool;
     public int[] enemyWeightPool;
@@ -178,17 +180,17 @@ public class LevelGenerator : MonoBehaviour
         int amount = Random.Range(minItems, maxItems + 1);
 
         int weightTotal = 0;
-        for(int i = 0; i < itemWeightPool.Length; i++)
+        for(int i = 0; i < dropTable.itemWeightPool.Length; i++)
         {
-            weightTotal += itemWeightPool[i];
+            weightTotal += dropTable.itemWeightPool[i];
         }
 
         List<Item> weightedPool = new List<Item>();
-        for(int i = 0; i < itemPool.Length; i++)
+        for(int i = 0; i < dropTable.itemPool.Length; i++)
         {
-            for(int j = 0; j < itemWeightPool[i]; j++)
+            for(int j = 0; j < dropTable.itemWeightPool[i]; j++)
             {
-                weightedPool.Add(itemPool[i]);
+                weightedPool.Add(dropTable.itemPool[i]);
             }
         }
 

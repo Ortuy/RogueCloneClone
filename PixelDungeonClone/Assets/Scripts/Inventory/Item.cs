@@ -21,6 +21,7 @@ public class Item : ScriptableObject
     public ItemType type = ItemType.NONE;
 
     public int statChangeMin, statChangeMax;
+    public int effectID;
 
     public Item(Item baseItem, int newAmount)
     {

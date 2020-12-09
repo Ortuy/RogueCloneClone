@@ -303,7 +303,13 @@ public class Enemy : MonoBehaviour
             hitFX.Play();
 
             var defence = Random.Range(minDefence, maxDefence + 1);
-            health -= (damage - defence);
+            var totaldmg = damage - defence;
+            if (totaldmg < 1)
+            {
+                totaldmg = 1;
+            }
+
+            health -= totaldmg;
             float value = (health / maxHealth);
             healthBar.value = value;
 

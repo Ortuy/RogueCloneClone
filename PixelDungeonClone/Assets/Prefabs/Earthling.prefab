@@ -4995,8 +4995,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   level: 1
   xpDrop: 2
-  health: 8
-  maxHealth: 8
+  health: 7
+  maxHealth: 7
   evasion: 1
   accuracy: 3
   minDefence: 3

@@ -57,6 +57,11 @@ public class PlayerStatistics : MonoBehaviour
         return strength;
     }
 
+    public void IncreaseStrength()
+    {
+        strength++;
+    }
+
     public void Heal(int healedHP)
     {
         health += healedHP;
@@ -89,7 +94,14 @@ public class PlayerStatistics : MonoBehaviour
             hitFX.Play();
 
             var defence = Random.Range(minDefence, maxDefence + 1);
-            health -= (damage - defence);
+
+            var totaldmg = damage - defence;
+            if(totaldmg < 1)
+            {
+                totaldmg = 1;
+            }
+
+            health -= totaldmg;
             float value = (health / maxHealth);
             UIManager.instance.playerHealthBar.value = value;
 
@@ -164,8 +176,6 @@ public class PlayerStatistics : MonoBehaviour
         health = maxHealth;
         evasion++;
         accuracy++;
-        //Placeholder mechanic
-        strength++;
         level++;
 
         float value = (health / maxHealth);
