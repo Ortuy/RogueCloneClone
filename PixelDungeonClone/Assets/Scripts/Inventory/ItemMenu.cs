@@ -44,4 +44,17 @@ public class ItemMenu : MonoBehaviour
             gameObject.SetActive(false);
         }        
     }
+
+    public void EquipItem()
+    {
+        if (TurnManager.instance.turnState == TurnState.PLAYER)
+        {
+            
+            InventoryManager.instance.EquipItem(slotID);
+            TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+
+
+            gameObject.SetActive(false);
+        }
+    }
 }

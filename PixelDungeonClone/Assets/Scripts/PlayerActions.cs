@@ -6,7 +6,7 @@ using System.Linq;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerActions : MonoBehaviour
 {
-    private bool attackQueued;
+    private bool attackQueued, pickUpQueued;
 
     private Enemy attackTarget;
 
@@ -30,6 +30,11 @@ public class PlayerActions : MonoBehaviour
                 StartCoroutine(Attack(attackTarget, baseDamage));            
             }         
         }
+        //Queued item pickups
+        if(pickUpQueued)
+        {
+            PickUpItem();
+        }
     }
 
     IEnumerator Attack(Enemy target, int damage)
@@ -37,7 +42,7 @@ public class PlayerActions : MonoBehaviour
         Player.movement.StopMovement();
         Player.instance.actionState = ActionState.ACTIVE;
         yield return new WaitForSeconds(0.5f);
-        target.TakeDamage(damage, Player.stats.getAccuracy(), transform.position);
+        target.TakeDamage(damage, Player.stats.GetAccuracy(), transform.position);
         attackQueued = false;
         attackTarget = null;
         Player.instance.actionState = ActionState.WAITING;
@@ -56,6 +61,11 @@ public class PlayerActions : MonoBehaviour
             attackQueued = false;
             attackTarget = null;
         }
+    }
+
+    public void QueueItemPickup()
+    {
+        pickUpQueued = true;
     }
 
     public void Pass()
@@ -88,7 +98,16 @@ public class PlayerActions : MonoBehaviour
                 Destroy(goldPickup.gameObject);
             }
             TurnManager.instance.SwitchTurn();
-            UIManager.instance.pickUpButton.gameObject.SetActive(false);
+            MouseBlocker.mouseBlocked = false;
+            pickUpQueued = false;
+            if(!Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")))
+            {
+                UIManager.instance.pickUpButton.gameObject.SetActive(false);
+            }      
+            else
+            {
+                UIManager.instance.pickUpButton.gameObject.SetActive(true);
+            }
         }        
     }
 

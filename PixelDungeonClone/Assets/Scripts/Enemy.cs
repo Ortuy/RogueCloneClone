@@ -14,7 +14,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private int level;
     [SerializeField]
-    private int strength;
+    private int xpDrop;
+    //[SerializeField]
+    //private int strength;
     [SerializeField]
     private float health, maxHealth;
     [SerializeField]
@@ -59,6 +61,13 @@ public class Enemy : MonoBehaviour
     private bool pathChangeQueued;
 
     private Vector2 targetPos;
+
+    [Header("Drops")]
+    [SerializeField]
+    private Vector2Int[] dropPercentRanges;
+
+    [SerializeField]
+    private Item[] drops;
 
     // Start is called before the first frame update
     void Start()
@@ -110,6 +119,7 @@ public class Enemy : MonoBehaviour
     private void DoSleepingTurn()
     {
         //If the condition is met, wake up and get alerted
+        Debug.Log(this);
         if(Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
             behaviourState = AIState.ALERTED;
@@ -201,7 +211,7 @@ public class Enemy : MonoBehaviour
 
             targetPos = path[currentPathIndex];
 
-            if (Pathfinding.instance.FindPlayerOnTile(targetPos))
+            if (Pathfinding.instance.FindPlayerOnTile(targetPos) || Pathfinding.instance.FindAnotherEnemyOnTile(path[currentPathIndex], this))
             {
                 Debug.Log("Player!");
                 path = null;
@@ -230,7 +240,7 @@ public class Enemy : MonoBehaviour
                     else
                     {
                         currentPathIndex++;
-                        if (currentPathIndex >= path.Count)
+                        if (currentPathIndex >= path.Count || Pathfinding.instance.FindEnemyOnTile(path[currentPathIndex]))
                         {
                             StopMovement();
                         }
@@ -300,12 +310,37 @@ public class Enemy : MonoBehaviour
             if (health <= 0)
             {
                 Debug.Log("ENEMY DEATH!");
-                TurnManager.instance.enemies.Remove(this);
-                Instantiate(deathFX, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().Play();
-                ResetState();
-                gameObject.SetActive(false);
+                Die();
             }
         }        
+    }
+
+    private void Die()
+    {
+        TurnManager.instance.enemies.Remove(this);
+        Instantiate(deathFX, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().Play();
+
+        int randomDrop = Random.Range(0, 100);
+        Debug.Log(randomDrop);
+        for (int i = 0; i < dropPercentRanges.Length && i < drops.Length; i++)
+        {
+            if (randomDrop >= dropPercentRanges[i].x && randomDrop <= dropPercentRanges[i].y)
+            {
+                ItemPickup temp = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
+                temp.SetItem(drops[i]);
+                break;
+            }
+        }
+        Player.stats.AddXP(xpDrop);
+
+        ResetState();
+
+        if(gameObject.CompareTag("SpiritJar"))
+        {
+            FindObjectOfType<SpawnManager>().SpawnEnemy(3, transform.position);
+        }
+
+        gameObject.SetActive(false);       
     }
 
     public void ResetState()

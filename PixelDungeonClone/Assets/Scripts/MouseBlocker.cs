@@ -32,6 +32,7 @@ public class MouseBlocker : MonoBehaviour
 
     public void EnterBlock()
     {
+        Debug.Log("ARSE");
         mouseBlocked = true;
     }
 

@@ -18,7 +18,7 @@ public class GridTester : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pathfinding = new Pathfinding(40, 40, ground);
+        //pathfinding = new Pathfinding(40, 40, ground);
         player = FindObjectOfType<PlayerMovement>();
         //grid = new Grid<int>(width, height, 1, transform.position, () => 0);
     }

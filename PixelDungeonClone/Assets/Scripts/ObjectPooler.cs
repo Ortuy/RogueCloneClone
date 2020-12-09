@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class ObjectPooler : MonoBehaviour
 {
-    //I'll need to make an enemy manager script to hold pools for all enemy types
-    public static ObjectPooler instance;
-
     private List<GameObject> pooledObjects;
     [SerializeField]
     private GameObject objectToPool;
@@ -14,17 +11,8 @@ public class ObjectPooler : MonoBehaviour
     private int amountToPool;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        if (instance != null)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            instance = this;
-        }
-
         pooledObjects = new List<GameObject>();
         for(int i = 0; i < amountToPool; i++)
         {

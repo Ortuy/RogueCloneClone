@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     public Image itemIcon;
+    public Image backgroundIcon;
     public Button itemButton;
     public Text amountText, requirementText;
 
@@ -16,14 +17,19 @@ public class InventorySlot : MonoBehaviour
 
     public void UpdateItem(Item item)
     {
-        itemButton.interactable = true;       
+        if(backgroundIcon != null)
+        {
+            backgroundIcon.gameObject.SetActive(false);
+        }      
+
+        itemButton.interactable = true;
 
         itemIcon.sprite = item.itemImage;
         
-        if(item.stackable && item.amount > 0)
+        if(item.stackable && item.amount > 1)
         {
             amountText.gameObject.SetActive(true);
-            amountText.text = "" + item.amount;
+            amountText.text = "x" + item.amount;
         }
         else
         {
@@ -41,11 +47,20 @@ public class InventorySlot : MonoBehaviour
         }
     }
 
+    public bool IsEmpty()
+    {
+        return !itemButton.interactable;
+    }
+
     public void ResetItem()
     {
         itemIcon.sprite = UIManager.instance.nullSprite;
         itemButton.interactable = false;
         amountText.gameObject.SetActive(false);
         requirementText.gameObject.SetActive(false);
+        if (backgroundIcon != null)
+        {
+            backgroundIcon.gameObject.SetActive(true);
+        }
     }
 }

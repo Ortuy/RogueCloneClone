@@ -9,6 +9,11 @@ public class PlayerStatistics : MonoBehaviour
     [Header("Stats")]
     [SerializeField]
     private int level;
+
+    [SerializeField]
+    private int xp;
+    private int[] xpRequired;
+
     [SerializeField]
     private int strength;
     [SerializeField]
@@ -17,11 +22,14 @@ public class PlayerStatistics : MonoBehaviour
     private float evasion;
     [SerializeField]
     private float accuracy;
+
     [SerializeField]
-    private int minDefence, maxDefence;
+    private int minDefBase, maxDefBase, minDmgBase, maxDmgBase;
+
+    //Minimum and maximum defence. INCLUSIVE
+    public int minDefence, maxDefence;
     //Minimum and maximum damage dealt. INCLUSIVE
-    [SerializeField]
-    private int minBaseDamage, maxBaseDamage;
+    public int minBaseDamage, maxBaseDamage;
 
     [SerializeField]
     private ParticleSystem hitFX;
@@ -29,15 +37,12 @@ public class PlayerStatistics : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        /**
-        if (instance != null)
+        xpRequired = new int[50];
+        for(int i = 0; i < xpRequired.Length; i++)
         {
-            Destroy(gameObject);
+            xpRequired[i] = 10 + 5 * i;
         }
-        else
-        {
-            instance = this;
-        }**/
+
         health = maxHealth;
     }
 
@@ -47,8 +52,25 @@ public class PlayerStatistics : MonoBehaviour
         
     }
 
+    public int GetStrength()
+    {
+        return strength;
+    }
+
+    public void Heal(int healedHP)
+    {
+        health += healedHP;
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        float value = (health / maxHealth);
+        UIManager.instance.playerHealthBar.value = value;
+    }
+
     public void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
     {
+        
         //Evasion chance
         int evasionPercent = Mathf.FloorToInt(((evasion - attackerAccuracy) / (evasion + 10)) * 100);
         Debug.Log("Evasion chacne: " + evasionPercent + "%");
@@ -73,8 +95,9 @@ public class PlayerStatistics : MonoBehaviour
 
             if (health <= 0)
             {
+                UIManager.instance.ToggleDeathScreen();
                 Debug.LogError("DEATH!");
-                Destroy(gameObject);
+                gameObject.SetActive(false);
             }
         }
     }
@@ -89,8 +112,75 @@ public class PlayerStatistics : MonoBehaviour
         return Random.Range(Player.stats.minDefence, Player.stats.maxDefence + 1);
     }
 
-    public float getAccuracy()
+    public float GetAccuracy()
     {
         return accuracy;
+    }
+
+    public float GetEvasion()
+    {
+        return evasion;
+    }
+
+    public int GetLevel()
+    {
+        return level;
+    }
+
+    public int GetCurrentXP()
+    {
+        return xp;
+    }
+
+    public int GetRequiredXP()
+    {
+        return xpRequired[level - 1];
+    }
+
+    public float GetHealth()
+    {
+        return health;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
+
+    public void AddXP(int xpToAdd)
+    {
+        xp += xpToAdd;
+        if(xp >= xpRequired[level - 1])
+        {
+            xp -= xpRequired[level - 1];
+            LevelUp();            
+        }
+    }
+
+    public void LevelUp()
+    {
+        Debug.Log("Level up!!");
+        maxHealth += 5;
+        health = maxHealth;
+        evasion++;
+        accuracy++;
+        //Placeholder mechanic
+        strength++;
+        level++;
+
+        float value = (health / maxHealth);
+        UIManager.instance.playerHealthBar.value = value;
+    }
+
+    public void ResetDefence()
+    {
+        minDefence = minDefBase;
+        maxDefence = maxDefBase;
+    }
+
+    public void ResetDamage()
+    {
+        minBaseDamage = minDmgBase;
+        maxBaseDamage = maxDmgBase;
     }
 }

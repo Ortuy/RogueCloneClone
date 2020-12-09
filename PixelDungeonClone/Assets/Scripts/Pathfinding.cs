@@ -16,7 +16,7 @@ public class Pathfinding
     private List<PathNode> closedList;
 
     private Tilemap walkableGround;
-
+    /**
     public Pathfinding(int width, int height, Tilemap tilemap)
     {
         instance = this;
@@ -35,6 +35,43 @@ public class Pathfinding
             }
         }
     }
+    **/
+    public Pathfinding(int width, int height, Vector3 origin, Tilemap tilemap)
+    {
+        instance = this;
+        grid = new Grid<PathNode>(width, height, 1f, origin, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        walkableGround = tilemap;
+
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++)
+            {
+                PathNode tempNode = grid.GetGridObject(x, y);
+                if (walkableGround.GetTile(new Vector3Int(x + Mathf.FloorToInt(origin.x), tempNode.y + Mathf.FloorToInt(origin.y), 0)))
+                {
+                    tempNode.walkable = true;
+                }
+            }
+        }
+    }
+
+    public void CreateGrid(int width, int height, Vector3 origin, Tilemap ground)
+    {
+        grid = new Grid<PathNode>(width, height, 1f, origin, (Grid<PathNode> g, int x, int y) => new PathNode(g, x, y));
+        walkableGround = ground;
+
+        for (int x = 0; x < grid.GetWidth(); x++)
+        {
+            for (int y = 0; y < grid.GetHeight(); y++)
+            {
+                PathNode tempNode = grid.GetGridObject(x, y);
+                if (walkableGround.GetTile(new Vector3Int(x, y, 0)))
+                {
+                    tempNode.walkable = true;
+                }
+            }
+        }
+    }
 
     public Grid<PathNode> GetGrid()
     {
@@ -46,6 +83,11 @@ public class Pathfinding
         grid.GetXY(startWorldPos, out int startX, out int startY);
         grid.GetXY(endWorldPos, out int endX, out int endY);
 
+        //float startX = startWorldPos.x;
+        //float startY = startWorldPos.y;
+        //float endX = endWorldPos.x;
+        //float endY = endWorldPos.y;        
+
         List<PathNode> path = FindPath(startX, startY, endX, endY);
         if(path == null)
         {
@@ -56,7 +98,8 @@ public class Pathfinding
             List<Vector2> vectorPath = new List<Vector2>();
             foreach (PathNode node in path)
             {
-                vectorPath.Add(new Vector2(node.x, node.y) * grid.GetCellSize() + Vector2.one * grid.GetCellSize() * 0.5f);
+                vectorPath.Add(new Vector2(node.x, node.y) * grid.GetCellSize() + GetGrid().GetOrigin() + Vector2.one * grid.GetCellSize() * 0.5f);
+                Debug.Log("Path node: " + vectorPath[vectorPath.Count - 1].x + "," + vectorPath[vectorPath.Count - 1].y);
             }
             return vectorPath;
         }
@@ -65,7 +108,9 @@ public class Pathfinding
     public List<PathNode> FindPath(int startX, int startY, int endX, int endY)
     {
         PathNode startNode = grid.GetGridObject(startX, startY);
+        Debug.Log("Start node: " + startNode.x + "," + startNode.y);
         PathNode endNode = grid.GetGridObject(endX, endY);
+        Debug.Log("End node: " + endNode.x + "," + endNode.y);
         openList = new List<PathNode>() { startNode };
         closedList = new List<PathNode>();
 
@@ -204,6 +249,26 @@ public class Pathfinding
         }
     }
 
+    public bool FindAnotherEnemyOnTile(Vector2 target, Enemy notTarget)
+    {
+        var temp = Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Enemies"));
+        if (temp != null)
+        {
+            if(temp.GetComponent<Enemy>() != notTarget)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool FindPlayerOnTile(Vector2 target)
     {
         if (new Vector2(Player.instance.transform.position.x, Player.instance.transform.position.y) == target)
@@ -220,25 +285,27 @@ public class Pathfinding
     public bool CheckLineOfSight(Vector2 origin, Vector2 target)
     {
         grid.GetXY(origin, out int oX, out int oY);
+        Vector2 oCell = grid.GetWorldPosition(oX, oY);
         grid.GetXY(target, out int tX, out int tY);
+        Vector2 tCell = grid.GetWorldPosition(tX, tY);
 
-        Vector2 originCell0 = new Vector2(oX + 0.1f, oY + 0.1f);
-        Vector2 originCell1 = new Vector2(oX + 0.9f, oY + 0.9f);
-        Vector2 originCell2 = new Vector2(oX + 0.9f, oY + 0.1f);
-        Vector2 originCell3 = new Vector2(oX + 0.1f, oY + 0.9f);
-        Vector2 targetCell = new Vector2(tX + 0.5f, tY + 0.5f);
+        Vector2 originCell0 = new Vector2(oCell.x + 0.1f, oCell.y + 0.1f);
+        Vector2 originCell1 = new Vector2(oCell.x + 0.9f, oCell.y + 0.9f);
+        Vector2 originCell2 = new Vector2(oCell.x + 0.9f, oCell.y + 0.1f);
+        Vector2 originCell3 = new Vector2(oCell.x + 0.1f, oCell.y + 0.9f);
+        Vector2 targetCell = new Vector2(tCell.x + 0.5f, tCell.y + 0.5f);
 
         var wallCheck0 = Physics2D.Raycast(originCell0, targetCell - originCell0, Vector2.Distance(originCell0, targetCell), LayerMask.GetMask("Walls"));
         var wallCheck1 = Physics2D.Raycast(originCell1, targetCell - originCell1, Vector2.Distance(originCell1, targetCell), LayerMask.GetMask("Walls"));
         var wallCheck2 = Physics2D.Raycast(originCell2, targetCell - originCell2, Vector2.Distance(originCell2, targetCell), LayerMask.GetMask("Walls"));
         var wallCheck3 = Physics2D.Raycast(originCell3, targetCell - originCell3, Vector2.Distance(originCell3, targetCell), LayerMask.GetMask("Walls"));
 
-        /**
+        
         Debug.DrawLine(originCell0, targetCell, Color.red, 50);
         Debug.DrawLine(originCell1, targetCell, Color.red, 50);
         Debug.DrawLine(originCell2, targetCell, Color.red, 50);
         Debug.DrawLine(originCell3, targetCell, Color.red, 50);
-        **/    
+          
 
         if (wallCheck0 && wallCheck1 && wallCheck2 && wallCheck3)
         {

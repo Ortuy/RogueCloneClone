@@ -23,13 +23,15 @@ public class Grid<TGridObject>
         width = gridWidth;
         height = gridHeight;
         cellSize = gridCellSize;
+        originPos = origin;
+
+        Debug.Log(originPos);
+        Debug.Log(origin);
 
         gridArray = new TGridObject[width, height];
         debugTextArray = new TextMesh[width, height];
 
-        Vector2 cellOffset = new Vector2(cellSize, cellSize) * 0.5f;
-
-        originPos = origin;
+        Vector2 cellOffset = new Vector2(cellSize, cellSize) * 0.5f;       
 
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
@@ -44,13 +46,13 @@ public class Grid<TGridObject>
             for(int y = 0; y < gridArray.GetLength(1); y++)
             {
                 //debugTextArray[x, y] = CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + cellOffset, 5, Color.cyan, TextAnchor.MiddleCenter, TextAlignment.Center, 0);
-                //Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
-                //Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
+                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), Color.white, 100f);
+                Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), Color.white, 100f);
             }
             
         }
-        //Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
-        //Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
+        Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
+        Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
     }
 
     public void SetCellMessage(Vector2 worldPos, string message)
@@ -65,7 +67,12 @@ public class Grid<TGridObject>
         debugTextArray[x, y].text = message;       
     }
 
-    private Vector2 GetWorldPosition(int x, int y)
+    public Vector2 GetOrigin()
+    {
+        return originPos;
+    }
+
+    public Vector2 GetWorldPosition(int x, int y)
     {
         return new Vector2(x, y) * cellSize + originPos;
     }
