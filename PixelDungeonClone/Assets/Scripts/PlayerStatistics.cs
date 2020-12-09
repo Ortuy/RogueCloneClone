@@ -57,8 +57,20 @@ public class PlayerStatistics : MonoBehaviour
         return strength;
     }
 
+    public void Heal(int healedHP)
+    {
+        health += healedHP;
+        if(health > maxHealth)
+        {
+            health = maxHealth;
+        }
+        float value = (health / maxHealth);
+        UIManager.instance.playerHealthBar.value = value;
+    }
+
     public void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
     {
+        
         //Evasion chance
         int evasionPercent = Mathf.FloorToInt(((evasion - attackerAccuracy) / (evasion + 10)) * 100);
         Debug.Log("Evasion chacne: " + evasionPercent + "%");
@@ -149,9 +161,11 @@ public class PlayerStatistics : MonoBehaviour
     {
         Debug.Log("Level up!!");
         maxHealth += 5;
-        health += 5;
+        health = maxHealth;
         evasion++;
         accuracy++;
+        //Placeholder mechanic
+        strength++;
         level++;
 
         float value = (health / maxHealth);

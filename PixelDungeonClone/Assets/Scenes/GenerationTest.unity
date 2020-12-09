@@ -5601,6 +5601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 11
   startWithRandomSeed: 1
+  floorID: 0
   minRoomSize: 5
   maxRoomSize: 10
   minRoomClusterAmount: 2

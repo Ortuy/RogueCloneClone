@@ -11,7 +11,7 @@ public class ObjectPooler : MonoBehaviour
     private int amountToPool;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         pooledObjects = new List<GameObject>();
         for(int i = 0; i < amountToPool; i++)

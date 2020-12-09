@@ -53,7 +53,7 @@ public class TurnManager : MonoBehaviour
                 }
                 else
                 {
-                    if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7)
+                    if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0)
                     {
                         enemies[currentActingEnemy].DoTurn();
                     }

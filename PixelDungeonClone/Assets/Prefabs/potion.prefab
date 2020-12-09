@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemInside: {fileID: 0}
-  amount: 4
+  amount: 1
 --- !u!58 &6458202566825076964
 CircleCollider2D:
   m_ObjectHideFlags: 0

@@ -34,6 +34,10 @@ public class LevelGenerator : MonoBehaviour
 
     private Pathfinding pathfinding;
 
+    public int floorID;
+
+    public FloorExit exit;
+
     [Header("Generation Values")]
     public int minRoomSize;
     public int maxRoomSize;
@@ -45,6 +49,7 @@ public class LevelGenerator : MonoBehaviour
     [Header("Tilemaps")]
     public Tilemap ground;
     public Tilemap walls0, walls1;
+    public Tilemap checkerboard;
     public Tile groundTileBase;
     public Tile wallTileBase;
     public Tile[] wallBottomTiles, wallTopTiles;
@@ -147,6 +152,25 @@ public class LevelGenerator : MonoBehaviour
         Debug.Log(minCorner.x + " " + minCorner.y);
         Debug.Log(maxCorner.x + " " + maxCorner.y);
         pathfinding = new Pathfinding(width, height, new Vector3(minCorner.x, minCorner.y), ground);
+
+        float currentMaxDistance = 0;
+        int currentCandidateRoom = 1;
+
+        for (int i = 1; i < rooms.Count; i++)
+        {
+            float distance = Vector2Int.Distance(rooms[0].centerPoint, rooms[i].centerPoint);
+            if (distance > currentMaxDistance)
+            {
+                currentMaxDistance = distance;
+                currentCandidateRoom = i;
+            }
+        }
+
+        Debug.LogWarning("Exit in room " + currentCandidateRoom);
+
+        int rX = Random.Range(rooms[currentCandidateRoom].minCorner.x, rooms[currentCandidateRoom].maxCorner.x);
+        int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y, rooms[currentCandidateRoom].maxCorner.y);
+        Instantiate(exit, new Vector3(rX + 0.5f, rY + 0.5f), Quaternion.identity);
     }
 
     private void PopulateWithItems()
@@ -451,8 +475,32 @@ public class LevelGenerator : MonoBehaviour
     {
         for(int x = minCorner.x - 10; x <= maxCorner.x + 10; x++)
         {
+            bool isXEven = false;
+            if(x%2 == 0)
+            {
+                isXEven = true;
+            }
+
             for (int y = minCorner.y - 10; y <= maxCorner.y + 10; y++)
             {
+                bool isYEven = false;
+                if (y % 2 == 0)
+                {
+                    isYEven = true;
+                }
+
+                if (isXEven)
+                {
+                    if(!isYEven)
+                    {
+                        checkerboard.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                    }
+                }
+                else if(isYEven)
+                {
+                    checkerboard.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                }
+
                 if(ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x, y, 0)))
                 {
                     //Wall bottom

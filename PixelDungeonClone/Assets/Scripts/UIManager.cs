@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     public void ToggleInventory()
@@ -97,6 +99,10 @@ public class UIManager : MonoBehaviour
             }
             else
             {
+                if(InventoryManager.instance.inventoryItems[slotID].type == ItemType.POTION)
+                {
+                    useButton.GetComponentInChildren<Text>().text = "Use";
+                }
                 useButton.gameObject.SetActive(true);
             }
         }
@@ -118,5 +124,10 @@ public class UIManager : MonoBehaviour
             accuracyText.text = "Accuracy: " + Player.stats.GetAccuracy();
             evasionText.text = "Evasion: " + Player.stats.GetEvasion();
         }
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

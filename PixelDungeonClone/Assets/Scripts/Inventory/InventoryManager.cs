@@ -34,6 +34,7 @@ public class InventoryManager : MonoBehaviour
         {
             instance = this;
         }
+        DontDestroyOnLoad(gameObject);
 
         inventoryItems = new Item[23];
         
@@ -132,7 +133,12 @@ public class InventoryManager : MonoBehaviour
     {
         if(slotID >= 4)
         {
-            if (inventoryItems[slotID].type == ItemType.WEAPON && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
+            if(inventoryItems[slotID].type == ItemType.POTION)
+            {
+                SubtractItem(slotID);
+                Player.stats.Heal(5);
+            }
+            else if (inventoryItems[slotID].type == ItemType.WEAPON && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
             {
                 Item temp = inventoryItems[slotID];
                 SubtractItem(slotID);

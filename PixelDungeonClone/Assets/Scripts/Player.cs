@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
         {
             instance = this;
         }
+        DontDestroyOnLoad(gameObject);
         movement = GetComponent<PlayerMovement>();
         actions = GetComponent<PlayerActions>();
         stats = GetComponent<PlayerStatistics>();

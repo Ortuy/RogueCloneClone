@@ -119,6 +119,7 @@ public class Enemy : MonoBehaviour
     private void DoSleepingTurn()
     {
         //If the condition is met, wake up and get alerted
+        Debug.Log(this);
         if(Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
             behaviourState = AIState.ALERTED;

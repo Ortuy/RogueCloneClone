@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     public Image itemIcon;
+    public Image backgroundIcon;
     public Button itemButton;
     public Text amountText, requirementText;
 
@@ -16,6 +17,11 @@ public class InventorySlot : MonoBehaviour
 
     public void UpdateItem(Item item)
     {
+        if(backgroundIcon != null)
+        {
+            backgroundIcon.gameObject.SetActive(false);
+        }      
+
         itemButton.interactable = true;
 
         itemIcon.sprite = item.itemImage;
@@ -52,5 +58,9 @@ public class InventorySlot : MonoBehaviour
         itemButton.interactable = false;
         amountText.gameObject.SetActive(false);
         requirementText.gameObject.SetActive(false);
+        if (backgroundIcon != null)
+        {
+            backgroundIcon.gameObject.SetActive(true);
+        }
     }
 }

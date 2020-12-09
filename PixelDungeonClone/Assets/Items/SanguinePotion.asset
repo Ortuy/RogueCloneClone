@@ -21,4 +21,6 @@ MonoBehaviour:
   strengthRequired: 0
   stackable: 1
   requiresStrength: 0
-  type: 0
+  type: 3
+  statChangeMin: 0
+  statChangeMax: 0

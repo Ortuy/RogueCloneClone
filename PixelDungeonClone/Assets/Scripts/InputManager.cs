@@ -15,11 +15,11 @@ public class InputManager : MonoBehaviour
 
     private PlayerMovement player;
 
-    public Tilemap ground;
+    //public Tilemap ground;
 
     public ParticleSystem clickFX;
 
-    public LevelGenerator temp;
+    //public LevelGenerator temp;
 
     
 
@@ -34,6 +34,9 @@ public class InputManager : MonoBehaviour
         {
             instance = this;
         }
+
+        //ground = GameObject.FindGameObjectsWithTag("Ground")[0].GetComponent<Tilemap>();
+
 
         //pathfinding = new Pathfinding(width, height, Vector3.zero, ground);
         player = FindObjectOfType<PlayerMovement>();
