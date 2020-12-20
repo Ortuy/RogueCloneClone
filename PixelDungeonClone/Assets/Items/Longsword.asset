@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Longsword
   description: A sleek sword intended for wielding with two hands. Its previous bearer
     must have been quite affluent to afford a weapon of this elegance. This particular
-    longsword deals 8-11 base damage.
+    longsword deals
   itemImage: {fileID: 21300000, guid: 4e940a920f8b8d7458680f7ae0d5477f, type: 3}
   amount: 1
   strengthRequired: 14
@@ -25,3 +25,4 @@ MonoBehaviour:
   statChangeMin: 8
   statChangeMax: 11
   effectID: 0
+  identified: 0

@@ -41,6 +41,15 @@ public class UIManager : MonoBehaviour
     public bool fadeInDone, fadeOutDone;
     public float fadeLength;
 
+    public Canvas canvas;
+
+    public Transform statusDisplayParent;
+    public List<Image> statusDisplay;
+    public Image statusDisplayTemplate;
+
+    public Text commandText;
+    public Button inventoryButton;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,6 +97,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void AddStatusToDisplay(Sprite icon)
+    {
+        statusDisplay.Add(Instantiate(statusDisplayTemplate, statusDisplayParent));
+        statusDisplay[statusDisplay.Count - 1].sprite = icon;
+    }
+
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         StartFadeIn();
@@ -98,6 +113,7 @@ public class UIManager : MonoBehaviour
         if(inventory.activeInHierarchy)
         {
             inventory.SetActive(false);
+            MouseBlocker.mouseBlocked = false;
         }
         else
         {
@@ -119,38 +135,102 @@ public class UIManager : MonoBehaviour
 
     public void ToggleItemMenu(int slotID)
     {
-        if (itemMenu.activeInHierarchy)
+        if(!InventoryManager.instance.waitingForSelection)
         {
-            itemMenu.SetActive(false);
+            if (itemMenu.activeInHierarchy)
+            {
+                itemMenu.SetActive(false);
+            }
+            else
+            {
+                itemMenu.SetActive(true);
+                StartCoroutine(RefreshItemMenu());
+                if (slotID >= 4)
+                {
+                    useButton.GetComponentInChildren<Text>().text = "Equip";
+                }
+                else
+                {
+                    useButton.GetComponentInChildren<Text>().text = "Unequip";
+                }
+                itemMenu.GetComponent<ItemMenu>().slotID = slotID;
+                itemMenuText.text = InventoryManager.instance.inventoryItems[slotID].itemName;
+
+                itemDescriptionText.text = InventoryManager.instance.inventoryItems[slotID].description;
+
+                if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.WEAPON)
+                {
+                    itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
+                    if (!InventoryManager.instance.inventoryItems[slotID].identified)
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+                    }
+                    else if (InventoryManager.instance.inventoryItems[slotID].cursed)
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is accursed with foul magic. Using it will bind it to your body.";
+                    }
+                }
+                else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.ARMOR)
+                {
+                    itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
+                    if (!InventoryManager.instance.inventoryItems[slotID].identified)
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+                    }
+                    else if (InventoryManager.instance.inventoryItems[slotID].cursed)
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is accursed with foul magic. Using it will bind it to your body.";
+                    }
+                }
+
+                itemMenu.transform.position = InventoryManager.instance.inventorySlots[slotID].transform.position;
+
+                var popupHeight = itemMenu.GetComponent<RectTransform>().sizeDelta.y;
+                var rect = itemMenu.GetComponent<RectTransform>();
+
+                if (rect.anchoredPosition.y - (popupHeight / 2) < -768)
+                {
+                    Debug.Log("AAAAAA");
+                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y + 10 + (popupHeight / 2) - (768 + rect.anchoredPosition.y));
+                }
+                else if (rect.anchoredPosition.y + (popupHeight / 2) > 0)
+                {
+                    Debug.Log("BBBB");
+                    rect.anchoredPosition = new Vector2(rect.anchoredPosition.x, rect.anchoredPosition.y - 10 - ((popupHeight / 2) + rect.anchoredPosition.y));
+                }
+                else
+                {
+                    itemMenu.transform.position = InventoryManager.instance.inventorySlots[slotID].transform.position;
+                }
+
+                if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.NONE)
+                {
+                    useButton.gameObject.SetActive(false);
+                }
+                else
+                {
+                    if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.POTION)
+                    {
+                        useButton.GetComponentInChildren<Text>().text = "Use";
+                    }
+                    useButton.gameObject.SetActive(true);
+                }
+            }
         }
         else
         {
-            itemMenu.SetActive(true);
-            if(slotID >= 4)
-            {
-                useButton.GetComponentInChildren<Text>().text = "Equip";
-            }
-            else
-            {
-                useButton.GetComponentInChildren<Text>().text = "Unequip";
-            }
-            itemMenu.GetComponent<ItemMenu>().slotID = slotID;
-            itemMenuText.text = InventoryManager.instance.inventoryItems[slotID].itemName;
-            itemDescriptionText.text = InventoryManager.instance.inventoryItems[slotID].description;
-            itemMenu.transform.position = InventoryManager.instance.inventorySlots[slotID].transform.position;
-            if(InventoryManager.instance.inventoryItems[slotID].type == ItemType.NONE)
-            {
-                useButton.gameObject.SetActive(false);
-            }
-            else
-            {
-                if(InventoryManager.instance.inventoryItems[slotID].type == ItemType.POTION)
-                {
-                    useButton.GetComponentInChildren<Text>().text = "Use";
-                }
-                useButton.gameObject.SetActive(true);
-            }
+            InventoryManager.instance.selectedSlotID = slotID;
+            InventoryManager.instance.waitingForSelection = false;
         }
+        
+    }
+
+    IEnumerator RefreshItemMenu()
+    {
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)itemMenu.transform);
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)itemMenu.transform);
     }
 
     public void ToggleCharacterMenu()
@@ -166,8 +246,8 @@ public class UIManager : MonoBehaviour
             xpText.text = "XP: " + Player.stats.GetCurrentXP() + "/" + Player.stats.GetRequiredXP();
             healthText.text = "HP: " + Player.stats.GetHealth() + "/" + Player.stats.GetMaxHealth();
             strengthText.text = "Strength: " + Player.stats.GetStrength();
-            accuracyText.text = "Accuracy: " + Player.stats.GetAccuracy();
-            evasionText.text = "Evasion: " + Player.stats.GetEvasion();
+            accuracyText.text = "Accuracy: " + (Player.stats.GetAccuracy() + Player.stats.accModifier);
+            evasionText.text = "Evasion: " + (Player.stats.GetEvasion() + Player.stats.evaModifier);
         }
     }
 

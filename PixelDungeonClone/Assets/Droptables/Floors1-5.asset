@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 818477ef4e9e6c240912eeeb4d127d78, type: 3}
   m_Name: Floors1-5
   m_EditorClassIdentifier: 
+  potionBase: {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
   itemPool:
   - {fileID: 11400000, guid: 0c5ae139e1e283f4ebf10c2e61efef3b, type: 2}
   - {fileID: 11400000, guid: 1911f4b121654b2498f4863a422d29ef, type: 2}
@@ -22,6 +23,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fdd64760cc30c94fbb4aaa0f9ce7e7e, type: 2}
   - {fileID: 11400000, guid: 86cf1d909cb97cb4c8783af343a86716, type: 2}
   - {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
-  - {fileID: 11400000, guid: e6361d725c207e24ebe4f83014b0f8ab, type: 2}
-  - {fileID: 11400000, guid: a244d6545ad3b51488d6864937b23fe6, type: 2}
-  itemWeightPool: 0200000005000000020000000100000005000000030000000200000001000000180000000800000006000000
+  - {fileID: 11400000, guid: 4e2d30f76a5b50241b2c1fa5ffc0ca89, type: 2}
+  itemWeightPool: 02000000050000000200000001000000050000000300000002000000010000001400000014000000
+  guaranteedItems: []

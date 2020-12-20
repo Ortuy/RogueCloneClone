@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Worn Chainmail
   description: A set of long chainmail armour. A vast amount of holes and broken
     links betrays its history. It could not protect many of its wearers. This particular
-    set of chainmail will absorb 3-6 points of damage per hit.
+    set of chainmail will absorb
   itemImage: {fileID: 21300000, guid: 36b9080e27fdc1044bb6628bafbe1f2c, type: 3}
   amount: 1
   strengthRequired: 13
@@ -25,3 +25,4 @@ MonoBehaviour:
   statChangeMin: 3
   statChangeMax: 6
   effectID: 0
+  identified: 0

@@ -17,15 +17,20 @@ public class ItemPickup : MonoBehaviour
 
     public ItemType type = ItemType.NONE;
     **/
-    public Item itemInside;
+    public Item itemPrefab;
+    public ItemInstance itemInside;
 
     public int amount;
 
     // Start is called before the first frame update
     void Start()
     {
+        if(itemInside == null)
+        {
+            itemInside = new ItemInstance(itemPrefab, amount);
+        }
         GetComponent<SpriteRenderer>().sprite = itemInside.itemImage;
-        if(itemInside.stackable)
+        if (itemInside.stackable)
         {
             itemInside.amount = amount;
         }
@@ -42,7 +47,7 @@ public class ItemPickup : MonoBehaviour
         **/
     }
 
-    public void SetItem(Item item)
+    public void SetItem(ItemInstance item)
     {
         itemInside = item;
         GetComponent<SpriteRenderer>().sprite = itemInside.itemImage;

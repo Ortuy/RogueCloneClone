@@ -23,5 +23,15 @@ public class LoadObject : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        else if(scene.buildIndex != 6)
+        {
+            StartCoroutine(MovePlayerToStartPosition());
+        }
+    }
+
+    IEnumerator MovePlayerToStartPosition()
+    {
+        yield return new WaitForSeconds(1);
+        Player.instance.transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
     }
 }

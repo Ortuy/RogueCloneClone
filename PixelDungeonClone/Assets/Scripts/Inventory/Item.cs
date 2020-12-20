@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType { NONE, WEAPON, ARMOR, POTION }
+public enum ItemType { NONE, WEAPON, ARMOR, POTION, SCROLL }
 
 [CreateAssetMenu(fileName = "Item", menuName = "Item", order = 1)]
 public class Item : ScriptableObject
@@ -22,7 +22,9 @@ public class Item : ScriptableObject
 
     public int statChangeMin, statChangeMax;
     public int effectID;
+    public bool identified;
 
+    /**
     public Item(Item baseItem, int newAmount)
     {
         itemName = baseItem.itemName;
@@ -32,7 +34,10 @@ public class Item : ScriptableObject
         strengthRequired = baseItem.strengthRequired;
         stackable = baseItem.stackable;
         requiresStrength = baseItem.requiresStrength;
-
+        statChangeMin = baseItem.statChangeMin;
+        statChangeMax = baseItem.statChangeMax;
+        effectID = baseItem.effectID;
+        identified = baseItem.identified;
         type = baseItem.type;
     }
 
@@ -40,4 +45,5 @@ public class Item : ScriptableObject
     {
 
     }
+    **/
 }

@@ -5363,15 +5363,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   level: 1
-  xpDrop: 2
+  xp: 0
+  strength: 0
   health: 11
   maxHealth: 11
   evasion: 7
   accuracy: 3
+  minDefBase: 0
+  maxDefBase: 2
+  minDmgBase: 4
+  maxDmgBase: 6
   minDefence: 0
   maxDefence: 2
   minBaseDamage: 4
   maxBaseDamage: 6
+  immune: 0
+  invisible: 0
+  dmgModifier: 0
+  evaModifier: 0
+  defModifier: 0
+  accModifier: 0
+  xpDrop: 2
   actionState: 0
   hitFX: {fileID: 6977649515092619411}
   deathFX: {fileID: 5761549772609214726, guid: 443d40f05f568174880fdf30de9d0982, type: 3}

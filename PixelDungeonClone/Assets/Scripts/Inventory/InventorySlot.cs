@@ -6,16 +6,20 @@ using UnityEngine.UI;
 public class InventorySlot : MonoBehaviour
 {
     public Image itemIcon;
-    public Image backgroundIcon;
+    public Image backgroundIcon, curseIcon;
     public Button itemButton;
-    public Text amountText, requirementText;
+    public Text amountText, requirementText, levelText;
 
     private void Start()
     {
         itemIcon = itemButton.GetComponent<Image>();
+        amountText.fontSize = 22;
+        requirementText.fontSize = 22;
+        levelText.fontSize = 22;
+        levelText.fontStyle = FontStyle.Bold;
     }
 
-    public void UpdateItem(Item item)
+    public void UpdateItem(ItemInstance item)
     {
         if(backgroundIcon != null)
         {
@@ -45,6 +49,46 @@ public class InventorySlot : MonoBehaviour
         {
             requirementText.gameObject.SetActive(false);
         }
+
+        if(item.identified && item.requiresStrength)
+        {
+            if(item.level > 0)
+            {
+                levelText.gameObject.SetActive(true);
+                levelText.text = "+" + item.level;
+                levelText.color = InventoryManager.instance.upgradeColor;
+            }
+            else if(item.level < 0)
+            {
+                levelText.gameObject.SetActive(true);
+                levelText.text = "" + item.level;
+                levelText.color = InventoryManager.instance.cursedColor;
+            }
+            else
+            {
+                levelText.gameObject.SetActive(false);
+            }
+            if(item.cursed)
+            {
+                curseIcon.gameObject.SetActive(true);
+            }
+            else
+            {
+                curseIcon.gameObject.SetActive(false);
+            }
+        }
+        else if(item.requiresStrength)
+        {
+            levelText.gameObject.SetActive(true);
+            levelText.text = "?";
+            levelText.color = InventoryManager.instance.unknownColor;
+            curseIcon.gameObject.SetActive(false);
+        }
+        else
+        {
+            levelText.gameObject.SetActive(false);
+            curseIcon.gameObject.SetActive(false);
+        }
     }
 
     public bool IsEmpty()
@@ -58,6 +102,8 @@ public class InventorySlot : MonoBehaviour
         itemButton.interactable = false;
         amountText.gameObject.SetActive(false);
         requirementText.gameObject.SetActive(false);
+        curseIcon.gameObject.SetActive(false);
+        levelText.gameObject.SetActive(false);
         if (backgroundIcon != null)
         {
             backgroundIcon.gameObject.SetActive(true);

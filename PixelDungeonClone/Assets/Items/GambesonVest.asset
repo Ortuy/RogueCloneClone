@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Gambeson Vest
   description: A lightweight, padded protective garment. It can help you brave some
     blows but consider finding a proper suit of armour instead. This particular vest
-    will absorb 2-4 points of damage per hit.
+    will absorb
   itemImage: {fileID: 21300000, guid: 9b281ef249fde9648ac6f269bbaed91c, type: 3}
   amount: -1
   strengthRequired: 11
@@ -24,3 +24,5 @@ MonoBehaviour:
   type: 2
   statChangeMin: 2
   statChangeMax: 4
+  effectID: 0
+  identified: 0

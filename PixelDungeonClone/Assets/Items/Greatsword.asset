@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Greatsword
   description: A long, heavy blade. It retains its deadly edge despite the obvious
     wear. Overgrown with flakes of rust and dried blood, it has proven its worth
-    a thousand times. This particular greatsword deals 8-12 base damage.
+    a thousand times. This particular greatsword deals
   itemImage: {fileID: 21300000, guid: ab016cbb094f48f409b18153ca65354c, type: 3}
   amount: 1
   strengthRequired: 16
@@ -25,3 +25,4 @@ MonoBehaviour:
   statChangeMin: 10
   statChangeMax: 14
   effectID: 0
+  identified: 0

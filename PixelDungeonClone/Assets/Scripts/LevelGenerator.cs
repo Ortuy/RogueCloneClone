@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
             centerPoint = new Vector2Int(Mathf.FloorToInt(min.x + (xSize / 2)), Mathf.FloorToInt(min.y + (ySize / 2)));
         }
     }
-    private List<Room> rooms;
+    public List<Room> rooms;
 
     private List<List<Room>> roomClusters;
 
@@ -37,6 +37,8 @@ public class LevelGenerator : MonoBehaviour
     public int floorID;
 
     public FloorExit exit;
+
+    public Vector2 playerStartPos;
 
     [Header("Generation Values")]
     public int minRoomSize;
@@ -170,9 +172,13 @@ public class LevelGenerator : MonoBehaviour
 
         Debug.LogWarning("Exit in room " + currentCandidateRoom);
 
-        int rX = Random.Range(rooms[currentCandidateRoom].minCorner.x, rooms[currentCandidateRoom].maxCorner.x);
-        int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y, rooms[currentCandidateRoom].maxCorner.y);
+        int rX = Random.Range(rooms[currentCandidateRoom].minCorner.x + 1, rooms[currentCandidateRoom].maxCorner.x);
+        int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y + 1, rooms[currentCandidateRoom].maxCorner.y);
         Instantiate(exit, new Vector3(rX + 0.5f, rY + 0.5f), Quaternion.identity);
+
+        rX = Random.Range(rooms[0].minCorner.x + 1, rooms[0].maxCorner.x);
+        rY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
+        playerStartPos = new Vector2(rX + 0.5f, rY + 0.5f);
     }
 
     private void PopulateWithItems()
@@ -203,8 +209,51 @@ public class LevelGenerator : MonoBehaviour
             float posY = Random.Range(rooms[roomID].minCorner.y, rooms[roomID].maxCorner.y + 1);
 
             ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
-            itemDrop.SetItem(weightedPool[roll]);
+            var itemToDrop = new ItemInstance(weightedPool[roll], 1);
+            if(itemToDrop.type == ItemType.POTION)
+            {
+                itemToDrop = new ItemInstance(IdentifyingMenager.instance.potions[Random.Range(0, IdentifyingMenager.instance.potions.Length)], 0);
+            }
+            else if(itemToDrop.type == ItemType.SCROLL)
+            {
+                itemToDrop = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(0, IdentifyingMenager.instance.scrolls.Length)], 0);
+            }
+            else if(itemToDrop.type == ItemType.ARMOR || itemToDrop.type == ItemType.WEAPON)
+            {
+                itemToDrop.identified = false;
+                if(Random.Range(0, 4) == 0)
+                {
+                    itemToDrop.cursed = true;
+                    itemToDrop.LevelUp(Random.Range(-3, 0));
+                }
+                else
+                {
+                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+                }
+            }
+            itemDrop.SetItem(new ItemInstance(itemToDrop, 1));
         }
+
+        dropTable.guaranteedItems.Add(IdentifyingMenager.instance.potions[Random.Range(0, 2)]);
+        dropTable.guaranteedItems.Add(IdentifyingMenager.instance.scrolls[Random.Range(0, 2)]);
+
+        for (int i = 0; i < dropTable.guaranteedItems.Count; i++)
+        {
+            int roomID = Random.Range(1, rooms.Count - 1);
+
+            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x + 1);
+            float posY = Random.Range(rooms[roomID].minCorner.y, rooms[roomID].maxCorner.y + 1);
+
+            ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
+            itemDrop.SetItem(new ItemInstance(dropTable.guaranteedItems[i], 1));
+        }
+
+        dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
+        dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
     }
 
     private void PopulateWithEnemies()

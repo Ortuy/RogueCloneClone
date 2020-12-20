@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65b26ba3e5a4f714dbdef37b2c75c316, type: 3}
-  m_Name: XanthousPotion
+  m_Name: OnyxPotion
   m_EditorClassIdentifier: 
-  itemName: Xanthous Potion
-  description: 'A carafe of a yellowish fluid swirling in mesmerizing patterns. You
-    can see it glow with a dim, golden light. You have no clue what drinking it would
-    entail. '
-  itemImage: {fileID: 21300000, guid: 7de02d13a978a5443abfb2868cb70084, type: 3}
+  itemName: Potion of Frost
+  description: A jar of a pitch-black substance reminding you of tar. Light seems
+    to dim all around it, consumed by its darkness. $nYou have no clue what drinking
+    it would entail.
+  itemImage: {fileID: 21300000, guid: 0f4b6e4e741085e4483c1c5ff08f09c9, type: 3}
   amount: 1
   strengthRequired: 0
   stackable: 1
@@ -24,4 +24,5 @@ MonoBehaviour:
   type: 3
   statChangeMin: 0
   statChangeMax: 0
-  effectID: 2
+  effectID: 6
+  identified: 1
