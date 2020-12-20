@@ -42,7 +42,17 @@ public class PlayerActions : MonoBehaviour
         Player.movement.StopMovement();
         Player.instance.actionState = ActionState.ACTIVE;
         yield return new WaitForSeconds(0.5f);
-        target.TakeDamage(damage, Player.stats.GetAccuracy(), transform.position);
+        target.TakeDamage(damage + Player.stats.dmgModifier, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position);
+
+        //Ends all invisibility effects
+        for(int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
+        {
+            if(Player.stats.statusEffects[i].effectID == 1)
+            {
+                Player.stats.EndStatusEffect(i);
+            }
+        }
+
         attackQueued = false;
         attackTarget = null;
         Player.instance.actionState = ActionState.WAITING;

@@ -12,6 +12,8 @@ public class Player : MonoBehaviour
     public static PlayerActions actions;
     public static PlayerStatistics stats;
 
+    
+
     public ActionState actionState = ActionState.WAITING;
 
     // Start is called before the first frame update
@@ -29,6 +31,8 @@ public class Player : MonoBehaviour
         movement = GetComponent<PlayerMovement>();
         actions = GetComponent<PlayerActions>();
         stats = GetComponent<PlayerStatistics>();
+
+        transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
     }
 
     public void DoPlayerTurn()

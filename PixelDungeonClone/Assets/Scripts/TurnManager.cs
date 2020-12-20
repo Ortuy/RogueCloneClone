@@ -14,6 +14,10 @@ public class TurnManager : MonoBehaviour
 
     private int currentActingEnemy;
 
+    public bool playerFrozen;
+    private bool passing;
+    public int playerExtraTurns;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,7 +45,21 @@ public class TurnManager : MonoBehaviour
         {
             if (turnState == TurnState.PLAYER)
             {
-                Player.instance.DoPlayerTurn();
+                /**
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    Player.stats.AddStatusEffect(new PoisonEffect(Player.stats.statusIcons[0], Player.stats.GetMaxHealth() / 20, 3));
+                }**/
+                if(!playerFrozen)
+                {
+                    Player.instance.DoPlayerTurn();
+                }
+                else if(!passing)
+                {
+                    StartCoroutine(FreezePlayer());
+                    //SwitchTurn(TurnState.ENEMY);
+                }
+                                
             }
             else
             {
@@ -98,15 +116,45 @@ public class TurnManager : MonoBehaviour
         currentActingEnemy++;
     }
 
+    IEnumerator FreezePlayer()
+    {
+        passing = true;
+        yield return new WaitForSeconds(0.5f);
+        SwitchTurn(TurnState.ENEMY);
+        passing = false;
+    }
+
     public void SwitchTurn()
     {
-        turnState = (turnState == TurnState.PLAYER) ? TurnState.ENEMY : TurnState.PLAYER;
-        currentActingEnemy = 0;
+        if (turnState == TurnState.PLAYER)
+        {
+            Player.stats.TickStatusEffects();
+        }
+        if(playerExtraTurns == 0)
+        {
+            turnState = (turnState == TurnState.PLAYER) ? TurnState.ENEMY : TurnState.PLAYER;
+            currentActingEnemy = 0;
+        }
+        else
+        {
+            playerExtraTurns--;
+        }       
     }
 
     public void SwitchTurn(TurnState turn)
     {
-        turnState = turn;
-        currentActingEnemy = 0;
+        if (turn == TurnState.ENEMY)
+        {
+            Player.stats.TickStatusEffects();
+        }
+        if (playerExtraTurns == 0)
+        {
+            turnState = turn;
+            currentActingEnemy = 0;
+        }
+        else
+        {
+            playerExtraTurns--;
+        }
     }
 }

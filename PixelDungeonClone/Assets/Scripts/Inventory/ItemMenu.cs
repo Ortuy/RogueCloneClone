@@ -38,7 +38,7 @@ public class ItemMenu : MonoBehaviour
         {
             //Drops item
             ItemPickup temp = Instantiate(InventoryManager.instance.itemTemplate, Player.instance.transform.position, Quaternion.identity);
-            temp.SetItem(new Item(InventoryManager.instance.inventoryItems[slotID], 1));
+            temp.SetItem(new ItemInstance(InventoryManager.instance.inventoryItems[slotID], 1));
             InventoryManager.instance.SubtractItem(slotID);
             TurnManager.instance.SwitchTurn(TurnState.ENEMY);
             gameObject.SetActive(false);

@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Dented Breastplate
   description: "A beaten up, mangled steel breastplate. Wearing it might be far from
     comfortable, but it\u2019s surely preferable to being far from safe. This particular
-    breastplate will absorb 4-8 points of damage per hit."
+    breastplate will absorb"
   itemImage: {fileID: 21300000, guid: 37420d3e7417c1945ae54ce7fb81e035, type: 3}
   amount: 1
   strengthRequired: 15
@@ -25,3 +25,4 @@ MonoBehaviour:
   statChangeMin: 4
   statChangeMax: 8
   effectID: 0
+  identified: 0

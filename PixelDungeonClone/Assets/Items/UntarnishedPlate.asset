@@ -16,7 +16,7 @@ MonoBehaviour:
   description: A full set of intricately crafted armour, a symbol of status and pride
     among the lords. Few have seen the riches one would need to acquire such a masterwork.
     Alas, it was lost here, in the murky depths. This particular set of plate will
-    absorb 6-10 points of damage per hit.
+    absorb
   itemImage: {fileID: 21300000, guid: 163f341fdc423f84c926aee5779773d8, type: 3}
   amount: 1
   strengthRequired: 17
@@ -26,3 +26,4 @@ MonoBehaviour:
   statChangeMin: 6
   statChangeMax: 10
   effectID: 0
+  identified: 0

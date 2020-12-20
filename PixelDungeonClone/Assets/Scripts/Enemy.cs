@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public enum ActionState { WAITING, ACTIVE }
 
-public enum AIState { SLEEPING, UNALERTED, ALERTED }
+public enum AIState { SLEEPING, UNALERTED, ALERTED, AMOK }
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class Enemy : MonoBehaviour
+public class Enemy : Entity
 {
+    /**
     [Header("Stats")]
     [SerializeField]
     private int level;
@@ -28,8 +29,11 @@ public class Enemy : MonoBehaviour
     //Minimum and maximum damage dealt. INCLUSIVE
     [SerializeField]
     private int minBaseDamage, maxBaseDamage;
-
+    **/
     [Header("Other")]
+    [SerializeField]
+    private int xpDrop;
+
     public ActionState actionState = ActionState.WAITING;
 
     [SerializeField]
@@ -62,6 +66,8 @@ public class Enemy : MonoBehaviour
 
     private Vector2 targetPos;
 
+    public Entity attackTarget;
+
     [Header("Drops")]
     [SerializeField]
     private Vector2Int[] dropPercentRanges;
@@ -88,16 +94,19 @@ public class Enemy : MonoBehaviour
         switch(behaviourState)
         {
             case AIState.SLEEPING:
-                Debug.Log("Sleeping");
+                //Debug.Log("Sleeping");
                 DoSleepingTurn();
                 break;
             case AIState.UNALERTED:
-                Debug.Log("Unalerted");
+                //Debug.Log("Unalerted");
                 DoUnalertedTurn();
                 break;
             case AIState.ALERTED:
-                Debug.Log("Alerted");
+                //Debug.Log("Alerted");
                 DoAlertedTurn();
+                break;
+            case AIState.AMOK:
+                DoAmokTurn();
                 break;
         }
 
@@ -120,7 +129,7 @@ public class Enemy : MonoBehaviour
     {
         //If the condition is met, wake up and get alerted
         Debug.Log(this);
-        if(Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+        if(!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
             behaviourState = AIState.ALERTED;
         }
@@ -131,7 +140,7 @@ public class Enemy : MonoBehaviour
     private void DoUnalertedTurn()
     {
         //If the condition is met, get alerted
-        if (Vector2.Distance(transform.position, Player.instance.transform.position) <= alertRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+        if (!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= alertRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
             behaviourState = AIState.ALERTED;
         }
@@ -143,7 +152,7 @@ public class Enemy : MonoBehaviour
 
     private void DoAlertedTurn()
     {
-        if(Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+        if(!Player.stats.invisible && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
             lastPlayerPosition = Player.instance.transform.position;
 
@@ -177,7 +186,7 @@ public class Enemy : MonoBehaviour
                 MoveOnPath();
             }
             //If they are not found, become unalerted
-            else if(!Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+            else if(Player.stats.invisible || !Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
             {
                 behaviourState = AIState.UNALERTED;
             }
@@ -186,6 +195,40 @@ public class Enemy : MonoBehaviour
         if (actionState == ActionState.WAITING)
         {
             Debug.Log("Passing");
+            TurnManager.instance.PassToNextEnemy();
+        }
+    }
+
+    public void GoAmok(Entity target)
+    {
+        behaviourState = AIState.AMOK;
+        attackTarget = target;
+    }
+
+    private void DoAmokTurn()
+    {
+        if (Vector2.Distance(transform.position, attackTarget.transform.position) < 1.5f && actionState == ActionState.WAITING)
+        {
+            var baseDamage = Random.Range(minBaseDamage, maxBaseDamage + 1);
+            StartCoroutine(AttackTarget(baseDamage));
+        }
+        else if (path == null && actionState == ActionState.WAITING)
+        {
+            QueueMovement(attackTarget.transform.position);
+            MoveOnPath();
+        }
+        else
+        {
+            MoveOnPath();
+        }
+
+        if (actionState == ActionState.WAITING)
+        {
+            Debug.Log("Passing");
+            if(Random.Range(0, 6) == 0)
+            {
+                behaviourState = AIState.ALERTED;
+            }
             TurnManager.instance.PassToNextEnemy();
         }
     }
@@ -273,16 +316,39 @@ public class Enemy : MonoBehaviour
     {
         actionState = ActionState.ACTIVE;       
         yield return new WaitForSeconds(0.5f);
-        Player.stats.TakeDamage(damage, accuracy, transform.position);
+        Player.stats.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);
+        for (int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
+        {
+            if (Player.stats.statusEffects[i].effectID == 3)
+            {
+                Player.stats.EndStatusEffect(i);
+            }
+        }
         TurnManager.instance.PassToNextEnemy();
         actionState = ActionState.WAITING;
     }
 
+    IEnumerator AttackTarget(int damage)
+    {
+        actionState = ActionState.ACTIVE;
+        yield return new WaitForSeconds(0.5f);
+        attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);
+        /**
+        for (int i = attackTarget.statusEffects.Count - 1; i >= 0; i--)
+        {
+            if (attackTarget.statusEffects[i].effectID == 3)
+            {
+                attackTarget.EndStatusEffect(i);
+            }
+        }**/
+        TurnManager.instance.PassToNextEnemy();
+        actionState = ActionState.WAITING;
+    }
 
-    public void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
+    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
     {
         //Evasion chance
-        int evasionPercent = Mathf.FloorToInt(((evasion - attackerAccuracy) / (evasion + 10)) * 100);
+        int evasionPercent = Mathf.FloorToInt((((evasion + evaModifier) - attackerAccuracy) / ((evasion + evaModifier) + 10)) * 100);
         Debug.Log("Enemy evasion chacne: " + evasionPercent + "%");
         int evasionRoll = Random.Range(1, 101);
         if(evasionRoll <= evasionPercent)
@@ -303,7 +369,7 @@ public class Enemy : MonoBehaviour
             hitFX.Play();
 
             var defence = Random.Range(minDefence, maxDefence + 1);
-            var totaldmg = damage - defence;
+            var totaldmg = damage - (defence + defModifier);
             if (totaldmg < 1)
             {
                 totaldmg = 1;
@@ -321,6 +387,37 @@ public class Enemy : MonoBehaviour
         }        
     }
 
+    public override void TakeTrueDamage(int damage)
+    {
+        if (!healthBar.gameObject.activeInHierarchy)
+        {
+            healthBar.gameObject.SetActive(true);
+        }
+
+        //var hitDirection = (transform.position - attackerPos).normalized;
+        //var angle = Mathf.Atan2(hitDirection.y, hitDirection.x);
+        //hitFX.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
+        hitFX.Play();
+
+        //var defence = Random.Range(minDefence, maxDefence + 1);
+        //var totaldmg = damage - defence;
+        //if (totaldmg < 1)
+        //{
+        //    totaldmg = 1;
+        //}
+
+        health -= damage;
+        float value = (health / maxHealth);
+        healthBar.value = value;
+
+        if (health <= 0)
+        {
+            Debug.Log("ENEMY DEATH!");
+            Die();
+        }
+    }
+
     private void Die()
     {
         TurnManager.instance.enemies.Remove(this);
@@ -333,7 +430,7 @@ public class Enemy : MonoBehaviour
             if (randomDrop >= dropPercentRanges[i].x && randomDrop <= dropPercentRanges[i].y)
             {
                 ItemPickup temp = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
-                temp.SetItem(drops[i]);
+                temp.SetItem(new ItemInstance(drops[i], 1));
                 break;
             }
         }

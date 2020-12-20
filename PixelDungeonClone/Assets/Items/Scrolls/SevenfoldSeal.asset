@@ -10,18 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 65b26ba3e5a4f714dbdef37b2c75c316, type: 3}
-  m_Name: UmberPotion
+  m_Name: SevenfoldSeal
   m_EditorClassIdentifier: 
-  itemName: Umber Potion
-  description: 'A flask of a dense, pasty concoction. It has an earthy smell, one
-    of fresh soil and air after the rain. You have no clue what drinking it would
-    entail. '
-  itemImage: {fileID: 21300000, guid: 2065c510c87908942a43c32e8413fb81, type: 3}
+  itemName: Sevenfold Seal
+  description: A scroll sealing away a powerful thought. The sigil binding it to
+    the sheet of paper appears minimalistic, barely able to hold on to a single intention.
+    $nThe symbol itself seems inscrutable.
+  itemImage: {fileID: 21300000, guid: 773ebee44f693f04db05196d433b4d98, type: 3}
   amount: 1
   strengthRequired: 0
   stackable: 1
   requiresStrength: 0
-  type: 3
+  type: 4
   statChangeMin: 0
   statChangeMax: 0
-  effectID: 1
+  effectID: 7
+  identified: 1

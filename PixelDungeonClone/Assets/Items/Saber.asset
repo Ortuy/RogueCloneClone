@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Saber
   description: A curved weapon, unexpectedly heavy for its length. It was made hastily
     out of second-grade steel - a common tool for the daredevils plunging themselves
-    into the depths. This particular saber deals 6-9 base damage.
+    into the depths. This particular saber deals
   itemImage: {fileID: 21300000, guid: 64ad31bfdd6913c40add302d4998025f, type: 3}
   amount: 1
   strengthRequired: 12
@@ -25,3 +25,4 @@ MonoBehaviour:
   statChangeMin: 6
   statChangeMax: 9
   effectID: 0
+  identified: 0

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Shortsword
   description: A short blade, light, nimble, but barely able to harm sturdier foes.
-    Such a weapon may prove lacking in this perilous world. This particular shortsword
-    deals 4-7 base damage.
+    Such a weapon may prove lacking in this perilous world. $nThis particular shortsword
+    deals
   itemImage: {fileID: 21300000, guid: 8b022972ed858da4b85404999544453c, type: 3}
   amount: 1
   strengthRequired: 10
@@ -24,3 +24,5 @@ MonoBehaviour:
   type: 1
   statChangeMin: 4
   statChangeMax: 7
+  effectID: 0
+  identified: 1

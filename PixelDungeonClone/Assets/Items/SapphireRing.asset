@@ -22,3 +22,7 @@ MonoBehaviour:
   stackable: 0
   requiresStrength: 0
   type: 0
+  statChangeMin: 0
+  statChangeMax: 0
+  effectID: 0
+  identified: 0
