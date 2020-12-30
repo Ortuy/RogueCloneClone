@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: SixfoldSeal
   m_EditorClassIdentifier: 
   itemName: Sixfold Seal
-  description: A scroll sealing away a powerful thought. The sigil binding it to
-    the sheet of paper appears minimalistic, barely able to hold on to a single intention.
-    $nThe symbol itself seems inscrutable.
+  description: A scroll sealing away a powerful thought. It emanates force - something
+    immaterial wants to break away from beyond it. $nThe symbol itself seems inscrutable.
   itemImage: {fileID: 21300000, guid: 646d7fcefb3713e4dad9ad6dc18bd489, type: 3}
   amount: 1
   strengthRequired: 0
@@ -24,5 +23,5 @@ MonoBehaviour:
   type: 4
   statChangeMin: 0
   statChangeMax: 0
-  effectID: 6
-  identified: 1
+  effectID: 2
+  identified: 0

@@ -37,7 +37,7 @@ public class Enemy : Entity
     public ActionState actionState = ActionState.WAITING;
 
     [SerializeField]
-    private ParticleSystem hitFX;
+    private ParticleSystem hitFX, sleepFX, alertFX;
 
     [SerializeField]
     private ParticleSystem deathFX;
@@ -52,6 +52,8 @@ public class Enemy : Entity
 
     [SerializeField]
     private float awakeRange, alertRange;
+
+    public int turnCost;
 
     [Header("Movement")]
     private Rigidbody2D body;
@@ -81,12 +83,9 @@ public class Enemy : Entity
         body = GetComponent<Rigidbody2D>();
         path = null;
         health = maxHealth;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        statusEffects = new List<StatusEffect>();
+        behaviourState = AIState.SLEEPING;
+        sleepFX.Play();
     }
 
     public void DoTurn()
@@ -109,28 +108,17 @@ public class Enemy : Entity
                 DoAmokTurn();
                 break;
         }
-
-        /**
-        var distance = Vector2.Distance(transform.position, Player.instance.transform.position);
-
-        if (distance < 1.5f && health > 0 && actionState == ActionState.WAITING)
-        {
-            var baseDamage = Random.Range(minBaseDamage, maxBaseDamage + 1);
-            StartCoroutine(AttackPlayer(baseDamage));
-        }
-        else if(actionState == ActionState.WAITING)
-        {
-            TurnManager.instance.PassToNextEnemy();
-        }
-        **/
     }
 
     private void DoSleepingTurn()
     {
         //If the condition is met, wake up and get alerted
-        Debug.Log(this);
+        
         if(!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
+            Debug.Log("Wake up!");
+            sleepFX.Stop();
+            alertFX.Play();
             behaviourState = AIState.ALERTED;
         }
 
@@ -142,6 +130,9 @@ public class Enemy : Entity
         //If the condition is met, get alerted
         if (!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= alertRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
         {
+            Debug.Log("I see you!");
+            sleepFX.Stop();
+            alertFX.Play();
             behaviourState = AIState.ALERTED;
         }
 
@@ -158,16 +149,17 @@ public class Enemy : Entity
 
             if (Vector2.Distance(transform.position, Player.instance.transform.position) < 1.5f && actionState == ActionState.WAITING)
             {
-                Debug.Log("Trying to attack (Player moved)");
+                Debug.LogWarning("Queueing attack");
                 var baseDamage = Random.Range(minBaseDamage, maxBaseDamage + 1);
-                StartCoroutine(AttackPlayer(baseDamage));
+                actionState = ActionState.ACTIVE;
+                StartCoroutine(AttackPlayer(baseDamage, 1));
             }
             else if (path == null && actionState == ActionState.WAITING)
             {
                 QueueMovement(Player.instance.transform.position);
                 MoveOnPath();
             }
-            else
+            else if(path != null)
             {
                 MoveOnPath();
             }
@@ -210,7 +202,8 @@ public class Enemy : Entity
         if (Vector2.Distance(transform.position, attackTarget.transform.position) < 1.5f && actionState == ActionState.WAITING)
         {
             var baseDamage = Random.Range(minBaseDamage, maxBaseDamage + 1);
-            StartCoroutine(AttackTarget(baseDamage));
+            Debug.Log(actionState);
+            StartCoroutine(AttackTarget(baseDamage, 1));
         }
         else if (path == null && actionState == ActionState.WAITING)
         {
@@ -257,6 +250,7 @@ public class Enemy : Entity
             if (Pathfinding.instance.FindPlayerOnTile(targetPos) || Pathfinding.instance.FindAnotherEnemyOnTile(path[currentPathIndex], this))
             {
                 Debug.Log("Player!");
+                actionState = ActionState.WAITING;
                 path = null;
                 currentPathIndex = 0;
             }
@@ -312,10 +306,11 @@ public class Enemy : Entity
         actionState = ActionState.WAITING;
     }
 
-    IEnumerator AttackPlayer(int damage)
+    IEnumerator AttackPlayer(int damage, int cost)
     {
         actionState = ActionState.ACTIVE;       
         yield return new WaitForSeconds(0.5f);
+        Debug.LogWarning("Attackin");
         Player.stats.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);
         for (int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
         {
@@ -324,23 +319,25 @@ public class Enemy : Entity
                 Player.stats.EndStatusEffect(i);
             }
         }
+        turnCost = cost;
         TurnManager.instance.PassToNextEnemy();
         actionState = ActionState.WAITING;
     }
 
-    IEnumerator AttackTarget(int damage)
+    IEnumerator AttackTarget(int damage, int cost)
     {
         actionState = ActionState.ACTIVE;
         yield return new WaitForSeconds(0.5f);
-        attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);
-        /**
+        Debug.LogWarning("Attackin");
+        attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);       
         for (int i = attackTarget.statusEffects.Count - 1; i >= 0; i--)
         {
             if (attackTarget.statusEffects[i].effectID == 3)
             {
                 attackTarget.EndStatusEffect(i);
             }
-        }**/
+        }
+        turnCost = cost;
         TurnManager.instance.PassToNextEnemy();
         actionState = ActionState.WAITING;
     }
@@ -354,6 +351,7 @@ public class Enemy : Entity
         if(evasionRoll <= evasionPercent)
         {
             Debug.Log("Dodge!");
+            ShowDamageText("Miss!");
         }
         else
         {
@@ -363,8 +361,8 @@ public class Enemy : Entity
             }
 
             var hitDirection = (transform.position - attackerPos).normalized;
-            var angle = Mathf.Atan2(hitDirection.y, hitDirection.x);
-            //hitFX.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            var angle = Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg;
+            hitFX.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
             //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
             hitFX.Play();
 
@@ -375,6 +373,8 @@ public class Enemy : Entity
                 totaldmg = 1;
             }
 
+            ShowDamageText(totaldmg.ToString());
+
             health -= totaldmg;
             float value = (health / maxHealth);
             healthBar.value = value;
@@ -382,7 +382,7 @@ public class Enemy : Entity
             if (health <= 0)
             {
                 Debug.Log("ENEMY DEATH!");
-                Die();
+                Die(angle - 90);
             }
         }        
     }
@@ -393,6 +393,8 @@ public class Enemy : Entity
         {
             healthBar.gameObject.SetActive(true);
         }
+
+        
 
         //var hitDirection = (transform.position - attackerPos).normalized;
         //var angle = Mathf.Atan2(hitDirection.y, hitDirection.x);
@@ -407,6 +409,8 @@ public class Enemy : Entity
         //    totaldmg = 1;
         //}
 
+        ShowDamageText(damage.ToString());
+
         health -= damage;
         float value = (health / maxHealth);
         healthBar.value = value;
@@ -414,14 +418,14 @@ public class Enemy : Entity
         if (health <= 0)
         {
             Debug.Log("ENEMY DEATH!");
-            Die();
+            Die(-90);
         }
     }
 
-    private void Die()
+    private void Die(float angle)
     {
         TurnManager.instance.enemies.Remove(this);
-        Instantiate(deathFX, transform.position, Quaternion.identity).GetComponent<ParticleSystem>().Play();
+        Instantiate(deathFX, transform.position, Quaternion.AngleAxis(angle - 45, Vector3.forward)).GetComponent<ParticleSystem>().Play();
 
         int randomDrop = Random.Range(0, 100);
         Debug.Log(randomDrop);
@@ -450,5 +454,6 @@ public class Enemy : Entity
     {
         health = maxHealth;
         behaviourState = AIState.SLEEPING;
+        sleepFX.Play();
     }
 }

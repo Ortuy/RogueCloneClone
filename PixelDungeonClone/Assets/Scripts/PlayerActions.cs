@@ -12,6 +12,8 @@ public class PlayerActions : MonoBehaviour
 
     private Rigidbody2D body;
 
+    public int turnCost;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +29,7 @@ public class PlayerActions : MonoBehaviour
             if (distance <= 1.5f && attackQueued && body.velocity == Vector2.zero && Player.instance.actionState == ActionState.WAITING)
             {
                 var baseDamage = Player.stats.GetRandomDamageValue();
-                StartCoroutine(Attack(attackTarget, baseDamage));            
+                StartCoroutine(Attack(attackTarget, baseDamage, 1));            
             }         
         }
         //Queued item pickups
@@ -37,10 +39,10 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
-    IEnumerator Attack(Enemy target, int damage)
+    IEnumerator Attack(Enemy target, int damage, int cost)
     {
         Player.movement.StopMovement();
-        Player.instance.actionState = ActionState.ACTIVE;
+        Player.instance.actionState = ActionState.ACTIVE;        
         yield return new WaitForSeconds(0.5f);
         target.TakeDamage(damage + Player.stats.dmgModifier, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position);
 
@@ -52,10 +54,18 @@ public class PlayerActions : MonoBehaviour
                 Player.stats.EndStatusEffect(i);
             }
         }
+        for (int i = target.statusEffects.Count - 1; i >= 0; i--)
+        {
+            if (target.statusEffects[i].effectID == 3)
+            {
+                target.EndStatusEffect(i);
+            }
+        }
 
         attackQueued = false;
         attackTarget = null;
         Player.instance.actionState = ActionState.WAITING;
+        turnCost = cost;
         TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 

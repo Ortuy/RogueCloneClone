@@ -28,14 +28,7 @@ public class TurnManager : MonoBehaviour
         else
         {
             instance = this;
-        }
-        /**
-        Enemy temp = SpawnManager.instance.SpawnEnemy(0, new Vector2(10.5f, 6.5f));
-        if(temp != null)
-        {
-            enemies.Add(temp);
-        }**/
-        //SpawnEnemy(new Vector2(10.5f, 6.5f));
+        }      
     }
 
     // Update is called once per frame
@@ -45,21 +38,22 @@ public class TurnManager : MonoBehaviour
         {
             if (turnState == TurnState.PLAYER)
             {
-                /**
-                if (Input.GetKeyDown(KeyCode.K))
-                {
-                    Player.stats.AddStatusEffect(new PoisonEffect(Player.stats.statusIcons[0], Player.stats.GetMaxHealth() / 20, 3));
-                }**/
                 if(!playerFrozen)
                 {
-                    Player.instance.DoPlayerTurn();
+                    Player.actions.turnCost--;
+                    if(Player.actions.turnCost <= 0)
+                    {
+                        Player.instance.DoPlayerTurn();
+                    }
+                    else
+                    {
+                        SwitchTurn(TurnState.ENEMY);
+                    }                    
                 }
                 else if(!passing)
                 {
                     StartCoroutine(FreezePlayer());
-                    //SwitchTurn(TurnState.ENEMY);
-                }
-                                
+                }                                
             }
             else
             {
@@ -71,7 +65,8 @@ public class TurnManager : MonoBehaviour
                 }
                 else
                 {
-                    if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0)
+                    enemies[currentActingEnemy].turnCost--;
+                    if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
                     {
                         enemies[currentActingEnemy].DoTurn();
                     }
@@ -79,37 +74,10 @@ public class TurnManager : MonoBehaviour
                     {
                         PassToNextEnemy();
                     }
-                    /**
-                    if (enemies[currentActingEnemy].actionState == ActionState.WAITING)
-                    {
-                        enemies[currentActingEnemy].DoTurn();
-                    }
-                    **/
                 }
-
-                /**
-                for(int i = 0; i < enemies.Count; i++)
-                {
-                    enemies[i].DoTurn();
-                }
-                SwitchTurn();
-                **/
             }
         }       
     }
-
-    /**
-    public void SpawnEnemy(Vector2 position)
-    {
-        GameObject enemyToSpawn = ObjectPooler.instance.GetNewPooledObject();
-        if(enemyToSpawn != null && enemyToSpawn.GetComponent<Enemy>() != null)
-        {
-            enemyToSpawn.transform.position = position;
-            enemies.Add(enemyToSpawn.GetComponent<Enemy>());
-            enemyToSpawn.SetActive(true);
-        }
-    }
-    **/
 
     public void PassToNextEnemy()
     {

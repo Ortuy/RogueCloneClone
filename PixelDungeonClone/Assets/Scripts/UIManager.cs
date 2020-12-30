@@ -159,27 +159,41 @@ public class UIManager : MonoBehaviour
                 itemDescriptionText.text = InventoryManager.instance.inventoryItems[slotID].description;
 
                 if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.WEAPON)
-                {
-                    itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
+                {                   
                     if (!InventoryManager.instance.inventoryItems[slotID].identified)
                     {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " base damage. Probably.";
                         itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+                        
                     }
                     else if (InventoryManager.instance.inventoryItems[slotID].cursed)
                     {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
                         itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is accursed with foul magic. Using it will bind it to your body.";
+                        
+                    }
+                    else
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
                     }
                 }
                 else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.ARMOR)
                 {
-                    itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
                     if (!InventoryManager.instance.inventoryItems[slotID].identified)
                     {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " points of damage per hit. Probably.";
                         itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+                        
                     }
                     else if (InventoryManager.instance.inventoryItems[slotID].cursed)
                     {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
                         itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is accursed with foul magic. Using it will bind it to your body.";
+                        
+                    }
+                    else
+                    {
+                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
                     }
                 }
 
@@ -211,7 +225,15 @@ public class UIManager : MonoBehaviour
                 {
                     if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.POTION)
                     {
-                        useButton.GetComponentInChildren<Text>().text = "Use";
+                        useButton.GetComponentInChildren<Text>().text = "Drink";
+                    }
+                    else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.SCROLL)
+                    {
+                        useButton.GetComponentInChildren<Text>().text = "Break";
+                    }
+                    else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.FOOD)
+                    {
+                        useButton.GetComponentInChildren<Text>().text = "Eat";
                     }
                     useButton.gameObject.SetActive(true);
                 }

@@ -18,6 +18,7 @@ public class ItemInstance
     public ItemType type = ItemType.NONE;
 
     public int statChangeMin, statChangeMax;
+    public int baseStatChangeMin, baseStatChangeMax;
     public int effectID;
     public bool identified;
     public int level;
@@ -36,6 +37,8 @@ public class ItemInstance
         requiresStrength = baseItem.requiresStrength;
         statChangeMin = baseItem.statChangeMin;
         statChangeMax = baseItem.statChangeMax;
+        baseStatChangeMin = statChangeMin;
+        baseStatChangeMax = statChangeMax;
         effectID = baseItem.effectID;
         identified = baseItem.identified;
         type = baseItem.type;
@@ -55,6 +58,8 @@ public class ItemInstance
         requiresStrength = baseItemInstance.requiresStrength;
         statChangeMin = baseItemInstance.statChangeMin;
         statChangeMax = baseItemInstance.statChangeMax;
+        baseStatChangeMin = statChangeMin;
+        baseStatChangeMax = statChangeMax;
         effectID = baseItemInstance.effectID;
         identified = baseItemInstance.identified;
         type = baseItemInstance.type;

@@ -36,6 +36,8 @@ public class Entity : MonoBehaviour
 
     public int dmgModifier, evaModifier, defModifier, accModifier;
 
+    public GameObject damagePopupText;
+
     public virtual void AddStatusEffect(StatusEffect status)
     {
         if (!immune)
@@ -87,5 +89,11 @@ public class Entity : MonoBehaviour
     public float GetEvasion()
     {
         return evasion;
+    }
+
+    protected void ShowDamageText(string text)
+    {
+        var popup = Instantiate(damagePopupText, transform.position, Quaternion.identity).GetComponent<TextMesh>();
+        popup.text = text;
     }
 }

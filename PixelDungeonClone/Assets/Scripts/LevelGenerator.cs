@@ -55,6 +55,7 @@ public class LevelGenerator : MonoBehaviour
     public Tile groundTileBase;
     public Tile wallTileBase;
     public Tile[] wallBottomTiles, wallTopTiles;
+    public Tile checkerboardTile;
 
     [Header("Room Content")]
     [SerializeField]
@@ -175,6 +176,7 @@ public class LevelGenerator : MonoBehaviour
         int rX = Random.Range(rooms[currentCandidateRoom].minCorner.x + 1, rooms[currentCandidateRoom].maxCorner.x);
         int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y + 1, rooms[currentCandidateRoom].maxCorner.y);
         Instantiate(exit, new Vector3(rX + 0.5f, rY + 0.5f), Quaternion.identity);
+        checkerboard.SetTile(new Vector3Int(rX, rY, 0), null);
 
         rX = Random.Range(rooms[0].minCorner.x + 1, rooms[0].maxCorner.x);
         rY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
@@ -205,8 +207,8 @@ public class LevelGenerator : MonoBehaviour
             int roll = Random.Range(0, weightTotal);
             int roomID = Random.Range(1, rooms.Count - 1);
 
-            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x + 1);
-            float posY = Random.Range(rooms[roomID].minCorner.y, rooms[roomID].maxCorner.y + 1);
+            float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
+            float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
             ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
             var itemToDrop = new ItemInstance(weightedPool[roll], 1);
@@ -245,8 +247,8 @@ public class LevelGenerator : MonoBehaviour
         {
             int roomID = Random.Range(1, rooms.Count - 1);
 
-            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x + 1);
-            float posY = Random.Range(rooms[roomID].minCorner.y, rooms[roomID].maxCorner.y + 1);
+            float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
+            float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
             ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
             itemDrop.SetItem(new ItemInstance(dropTable.guaranteedItems[i], 1));
@@ -387,38 +389,46 @@ public class LevelGenerator : MonoBehaviour
                 case 0:
                     Debug.Log("Up");                  
                     int oldSize = xSize;
-                    startCorner = new Vector2Int(startCorner.x, startCorner.y + 1 + ySize);
+                    startCorner = new Vector2Int(startCorner.x, startCorner.y + 2 + ySize);
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
                     DrawRoom(startCorner, xSize, ySize);
-                    ground.SetTile(new Vector3Int(startCorner.x + Random.Range(0, Mathf.Min(oldSize, xSize)), startCorner.y - 1, 0), groundTileBase);
+                    var xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
+                    ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 1, 0), groundTileBase);
+                    ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 2, 0), groundTileBase);
                     break;
                 case 1:
                     Debug.Log("Right");
-                    startCorner = new Vector2Int(startCorner.x + 1 + xSize, startCorner.y);
+                    startCorner = new Vector2Int(startCorner.x + 2 + xSize, startCorner.y);
                     oldSize = ySize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
                     DrawRoom(startCorner, xSize, ySize);
-                    ground.SetTile(new Vector3Int(startCorner.x - 1, startCorner.y + Random.Range(0, Mathf.Min(oldSize, ySize)), 0), groundTileBase);
+                    var yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
+                    ground.SetTile(new Vector3Int(startCorner.x - 1, startCorner.y + yTemp, 0), groundTileBase);
+                    ground.SetTile(new Vector3Int(startCorner.x - 2, startCorner.y + yTemp, 0), groundTileBase);
                     break;
                 case 2:
                     Debug.Log("Down");
                     oldSize = xSize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
-                    startCorner = new Vector2Int(startCorner.x, startCorner.y - 1 - ySize);                    
+                    startCorner = new Vector2Int(startCorner.x, startCorner.y - 2 - ySize);                    
                     DrawRoom(startCorner, xSize, ySize);
-                    ground.SetTile(new Vector3Int(startCorner.x + Random.Range(0, Mathf.Min(oldSize, xSize)), startCorner.y + ySize, 0), groundTileBase);
+                    xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
+                    ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize, 0), groundTileBase);
+                    ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize + 1, 0), groundTileBase);
                     break;
                 case 3:
                     Debug.Log("Left");
                     oldSize = ySize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
-                    startCorner = new Vector2Int(startCorner.x - 1 - xSize, startCorner.y);
+                    startCorner = new Vector2Int(startCorner.x - 2 - xSize, startCorner.y);
                     DrawRoom(startCorner, xSize, ySize);
-                    ground.SetTile(new Vector3Int(startCorner.x + xSize, startCorner.y + Random.Range(0, Mathf.Min(oldSize, ySize)), 0), groundTileBase);
+                    yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
+                    ground.SetTile(new Vector3Int(startCorner.x + xSize, startCorner.y + yTemp, 0), groundTileBase);
+                    ground.SetTile(new Vector3Int(startCorner.x + xSize + 1, startCorner.y + yTemp, 0), groundTileBase);
                     break;
             }
             cluster.Add(rooms[lastRoom + i]);
@@ -452,11 +462,8 @@ public class LevelGenerator : MonoBehaviour
         //Basic algorithm
         //TODO a better one
         bool roomReached = false;
-        bool moveX = true;
-        if (Random.Range(0, 2) == 0)
-        {
-            moveX = false;
-        }
+
+        //Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
 
         //Technically there should be +1/-1 here, but it shouldn't matter
         int distanceX = room1.centerPoint.x - room0.centerPoint.x;
@@ -467,6 +474,13 @@ public class LevelGenerator : MonoBehaviour
 
         distanceX = Mathf.Abs(distanceX);
         distanceY = Mathf.Abs(distanceY);
+
+        bool moveX = true;
+        if (Random.Range(0, 2) == 0 && distanceY > 0 || distanceX == 0)
+        {
+            moveX = false;
+        }
+
 
         int currentX = room0.centerPoint.x;
         int currentY = room0.centerPoint.y;
@@ -508,6 +522,8 @@ public class LevelGenerator : MonoBehaviour
             safeguard--;
             if(safeguard == 0)
             {
+                Debug.LogError("Corridor fuckup (room0 - " + room0.centerPoint + " ,room1 - " + room1.centerPoint + ")");
+                Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
                 break;
             }
         }
@@ -544,12 +560,12 @@ public class LevelGenerator : MonoBehaviour
                 {
                     if(!isYEven)
                     {
-                        checkerboard.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                        checkerboard.SetTile(new Vector3Int(x, y, 0), checkerboardTile);
                     }
                 }
                 else if(isYEven)
                 {
-                    checkerboard.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                    checkerboard.SetTile(new Vector3Int(x, y, 0), checkerboardTile);
                 }
 
                 if(ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x, y, 0)))
@@ -567,7 +583,7 @@ public class LevelGenerator : MonoBehaviour
                 else if(!ground.GetTile(new Vector3Int(x, y, 0)))
                 {
                     //Wall
-                    walls0.SetTile(new Vector3Int(x, y, 0), wallTileBase);
+                    walls1.SetTile(new Vector3Int(x, y, 0), wallTileBase);
                 }
             }
         }
