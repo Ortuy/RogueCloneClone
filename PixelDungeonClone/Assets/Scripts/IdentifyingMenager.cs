@@ -119,6 +119,10 @@ public class IdentifyingMenager : MonoBehaviour
         {
             IdentifyPotion(item);
         }
+        else if(item.type == ItemType.SCROLL)
+        {
+            IdentifyScroll(item);
+        }
         else
         {
             item.identified = true;

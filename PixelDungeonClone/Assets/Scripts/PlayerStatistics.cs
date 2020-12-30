@@ -266,6 +266,7 @@ public class PlayerStatistics : Entity
 
         float value = (health / maxHealth);
         UIManager.instance.playerHealthBar.value = value;
+        InventoryManager.instance.potionUseFX[2].Play();
     }
 
     public void ResetDefence()

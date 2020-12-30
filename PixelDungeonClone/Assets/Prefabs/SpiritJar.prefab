@@ -5126,7 +5126,7 @@ MonoBehaviour:
   minDefBase: 1
   maxDefBase: 3
   minDmgBase: 5
-  maxDmgBase: 8
+  maxDmgBase: 9
   minDefence: 1
   maxDefence: 3
   minBaseDamage: 5
