@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b26ba3e5a4f714dbdef37b2c75c316, type: 3}
   m_Name: OnyxPotion
   m_EditorClassIdentifier: 
-  itemName: Potion of Frost
+  itemName: Onyx Potion
   description: A jar of a pitch-black substance reminding you of tar. Light seems
     to dim all around it, consumed by its darkness. $nYou have no clue what drinking
     it would entail.
@@ -24,5 +24,5 @@ MonoBehaviour:
   type: 3
   statChangeMin: 0
   statChangeMax: 0
-  effectID: 6
-  identified: 1
+  effectID: 9
+  identified: 0

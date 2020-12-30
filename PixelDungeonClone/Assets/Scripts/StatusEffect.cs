@@ -113,7 +113,7 @@ public class CleansingEffect : StatusEffect
         int temp = 0;
         for(int i = 0; i < targetEntity.statusEffects.Count; i++)
         {
-            if(targetEntity.statusEffects[temp].effectID > 0)
+            if(targetEntity.statusEffects[temp].effectID > 0 && targetEntity.statusEffects[temp].effectID < 7)
             {
                 targetEntity.EndStatusEffect(temp);
             }
@@ -165,7 +165,6 @@ public class InvisibilityEffect : StatusEffect
     }
 }
 
-//Needs rework to work with enemies
 public class FrostEffect : StatusEffect
 {
     public FrostEffect(float multiplier, int duration, Entity target) : base(multiplier, duration, target)
@@ -179,12 +178,26 @@ public class FrostEffect : StatusEffect
 
     public override void OnEffectApplied()
     {
-        TurnManager.instance.playerFrozen = true;
+        if(targetEntity == Player.stats)
+        {
+            TurnManager.instance.playerFrozen = true;
+        }
+        else if(targetEntity.GetComponent<Enemy>() != null)
+        {
+            targetEntity.GetComponent<Enemy>().turnCost = durationLeft;
+        }
     }
 
     public override void OnEffectEnd()
     {
-        TurnManager.instance.playerFrozen = false;
+        if (targetEntity == Player.stats)
+        {
+            TurnManager.instance.playerFrozen = false;
+        }
+        else if (targetEntity.GetComponent<Enemy>() != null)
+        {
+            targetEntity.GetComponent<Enemy>().turnCost = 0;
+        }
     }
 
     public override void OnEffectTick()
@@ -274,15 +287,121 @@ public class BlindnessEffect : StatusEffect
     {
         tempModifier = Mathf.RoundToInt(targetEntity.GetAccuracy() * 0.6f);
         targetEntity.accModifier -= tempModifier;
+
+        if(targetEntity.TryGetComponent(out PlayerStatistics stats))
+        {
+            stats.blindLight.SetActive(true);
+            stats.normalLight.SetActive(false);
+        }
+
     }
 
     public override void OnEffectEnd()
     {
         targetEntity.accModifier += tempModifier;
+        if (targetEntity.TryGetComponent(out PlayerStatistics stats))
+        {
+            stats.blindLight.SetActive(false);
+            stats.normalLight.SetActive(true);
+        }
     }
 
     public override void OnEffectTick()
     {
 
+    }
+}
+
+public class HungerEffect : StatusEffect
+{
+    public int type;
+
+    public HungerEffect(float multiplier, int duration, Entity target) : base(multiplier, duration, target)
+    {
+        icon = Player.stats.statusIcons[duration];
+        effectValue = multiplier;
+        durationLeft = -1;
+        targetEntity = target;
+        effectID = 7;
+        type = duration;
+    }
+
+    public override void OnEffectApplied()
+    {
+
+    }
+
+    public override void OnEffectEnd()
+    {
+        if (Player.stats.foodPoints > 96)
+        {
+            Player.stats.AddStatusEffect(new HungerEffect(0f, 7, Player.stats));
+        }
+        else if(Player.stats.foodPoints == 96)
+        {
+            Player.stats.AddStatusEffect(new HungerEffect(0f, 8, Player.stats));
+        }
+        else
+        {
+            Player.stats.AddStatusEffect(new StarvationEffect(0f, 7, Player.stats));
+        }
+    }
+
+    public override void OnEffectTick()
+    {
+        Player.stats.foodPoints--;
+        if(Player.stats.foodPoints == 96 || Player.stats.foodPoints == 0)
+        {
+            Player.stats.EndStatusEffectOfType(7);
+        }
+        if(Player.stats.foodPoints > 96)
+        {
+            if (Random.Range(0, 5) == 0)
+            {
+                Player.stats.Heal(1);
+            }
+            if(type == 8)
+            {
+                Player.stats.EndStatusEffectOfType(7);
+            }          
+        }
+    }
+}
+
+public class StarvationEffect : StatusEffect
+{
+
+    public StarvationEffect(float multiplier, int duration, Entity target) : base(multiplier, duration, target)
+    {
+        icon = Player.stats.statusIcons[9];
+        effectValue = multiplier;
+        durationLeft = -1;
+        targetEntity = target;
+        effectID = 8;
+    }
+
+    public override void OnEffectApplied()
+    {
+
+    }
+
+    public override void OnEffectEnd()
+    {
+        Player.stats.AddStatusEffect(new HungerEffect(0f, 7, Player.stats));
+    }
+
+    public override void OnEffectTick()
+    {
+        if (Player.stats.foodPoints > 0)
+        {
+            Player.stats.EndStatusEffectOfType(8);
+        }
+        else
+        {
+            if(Random.Range(0, 5) == 0)
+            {
+                Player.stats.TakeTrueDamage(1);
+            }            
+        }
     }
 }

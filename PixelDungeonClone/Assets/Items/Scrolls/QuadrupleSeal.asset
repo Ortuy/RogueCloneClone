@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: QuadrupleSeal
   m_EditorClassIdentifier: 
   itemName: Quadruple Seal
-  description: A scroll sealing away a powerful thought. The sigil binding it to
-    the sheet of paper appears minimalistic, barely able to hold on to a single intention.
-    $nThe symbol itself seems inscrutable.
+  description: "A scroll sealing away a powerful thought. The sigil wasn\u2019t drawn
+    with any ink. It has simply always been a part of the parchment. $nThe symbol
+    itself seems inscrutable."
   itemImage: {fileID: 21300000, guid: 8ee475adc3b9c6b439fbbe2be72c33d1, type: 3}
   amount: 1
   strengthRequired: 0
@@ -25,4 +25,4 @@ MonoBehaviour:
   statChangeMin: 0
   statChangeMax: 0
   effectID: 4
-  identified: 1
+  identified: 0

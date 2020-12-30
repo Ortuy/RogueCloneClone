@@ -13,12 +13,13 @@ public class InventorySlot : MonoBehaviour
     private void Start()
     {
         itemIcon = itemButton.GetComponent<Image>();
-        amountText.fontSize = 22;
-        requirementText.fontSize = 22;
-        levelText.fontSize = 22;
+        amountText.fontSize = 16;
+        requirementText.fontSize = 16;
+        levelText.fontSize = 16;
         levelText.fontStyle = FontStyle.Bold;
     }
 
+    //TODO: using string builders
     public void UpdateItem(ItemInstance item)
     {
         if(backgroundIcon != null)
@@ -33,7 +34,7 @@ public class InventorySlot : MonoBehaviour
         if(item.stackable && item.amount > 1)
         {
             amountText.gameObject.SetActive(true);
-            amountText.text = "x" + item.amount;
+            amountText.text = " x" + item.amount;
         }
         else
         {
@@ -43,7 +44,7 @@ public class InventorySlot : MonoBehaviour
         if(item.requiresStrength)
         {
             requirementText.gameObject.SetActive(true);
-            requirementText.text = "" + item.strengthRequired;
+            requirementText.text = " " + item.strengthRequired;
         }
         else
         {
@@ -55,13 +56,13 @@ public class InventorySlot : MonoBehaviour
             if(item.level > 0)
             {
                 levelText.gameObject.SetActive(true);
-                levelText.text = "+" + item.level;
+                levelText.text = "+" + item.level + " ";
                 levelText.color = InventoryManager.instance.upgradeColor;
             }
             else if(item.level < 0)
             {
                 levelText.gameObject.SetActive(true);
-                levelText.text = "" + item.level;
+                levelText.text = "" + item.level + " ";
                 levelText.color = InventoryManager.instance.cursedColor;
             }
             else
@@ -80,7 +81,7 @@ public class InventorySlot : MonoBehaviour
         else if(item.requiresStrength)
         {
             levelText.gameObject.SetActive(true);
-            levelText.text = "?";
+            levelText.text = "? ";
             levelText.color = InventoryManager.instance.unknownColor;
             curseIcon.gameObject.SetActive(false);
         }

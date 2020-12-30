@@ -160,7 +160,7 @@ public class InventoryManager : MonoBehaviour
         switch (inventoryItems[slotID].effectID)
         {
             case 0:
-                Player.stats.Heal(Mathf.RoundToInt(Player.stats.GetMaxHealth() * 0.3f));
+                Player.stats.Heal(Mathf.RoundToInt(Player.stats.GetMaxHealth() * 0.5f));
                 break;
             case 1:
                 Player.stats.IncreaseStrength();
@@ -169,10 +169,10 @@ public class InventoryManager : MonoBehaviour
                 Player.stats.LevelUp();
                 break;
             case 3:
-                Player.stats.AddStatusEffect(new CleansingEffect(0, 12, Player.stats));
+                Player.stats.AddStatusEffect(new CleansingEffect(0, 24, Player.stats));
                 break;
             case 4:
-                Player.stats.AddStatusEffect(new InvisibilityEffect(0, 12, Player.stats));
+                Player.stats.AddStatusEffect(new InvisibilityEffect(0, 24, Player.stats));
                 break;
             case 5:
                 Player.stats.AddStatusEffect(new PoisonEffect(Player.stats.GetMaxHealth() / 20, 8, Player.stats));
@@ -181,13 +181,13 @@ public class InventoryManager : MonoBehaviour
                 Player.stats.AddStatusEffect(new FrostEffect(0, 4, Player.stats));
                 break;
             case 7:
-                Player.stats.AddStatusEffect(new WeaknessEffect(0, 8, Player.stats));
+                Player.stats.AddStatusEffect(new WeaknessEffect(0, 16, Player.stats));
                 break;
             case 8:
-                Player.stats.AddStatusEffect(new FragilityEffect(0, 8, Player.stats));
+                Player.stats.AddStatusEffect(new FragilityEffect(0, 16, Player.stats));
                 break;
             case 9:
-                Player.stats.AddStatusEffect(new BlindnessEffect(0, 8, Player.stats));
+                Player.stats.AddStatusEffect(new BlindnessEffect(0, 16, Player.stats));
                 break;
 
         }
@@ -247,12 +247,14 @@ public class InventoryManager : MonoBehaviour
                         enemy.TakeTrueDamage(damage);
                     }
                 }
-                Player.stats.AddStatusEffect(new WeaknessEffect(0, 8, Player.stats));
-                Player.stats.AddStatusEffect(new FragilityEffect(0, 8, Player.stats));
-                Player.stats.AddStatusEffect(new BlindnessEffect(0, 8, Player.stats));
+                Player.stats.AddStatusEffect(new WeaknessEffect(0, 12, Player.stats));
+                Player.stats.AddStatusEffect(new FragilityEffect(0, 12, Player.stats));
+                Player.stats.AddStatusEffect(new BlindnessEffect(0, 12, Player.stats));
+                UIManager.instance.ToggleInventory();
                 break;
             case 6:
                 TurnManager.instance.playerExtraTurns += 4;
+                UIManager.instance.ToggleInventory();
                 break;
             case 7:
                 nearbyEnemies = Physics2D.OverlapCircleAll(Player.instance.transform.position, 6f, LayerMask.GetMask("Enemies"));
@@ -272,6 +274,7 @@ public class InventoryManager : MonoBehaviour
                         enemy.GoAmok(temp[Random.Range(0, temp.Count)]);
                     }
                 }
+                UIManager.instance.ToggleInventory();
                 break;
             case 8:
                 var generator = FindObjectOfType<LevelGenerator>();
@@ -283,6 +286,7 @@ public class InventoryManager : MonoBehaviour
                 Player.movement.StopMovement();
                 Player.instance.transform.position = new Vector2(posX + 0.5f, posY + 0.5f);
 
+                UIManager.instance.ToggleInventory();
                 break;
         }
         
@@ -385,8 +389,16 @@ public class InventoryManager : MonoBehaviour
             {
                 UseScroll(slotID);
             }
+            else if(inventoryItems[slotID].type == ItemType.FOOD)
+            {
+                Player.stats.foodPoints += 192;
+                Player.actions.turnCost = 3;
+                SubtractItem(slotID);
+                UIManager.instance.ToggleInventory();
+            }
             else if (inventoryItems[slotID].type == ItemType.WEAPON && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
             {
+                IdentifyingMenager.instance.IdentifyItem(inventoryItems[slotID]);
                 if(inventoryItems[0] == null || (inventoryItems[0] != null && !inventoryItems[0].cursed))
                 {
                     ItemInstance temp = inventoryItems[slotID];
@@ -404,6 +416,7 @@ public class InventoryManager : MonoBehaviour
             }
             else if (inventoryItems[slotID].type == ItemType.ARMOR && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
             {
+                IdentifyingMenager.instance.IdentifyItem(inventoryItems[slotID]);
                 if (inventoryItems[1] == null || (inventoryItems[1] != null && !inventoryItems[1].cursed))
                 {
                     ItemInstance temp = inventoryItems[slotID];

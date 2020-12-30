@@ -38,6 +38,10 @@ public class PlayerStatistics : Entity
     //public List<StatusEffect> statusEffects;
 
     public Sprite[] statusIcons;
+
+    public int foodPoints = 192;
+
+    public GameObject normalLight, blindLight;
     /**
     public bool immune;
     public bool invisible;
@@ -56,6 +60,13 @@ public class PlayerStatistics : Entity
 
         health = maxHealth;
         statusEffects = new List<StatusEffect>();
+        StartCoroutine(WaitAndAddHungerStatus());
+    }
+
+    IEnumerator WaitAndAddHungerStatus()
+    {
+        yield return null;
+        AddStatusEffect(new HungerEffect(0f, 7, this));
     }
 
     // Update is called once per frame
@@ -66,7 +77,7 @@ public class PlayerStatistics : Entity
 
     public override void AddStatusEffect(StatusEffect status)
     {
-        if(!immune)
+        if(!immune || status.effectID == 7 || status.effectID == 8)
         {
             statusEffects.Add(status);
             status.OnEffectApplied();
@@ -95,6 +106,23 @@ public class PlayerStatistics : Entity
         UIManager.instance.statusDisplay.Remove(temp.GetComponent<Image>());
         Destroy(temp);
         statusEffects.RemoveAt(effectID);
+    }
+
+    public void EndStatusEffectOfType(int effectType)
+    {
+        for(int i = 0; i < statusEffects.Count; i++)
+        {
+            if(statusEffects[i].effectID == effectType)
+            {
+                statusEffects[i].OnEffectEnd();
+                var temp = statusEffects[i].iconDisplay;
+                UIManager.instance.statusDisplay.Remove(temp.GetComponent<Image>());
+                Destroy(temp);
+                statusEffects.RemoveAt(i);
+                break;
+            }
+        }
+        
     }
 
     public int GetStrength()
@@ -128,13 +156,14 @@ public class PlayerStatistics : Entity
         if (evasionRoll <= evasionPercent)
         {
             Debug.Log("Dodge!");
+            ShowDamageText("Miss!");
         }
         else
         {
             var hitDirection = (attackerPos - transform.position).normalized;
             Debug.DrawRay(transform.position, hitDirection, Color.yellow, 1000);
-            var angle = Mathf.Atan2(hitDirection.y, hitDirection.x);
-            //hitFX.transform.rotation = Quaternion.AngleAxis(angle - 120, Vector3.forward);
+            var angle = Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg;
+            hitFX.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
             //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
             hitFX.Play();
 
@@ -145,6 +174,8 @@ public class PlayerStatistics : Entity
             {
                 totaldmg = 1;
             }
+
+            ShowDamageText(totaldmg.ToString());
 
             health -= totaldmg;
             float value = (health / maxHealth);
@@ -163,11 +194,13 @@ public class PlayerStatistics : Entity
     {        
         //hitFX.transform.rotation = Quaternion.AngleAxis(angle - 120, Vector3.forward);
         //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
-        hitFX.Play();
+        //hitFX.Play();
 
         health -= damage;
         float value = (health / maxHealth);
         UIManager.instance.playerHealthBar.value = value;
+
+        ShowDamageText(damage.ToString());
 
         if (health <= 0)
         {

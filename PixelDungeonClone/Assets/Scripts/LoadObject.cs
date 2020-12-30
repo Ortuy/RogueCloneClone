@@ -31,7 +31,7 @@ public class LoadObject : MonoBehaviour
 
     IEnumerator MovePlayerToStartPosition()
     {
-        yield return new WaitForSeconds(1);
+        yield return null;
         Player.instance.transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
     }
 }

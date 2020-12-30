@@ -25,4 +25,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
   - {fileID: 11400000, guid: 4e2d30f76a5b50241b2c1fa5ffc0ca89, type: 2}
   itemWeightPool: 02000000050000000200000001000000050000000300000002000000010000001400000014000000
-  guaranteedItems: []
+  guaranteedItems:
+  - {fileID: 11400000, guid: 87184e2c8734cc04db1fc0d8fc1d4963, type: 2}

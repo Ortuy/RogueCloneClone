@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: SingularSeal
   m_EditorClassIdentifier: 
   itemName: Singular Seal
-  description: A scroll sealing away a powerful thought. The sigil binding it to
-    the sheet of paper appears minimalistic, barely able to hold on to a single intention.
-    $nThe symbol itself seems inscrutable.
+  description: A scroll sealing away a powerful thought. The mark of the seal is
+    one of the simpler ones. Those mysterious scrolls appear nowhere outside the
+    labyrinth and lose all power when taken away. $nThe symbol itself seems inscrutable.
   itemImage: {fileID: 21300000, guid: 76a25da4ef51c894ba16f20225c8d3e7, type: 3}
   amount: 1
   strengthRequired: 0
@@ -24,5 +24,5 @@ MonoBehaviour:
   type: 4
   statChangeMin: 0
   statChangeMax: 0
-  effectID: 1
-  identified: 1
+  effectID: 3
+  identified: 0
