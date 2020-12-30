@@ -14,6 +14,7 @@ public class InventoryManager : MonoBehaviour
     //4+ - inventory
     public ItemInstance[] inventoryItems;
     public InventorySlot[] inventorySlots;
+    public ParticleSystem[] scrollUseFX, potionUseFX;
 
     //public Item weapon, armour;
     //public InventorySlot weaponSlot, armourSlot;
@@ -157,7 +158,8 @@ public class InventoryManager : MonoBehaviour
 
     public void DrinkPotion(int slotID)
     {
-        switch (inventoryItems[slotID].effectID)
+        var effID = inventoryItems[slotID].effectID;
+        switch (effID)
         {
             case 0:
                 Player.stats.Heal(Mathf.RoundToInt(Player.stats.GetMaxHealth() * 0.5f));
@@ -194,6 +196,7 @@ public class InventoryManager : MonoBehaviour
         IdentifyingMenager.instance.IdentifyPotion(inventoryItems[slotID]);
         SubtractItem(slotID);
         UIManager.instance.ToggleInventory();
+        potionUseFX[effID].Play();
     }
 
     private void UseScroll(int slotID)
@@ -251,10 +254,12 @@ public class InventoryManager : MonoBehaviour
                 Player.stats.AddStatusEffect(new FragilityEffect(0, 12, Player.stats));
                 Player.stats.AddStatusEffect(new BlindnessEffect(0, 12, Player.stats));
                 UIManager.instance.ToggleInventory();
+                scrollUseFX[0].Play();
                 break;
             case 6:
                 TurnManager.instance.playerExtraTurns += 4;
                 UIManager.instance.ToggleInventory();
+                scrollUseFX[1].Play();
                 break;
             case 7:
                 nearbyEnemies = Physics2D.OverlapCircleAll(Player.instance.transform.position, 6f, LayerMask.GetMask("Enemies"));
@@ -275,6 +280,7 @@ public class InventoryManager : MonoBehaviour
                     }
                 }
                 UIManager.instance.ToggleInventory();
+                scrollUseFX[2].Play();
                 break;
             case 8:
                 var generator = FindObjectOfType<LevelGenerator>();
@@ -287,6 +293,7 @@ public class InventoryManager : MonoBehaviour
                 Player.instance.transform.position = new Vector2(posX + 0.5f, posY + 0.5f);
 
                 UIManager.instance.ToggleInventory();
+                scrollUseFX[3].Play();
                 break;
         }
         
