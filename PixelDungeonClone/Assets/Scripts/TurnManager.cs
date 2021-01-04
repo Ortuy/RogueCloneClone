@@ -18,6 +18,8 @@ public class TurnManager : MonoBehaviour
     private bool passing;
     public int playerExtraTurns;
 
+    public List<Gas> gases;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -81,6 +83,15 @@ public class TurnManager : MonoBehaviour
 
     public void PassToNextEnemy()
     {
+        enemies[currentActingEnemy].TickStatusEffects();
+
+        var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
+
+        if (gasNearEnemy != null)
+        {
+            gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
+        }
+
         currentActingEnemy++;
     }
 
@@ -97,6 +108,18 @@ public class TurnManager : MonoBehaviour
         if (turnState == TurnState.PLAYER)
         {
             Player.stats.TickStatusEffects();
+
+            var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
+
+            if (gasNearPlayer != null)
+            {
+                gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
+            }
+
+            for (int i = 0; i < gases.Count; i++)
+            {
+                gases[i].TickGas();
+            }
         }
         if(playerExtraTurns == 0)
         {
@@ -114,6 +137,18 @@ public class TurnManager : MonoBehaviour
         if (turn == TurnState.ENEMY)
         {
             Player.stats.TickStatusEffects();
+
+            var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
+
+            if(gasNearPlayer != null)
+            {
+                gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
+            }
+
+            for (int i = 0; i < gases.Count; i++)
+            {
+                gases[i].TickGas();
+            }
         }
         if (playerExtraTurns == 0)
         {

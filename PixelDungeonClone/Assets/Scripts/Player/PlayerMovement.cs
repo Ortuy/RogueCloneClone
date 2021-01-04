@@ -17,6 +17,9 @@ public class PlayerMovement : MonoBehaviour
 
     public bool debugMode;
 
+    private SpriteRenderer spriteRenderer;
+    private Animator animator;
+
     //public static PlayerMovement instance;
 
     // Start is called before the first frame update
@@ -33,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
         }**/
         
         body = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = GetComponent<Animator>();
         path = null;
     }
     
@@ -82,6 +87,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveOnPath()
     {
+        animator.speed = 1;
+        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
         if (path != null)
         {
             Vector2 targetPos = path[currentPathIndex];
@@ -98,6 +105,16 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Vector2 movementDir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
 
+                    if(movementDir.x != 0)
+                    {
+                        animator.SetFloat("MoveDirection", movementDir.x);
+                    }
+                    
+                    if(!animator.GetBool("Moving"))
+                    {
+                        animator.SetBool("Moving", true);
+                    }
+                    
                     body.velocity = movementDir * movementSpeed;
                 }
                 else
@@ -114,14 +131,20 @@ public class PlayerMovement : MonoBehaviour
                         currentPathIndex++;
                         if (currentPathIndex >= path.Count)
                         {
-                            if(Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")) && !Physics2D.OverlapCircle(transform.position, 2f, LayerMask.GetMask("Enemies")))
+                            var item = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items"));
+                            if (item != null)
                             {
-                                Player.actions.QueueItemPickup();
+                                if (!Physics2D.OverlapCircle(transform.position, 2f, LayerMask.GetMask("Enemies")))
+                                {
+                                    Player.actions.QueueItemPickup();
+                                }
+                                else
+                                {
+                                    UIManager.instance.pickUpButton.gameObject.SetActive(true);
+                                    UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
+                                }
                             }
-                            else
-                            {
-                                UIManager.instance.pickUpButton.gameObject.SetActive(true);
-                            }
+                            
                             StopMovement();
                         }
                     }
@@ -135,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             body.velocity = Vector2.zero;
+            animator.SetBool("Moving", false);
         }
     }
 
@@ -143,6 +167,8 @@ public class PlayerMovement : MonoBehaviour
         path = null;
         currentPathIndex = 0;
         body.velocity = Vector2.zero;
+        //animator.SetBool("Moving", false);
+        animator.speed = 0;
     }
 
     public void StopMovement(bool abandonPath)
@@ -152,7 +178,7 @@ public class PlayerMovement : MonoBehaviour
             path = null;
             currentPathIndex = 0;
         }
-        
+        //animator.SetBool("Moving", false);
         body.velocity = Vector2.zero;
     }
 }

@@ -24,7 +24,9 @@ public class ItemInstance
     public int level;
     public bool cursed;
 
-    private int levelFactor;
+    public bool pickedUpOnce;
+
+    public int levelFactor;
 
     public ItemInstance(Item baseItem, int newAmount)
     {
@@ -45,6 +47,7 @@ public class ItemInstance
         level = 0;
         cursed = false;
         levelFactor = 1 + Mathf.RoundToInt((statChangeMin + statChangeMax) / 20);
+        pickedUpOnce = false;
     }
 
     public ItemInstance(ItemInstance baseItemInstance, int newAmount)
@@ -58,19 +61,24 @@ public class ItemInstance
         requiresStrength = baseItemInstance.requiresStrength;
         statChangeMin = baseItemInstance.statChangeMin;
         statChangeMax = baseItemInstance.statChangeMax;
-        baseStatChangeMin = statChangeMin;
-        baseStatChangeMax = statChangeMax;
+        baseStatChangeMin = baseItemInstance.baseStatChangeMin;
+        baseStatChangeMax = baseItemInstance.baseStatChangeMax;
         effectID = baseItemInstance.effectID;
         identified = baseItemInstance.identified;
         type = baseItemInstance.type;
         level = baseItemInstance.level;
         cursed = baseItemInstance.cursed;
+        pickedUpOnce = baseItemInstance.pickedUpOnce;
+        levelFactor = baseItemInstance.levelFactor;
     }
 
     public void LevelUp(int levelAmount)
     {
+        Debug.LogWarning("OLDLevel: " + level + " Stats: " + statChangeMin + "-" + statChangeMax);
+        Debug.LogWarning(levelFactor);
         level += levelAmount;
         statChangeMin += levelAmount * levelFactor;
         statChangeMax += levelAmount * levelFactor;
+        Debug.LogWarning("Level: " + level + " Stats: " + statChangeMin + "-" + statChangeMax);
     }
 }

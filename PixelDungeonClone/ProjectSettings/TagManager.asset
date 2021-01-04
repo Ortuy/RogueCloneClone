@@ -6,6 +6,7 @@ TagManager:
   tags:
   - SpiritJar
   - Ground
+  - Map
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Enemies
   - Walls
   - Items
-  - 
-  - 
+  - Gases
+  - Minimap
   - 
   - 
   - 
@@ -46,11 +47,17 @@ TagManager:
   - name: Items
     uniqueID: 2942854843
     locked: 0
+  - name: EntitiesMain
+    uniqueID: 3019788219
+    locked: 0
   - name: Entities
     uniqueID: 2974165323
     locked: 0
   - name: Walls
     uniqueID: 2337765345
+    locked: 0
+  - name: Minimap
+    uniqueID: 3150546607
     locked: 0
   - name: Default
     uniqueID: 0

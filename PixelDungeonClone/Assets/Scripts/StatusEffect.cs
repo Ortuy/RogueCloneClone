@@ -19,7 +19,7 @@ public class StatusEffect
 
     public StatusEffect(float multiplier, int duration, Entity target)
     {
-        //icon = newIcon;
+        icon = Player.stats.statusIcons[11];
         effectValue = multiplier;
         durationLeft = duration;
         targetEntity = target;
@@ -274,6 +274,8 @@ public class BlindnessEffect : StatusEffect
 {
     private int tempModifier;
 
+    private float oldAlertRange = 0;
+
     public BlindnessEffect(float multiplier, int duration, Entity target) : base(multiplier, duration, target)
     {
         icon = Player.stats.statusIcons[6];
@@ -288,12 +290,19 @@ public class BlindnessEffect : StatusEffect
         tempModifier = Mathf.RoundToInt(targetEntity.GetAccuracy() * 0.6f);
         targetEntity.accModifier -= tempModifier;
 
-        if(targetEntity.TryGetComponent(out PlayerStatistics stats))
+        if (targetEntity.TryGetComponent(out PlayerStatistics stats))
         {
+            stats.torchLight.SetActive(false);
             stats.blindLight.SetActive(true);
             stats.normalLight.SetActive(false);
         }
-
+        else
+        {
+            var enemy = targetEntity.GetComponent<Enemy>();
+            enemy.behaviourState = AIState.UNALERTED;
+            oldAlertRange = enemy.alertRange;
+            enemy.alertRange = effectValue;
+        }
     }
 
     public override void OnEffectEnd()
@@ -302,7 +311,18 @@ public class BlindnessEffect : StatusEffect
         if (targetEntity.TryGetComponent(out PlayerStatistics stats))
         {
             stats.blindLight.SetActive(false);
-            stats.normalLight.SetActive(true);
+            if (targetEntity.HasStatus(10))
+            {
+                stats.torchLight.SetActive(true);
+            }
+            else
+            {
+                stats.normalLight.SetActive(true);
+            }            
+        }
+        else
+        {
+            targetEntity.GetComponent<Enemy>().alertRange = oldAlertRange;
         }
     }
 
@@ -322,7 +342,7 @@ public class HungerEffect : StatusEffect
         effectValue = multiplier;
         durationLeft = -1;
         targetEntity = target;
-        effectID = 7;
+        effectID = duration;
         type = duration;
     }
 
@@ -351,8 +371,15 @@ public class HungerEffect : StatusEffect
     {
         Player.stats.foodPoints--;
         if(Player.stats.foodPoints == 96 || Player.stats.foodPoints == 0)
-        {
-            Player.stats.EndStatusEffectOfType(7);
+        {            
+            if(Player.stats.foodPoints == 0)
+            {
+                Player.stats.EndStatusEffectOfType(8);
+            }
+            else
+            {
+                Player.stats.EndStatusEffectOfType(7);
+            }
         }
         if(Player.stats.foodPoints > 96)
         {
@@ -362,7 +389,7 @@ public class HungerEffect : StatusEffect
             }
             if(type == 8)
             {
-                Player.stats.EndStatusEffectOfType(7);
+                Player.stats.EndStatusEffectOfType(8);
             }          
         }
     }
@@ -377,7 +404,7 @@ public class StarvationEffect : StatusEffect
         effectValue = multiplier;
         durationLeft = -1;
         targetEntity = target;
-        effectID = 8;
+        effectID = 9;
     }
 
     public override void OnEffectApplied()
@@ -394,7 +421,7 @@ public class StarvationEffect : StatusEffect
     {
         if (Player.stats.foodPoints > 0)
         {
-            Player.stats.EndStatusEffectOfType(8);
+            Player.stats.EndStatusEffectOfType(9);
         }
         else
         {
@@ -403,5 +430,61 @@ public class StarvationEffect : StatusEffect
                 Player.stats.TakeTrueDamage(1);
             }            
         }
+    }
+}
+
+public class TorchEffect : StatusEffect
+{
+    private int tempModifier;
+
+    private float oldAlertRange = 0;
+
+    public TorchEffect(float multiplier, int duration, Entity target) : base(multiplier, duration, target)
+    {
+        icon = Player.stats.statusIcons[10];
+        effectValue = multiplier;
+        durationLeft = duration;
+        targetEntity = target;
+        effectID = 10;
+    }
+
+    public override void OnEffectApplied()
+    {
+        tempModifier = Mathf.RoundToInt(effectValue);
+        targetEntity.accModifier += tempModifier;
+        targetEntity.evaModifier += tempModifier;
+
+        if (targetEntity.TryGetComponent(out PlayerStatistics stats))
+        {
+            if(!targetEntity.HasStatus(6))
+            {
+                stats.normalLight.SetActive(false);
+                stats.torchLight.SetActive(true);
+            }           
+        }
+    }
+
+    public override void OnEffectEnd()
+    {
+        targetEntity.accModifier -= tempModifier;
+        targetEntity.evaModifier -= tempModifier;
+
+        if (targetEntity.TryGetComponent(out PlayerStatistics stats))
+        {
+            stats.torchLight.SetActive(false);
+            if (!targetEntity.HasStatus(6))
+            {
+                stats.normalLight.SetActive(true);               
+            }
+            else
+            {
+                stats.blindLight.SetActive(true);
+            }
+        }
+    }
+
+    public override void OnEffectTick()
+    {
+
     }
 }

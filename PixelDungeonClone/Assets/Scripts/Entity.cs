@@ -38,12 +38,40 @@ public class Entity : MonoBehaviour
 
     public GameObject damagePopupText;
 
+    public bool HasStatus(int effectID)
+    {
+        var temp = false;
+        for(int i = 0; i < statusEffects.Count; i++)
+        {
+            if(statusEffects[i].effectID == effectID)
+            {
+                temp = true;
+                break;
+            }
+        }
+        return temp;
+    }
+
     public virtual void AddStatusEffect(StatusEffect status)
     {
         if (!immune)
         {
-            statusEffects.Add(status);
-            status.OnEffectApplied();
+            var temp = false;
+
+            for(int i = 0; i < statusEffects.Count; i++)
+            {
+                if(statusEffects[i].effectID == status.effectID && statusEffects[i].effectValue == status.effectValue)
+                {
+                    temp = true;
+                    statusEffects[i].durationLeft += status.durationLeft;
+                    break;
+                }
+            }
+            if(!temp)
+            {
+                statusEffects.Add(status);
+                status.OnEffectApplied();
+            }            
             //UIManager.instance.AddStatusToDisplay(status.icon);
             //statusEffects[statusEffects.Count - 1].iconDisplay = UIManager.instance.statusDisplay[UIManager.instance.statusDisplay.Count - 1].gameObject;
         }
@@ -89,6 +117,11 @@ public class Entity : MonoBehaviour
     public float GetEvasion()
     {
         return evasion;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
     }
 
     protected void ShowDamageText(string text)

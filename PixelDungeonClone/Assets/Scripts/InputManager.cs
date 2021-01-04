@@ -49,8 +49,17 @@ public class InputManager : MonoBehaviour
         {
             Vector2 mousePos = GetMouseWorldPosition();
             
-
-            if(Pathfinding.instance.FindEnemyOnTile(mousePos))
+            if(Player.actions.throwQueued)
+            {
+                Pathfinding.instance.GetGrid().GetXY(mousePos, out int x0, out int y0);
+                var temp = new Vector2(Pathfinding.instance.GetGrid().GetWorldPosition(x0, y0).x + 0.5f, Pathfinding.instance.GetGrid().GetWorldPosition(x0, y0).y + 0.5f);
+                if (Pathfinding.instance.CheckLineOfSight(Player.instance.transform.position, temp) && Pathfinding.instance.GetGrid().GetGridObject(mousePos).walkable)
+                {
+                    Player.actions.ThrowItem(temp);
+                }
+                
+            }
+            else if(Pathfinding.instance.FindEnemyOnTile(mousePos))
             {
                 Player.actions.QueueAttack(true);
             }

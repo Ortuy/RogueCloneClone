@@ -29,12 +29,14 @@ public class UIManager : MonoBehaviour
     public Sprite nullSprite;
 
     public Button pickUpButton;
-    public Button useButton;
+    public Image itemPickupImage;
+    public Button useButton, throwButton, dropButton, mapButton;
 
     public GameObject itemMenu;
     public Text itemMenuText, itemDescriptionText;
 
     public GameObject pauseMenu;
+    public GameObject mapMenu;
 
     public Image fadeImage;
     private bool fadeIn, fadeOut;
@@ -121,6 +123,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ToggleMap()
+    {
+        if (mapMenu.activeInHierarchy)
+        {
+            mapMenu.SetActive(false);
+            MouseBlocker.mouseBlocked = false;
+        }
+        else
+        {
+            mapMenu.SetActive(true);
+        }
+    }
+
     public void ToggleDeathScreen()
     {
         if (deathScreen.activeInHierarchy)
@@ -147,10 +162,14 @@ public class UIManager : MonoBehaviour
                 StartCoroutine(RefreshItemMenu());
                 if (slotID >= 4)
                 {
+                    throwButton.gameObject.SetActive(true);
+                    dropButton.gameObject.SetActive(true);
                     useButton.GetComponentInChildren<Text>().text = "Equip";
                 }
                 else
                 {
+                    throwButton.gameObject.SetActive(false);
+                    dropButton.gameObject.SetActive(false);                   
                     useButton.GetComponentInChildren<Text>().text = "Unequip";
                 }
                 itemMenu.GetComponent<ItemMenu>().slotID = slotID;
@@ -162,7 +181,7 @@ public class UIManager : MonoBehaviour
                 {                   
                     if (!InventoryManager.instance.inventoryItems[slotID].identified)
                     {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " base damage. Probably.";
+                        itemDescriptionText.text = itemDescriptionText.text + " " + (InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin) + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " base damage. Probably.";
                         itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is unidentified. It may hold secrets, pleasant and unpleasant alike.";
                         
                     }
@@ -235,7 +254,16 @@ public class UIManager : MonoBehaviour
                     {
                         useButton.GetComponentInChildren<Text>().text = "Eat";
                     }
+                    else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.TORCH)
+                    {
+                        useButton.GetComponentInChildren<Text>().text = "Light";
+                    }
+
                     useButton.gameObject.SetActive(true);
+                    if (slotID < 4 && InventoryManager.instance.inventoryItems[slotID].effectID == 10)
+                    {
+                        useButton.gameObject.SetActive(false);
+                    }
                 }
             }
         }

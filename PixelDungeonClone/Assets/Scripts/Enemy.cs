@@ -33,6 +33,7 @@ public class Enemy : Entity
     [Header("Other")]
     [SerializeField]
     private int xpDrop;
+    public SpriteRenderer mapImage;
 
     public ActionState actionState = ActionState.WAITING;
 
@@ -46,14 +47,18 @@ public class Enemy : Entity
     private Slider healthBar;
 
     [SerializeField]
-    private AIState behaviourState;
+    public AIState behaviourState;
 
     private Vector3 lastPlayerPosition;
 
     [SerializeField]
-    private float awakeRange, alertRange;
+    public float awakeRange, alertRange;
 
     public int turnCost;
+
+    private SpriteRenderer spriteRenderer;
+
+    private Animator animator;
 
     [Header("Movement")]
     private Rigidbody2D body;
@@ -86,6 +91,9 @@ public class Enemy : Entity
         statusEffects = new List<StatusEffect>();
         behaviourState = AIState.SLEEPING;
         sleepFX.Play();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+        animator = GetComponent<Animator>();
     }
 
     public void DoTurn()
@@ -241,6 +249,7 @@ public class Enemy : Entity
 
     private void MoveOnPath()
     {
+        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
         if (path != null)
         {
             actionState = ActionState.ACTIVE;
@@ -261,6 +270,11 @@ public class Enemy : Entity
                 {
                     Debug.Log("SettingVelocity");
                     Vector2 movementDir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
+
+                    if (movementDir.x != 0)
+                    {
+                        animator.SetFloat("MoveDirection", movementDir.x);
+                    }
 
                     body.velocity = movementDir * movementSpeed;
                 }
@@ -308,6 +322,12 @@ public class Enemy : Entity
 
     IEnumerator AttackPlayer(int damage, int cost)
     {
+        var dir = transform.position.x - Player.instance.transform.position.x;
+
+        if (dir != 0)
+        {
+            animator.SetFloat("MoveDirection", -dir);
+        }
         actionState = ActionState.ACTIVE;       
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("Attackin");
@@ -326,6 +346,12 @@ public class Enemy : Entity
 
     IEnumerator AttackTarget(int damage, int cost)
     {
+        var dir = transform.position.x - attackTarget.transform.position.x;
+
+        if (dir != 0)
+        {
+            animator.SetFloat("MoveDirection", -dir);
+        }
         actionState = ActionState.ACTIVE;
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("Attackin");
@@ -438,7 +464,47 @@ public class Enemy : Entity
                 break;
             }
         }
-        Player.stats.AddXP(xpDrop);
+
+        int xpModifier = 0;
+
+        if (InventoryManager.instance.ringEquipped[0] == 7)
+        {
+            int chance = 40 + (10 * InventoryManager.instance.inventoryItems[2].baseStatChangeMax);
+            if (InventoryManager.instance.inventoryItems[2].cursed)
+            {
+                if(Random.Range(0, 100) < chance)
+                {
+                    xpModifier -= InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+                }
+            }
+            else
+            {
+                if (Random.Range(0, 100) < chance)
+                {
+                    xpModifier += InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+                }
+            }
+        }
+        if (InventoryManager.instance.ringEquipped[1] == 7)
+        {
+            int chance = 40 + (10 * InventoryManager.instance.inventoryItems[3].baseStatChangeMax);
+            if (InventoryManager.instance.inventoryItems[3].cursed)
+            {
+                if (Random.Range(0, 100) < chance)
+                {
+                    xpModifier -= InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
+                }
+            }
+            else
+            {
+                if (Random.Range(0, 100) < chance)
+                {
+                    xpModifier += InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
+                }
+            }
+        }
+
+        Player.stats.AddXP(xpDrop+xpModifier);
 
         ResetState();
 

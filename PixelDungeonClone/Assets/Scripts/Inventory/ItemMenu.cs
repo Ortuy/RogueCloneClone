@@ -57,4 +57,21 @@ public class ItemMenu : MonoBehaviour
             gameObject.SetActive(false);
         }
     }
+
+    public void ThrowItem()
+    {
+        //TODO: Turn off the inventory button
+        if (TurnManager.instance.turnState == TurnState.PLAYER && slotID >= 4)
+        {
+            Player.actions.throwQueued = true;
+            Player.actions.itemToThrow = new ItemInstance(InventoryManager.instance.inventoryItems[slotID], 1);
+            InventoryManager.instance.SubtractItem(slotID);
+
+            
+
+            //TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+            UIManager.instance.ToggleInventory();
+            gameObject.SetActive(false);
+        }
+    }
 }

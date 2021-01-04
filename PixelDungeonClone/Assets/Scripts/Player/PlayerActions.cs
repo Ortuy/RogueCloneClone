@@ -8,16 +8,22 @@ public class PlayerActions : MonoBehaviour
 {
     private bool attackQueued, pickUpQueued;
 
+    public bool throwQueued;
+    public ItemInstance itemToThrow;
+
     private Enemy attackTarget;
 
     private Rigidbody2D body;
 
     public int turnCost;
+    public GameObject popupText;
+    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }  
 
     public void DoPlayerTurn()
@@ -39,12 +45,59 @@ public class PlayerActions : MonoBehaviour
         }
     }
 
+    public void ThrowItem(Vector2 destination)
+    {
+        //StartCoroutine(InstantiateThrownItem(destination));
+        var thrown = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
+        thrown.SetItem(itemToThrow);
+        thrown.SetThrown(destination);
+        throwQueued = false;
+    }
+
+    IEnumerator InstantiateThrownItem(Vector2 destination)
+    {
+        yield return null;
+        var thrown = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
+        thrown.SetItem(itemToThrow);
+        thrown.SetThrown(destination);
+    }
+
     IEnumerator Attack(Enemy target, int damage, int cost)
     {
+        var dir = transform.position.x - target.transform.position.x;
+
+        if(dir != 0)
+        {
+            animator.SetFloat("MoveDirection", -dir);
+        }
+
         Player.movement.StopMovement();
+        animator.speed = 1;
+        animator.Play("Attack");
         Player.instance.actionState = ActionState.ACTIVE;        
         yield return new WaitForSeconds(0.5f);
-        target.TakeDamage(damage + Player.stats.dmgModifier, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position);
+
+        int bonus = 0;
+        if(InventoryManager.instance.ringEquipped[0] == 4)
+        {
+            var tempbonus = Mathf.RoundToInt(((Player.stats.GetStrength() - 10) / 2) * InventoryManager.instance.inventoryItems[2].baseStatChangeMax);
+            if(InventoryManager.instance.inventoryItems[2].cursed)
+            {
+                tempbonus = -tempbonus;
+            }
+            bonus += tempbonus;
+        }
+        if (InventoryManager.instance.ringEquipped[1] == 4)
+        {
+            var tempbonus = Mathf.RoundToInt(((Player.stats.GetStrength() - 10) / 2) * InventoryManager.instance.inventoryItems[3].baseStatChangeMax);
+            if (InventoryManager.instance.inventoryItems[3].cursed)
+            {
+                tempbonus = -tempbonus;
+            }
+            bonus += tempbonus;
+        }
+
+        target.TakeDamage(damage + Player.stats.dmgModifier + bonus, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position);
 
         //Ends all invisibility effects
         for(int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
@@ -100,14 +153,22 @@ public class PlayerActions : MonoBehaviour
     {
         if (TurnManager.instance.turnState == TurnState.PLAYER)
         {
-            ItemPickup itemPickup = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")).GetComponent<ItemPickup>();
-            GoldPickup goldPickup = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")).GetComponent<GoldPickup>();
+            var foundObject = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items"));
+            ItemPickup itemPickup = foundObject.GetComponent<ItemPickup>();
+            GoldPickup goldPickup = foundObject.GetComponent<GoldPickup>();
 
+            if(foundObject.CompareTag("Map"))
+            {
+                UIManager.instance.mapButton.gameObject.SetActive(true);
+                InventoryManager.instance.potionUseFX[10].Play();
+                Destroy(foundObject.gameObject);
+            }
             if (itemPickup != null)
             {
                 InventoryManager.instance.AddItem(itemPickup.itemInside, out bool itemDelivered);
                 if (itemDelivered)
                 {
+                    ShowItemText(itemPickup.itemInside.itemName);
                     Destroy(itemPickup.gameObject);
                 }
             }
@@ -120,15 +181,23 @@ public class PlayerActions : MonoBehaviour
             TurnManager.instance.SwitchTurn();
             MouseBlocker.mouseBlocked = false;
             pickUpQueued = false;
-            if(!Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items")))
+            var item = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items"));
+            if (item == null)
             {
                 UIManager.instance.pickUpButton.gameObject.SetActive(false);
             }      
             else
             {
                 UIManager.instance.pickUpButton.gameObject.SetActive(true);
+                UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
             }
         }        
+    }
+
+    protected void ShowItemText(string text)
+    {
+        var popup = Instantiate(popupText, transform.position, Quaternion.identity).GetComponent<TextMesh>();
+        popup.text = text;
     }
 
     public Enemy FindEnemy(Vector2 target)

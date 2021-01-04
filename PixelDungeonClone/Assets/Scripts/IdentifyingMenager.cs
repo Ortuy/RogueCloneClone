@@ -9,6 +9,7 @@ public class IdentifyingMenager : MonoBehaviour
 
     public Item[] potions;
     public Item[] scrolls;
+    public Item[] rings;
     public Item[] weapons;
     public Item[] armour;
     //public bool[] potionsIdentified;
@@ -20,6 +21,10 @@ public class IdentifyingMenager : MonoBehaviour
     public string[] scrollBaseNames;
     public string[] scrollEffectNames;
     public string[] scrollEffectDescriptions;
+
+    public string[] ringBaseNames;
+    public string[] ringEffectNames;
+    public string[] ringEffectDescriptions;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +41,7 @@ public class IdentifyingMenager : MonoBehaviour
 
         ShufflePotions();
         ShuffleScrolls();
+        ShuffleRings();
     }
 
     public void ShuffleScrolls()
@@ -113,6 +119,48 @@ public class IdentifyingMenager : MonoBehaviour
         potion.description = potion.description.Replace("You have no clue what drinking it would entail.", potionEffectDescriptions[effectID]);
     }
 
+    public void ShuffleRings()
+    {
+        for (int i = 0; i < rings.Length; i++)
+        {
+            rings[i].itemName = ringBaseNames[i];
+            //potions[i] = new Item(potions[i], 1);
+        }
+
+        for (int i = rings.Length - 1; i > 0; i--)
+        {
+            int rand = Random.Range(0, i + 1);
+
+            Item temp = rings[i];
+            rings[i] = rings[rand];
+            rings[rand] = temp;
+
+            //potions[i].effectID = i;
+
+            rings[i].identified = false;
+        }
+        for (int i = 0; i < rings.Length; i++)
+        {
+            rings[i].effectID = i;
+            Debug.Log(rings[i].name + " " + ringEffectNames[i] + " " + rings[i].identified);
+        }
+        //potions[0].identified = true;
+    }
+
+    public void IdentifyRing(ItemInstance ring)
+    {
+        var effectID = ring.effectID;
+        ring.identified = true;
+        if(effectID < 10)
+        {
+            rings[effectID].identified = true;
+            //potionsIdentified[effectID] = true;
+
+            ring.itemName = ringEffectNames[effectID];
+            ring.description = ring.description.Replace("You have no idea what spell does the jewelery hold.", ringEffectDescriptions[effectID]);
+        }        
+    }
+
     public void IdentifyItem(ItemInstance item)
     {
         if(item.type == ItemType.POTION)
@@ -122,6 +170,10 @@ public class IdentifyingMenager : MonoBehaviour
         else if(item.type == ItemType.SCROLL)
         {
             IdentifyScroll(item);
+        }
+        else if (item.type == ItemType.RING)
+        {
+            IdentifyRing(item);
         }
         else
         {
@@ -135,6 +187,15 @@ public class IdentifyingMenager : MonoBehaviour
         {
             potion.itemName = potionEffectNames[potion.effectID];
             potion.description = potion.description.Replace("You have no clue what drinking it would entail.", potionEffectDescriptions[potion.effectID]);
+        }
+    }
+
+    public void CheckIfRingIdentified(ItemInstance ring)
+    {
+        if (ring.effectID < 10 && rings[ring.effectID].identified)
+        {
+            ring.itemName = potionEffectNames[ring.effectID];
+            ring.description = ring.description.Replace("You have no idea what spell does the jewelery hold.", ringEffectDescriptions[ring.effectID]);
         }
     }
 
