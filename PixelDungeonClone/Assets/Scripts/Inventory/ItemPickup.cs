@@ -4,23 +4,20 @@ using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
 {
-    /**
-    //TODO: Items instead of this crap 
-    public string itemName;
-
-    public string description;
-
-    public int amount;
-    public int strengthRequired;
-    public bool stackable = true;
-    public bool requiresStrength = false;
-
-    public ItemType type = ItemType.NONE;
-    **/
     public Item itemPrefab;
     public ItemInstance itemInside;
 
+    private bool thrown;
+    private Vector3 throwDestination;
+    public float throwSpeed;
+
     public int amount;
+    private Animator animator;
+    private Rigidbody2D rigidBody;
+
+    [SerializeField]
+    private Sprite[] mapIcons;
+    public SpriteRenderer mapImage;
 
     // Start is called before the first frame update
     void Start()
@@ -34,33 +31,94 @@ public class ItemPickup : MonoBehaviour
         {
             itemInside.amount = amount;
         }
-        
-        /**
-        itemInside.itemName = itemName;
-        itemInside.description = description;
-        itemInside.itemImage = GetComponent<SpriteRenderer>().sprite;
-        itemInside.amount = amount;
-        itemInside.strengthRequired = strengthRequired;
-        itemInside.stackable = stackable;
-        itemInside.requiresStrength = requiresStrength;
-        itemInside.type = type;
-        **/
+        animator = GetComponent<Animator>();
+        rigidBody = GetComponent<Rigidbody2D>();
+    }
+
+    public void SetThrown(Vector2 destination)
+    {
+        thrown = true;
+        throwDestination = destination;
+        GetComponent<Animator>().Play("ItemThrow");
+        GetComponent<Rigidbody2D>().velocity = -(transform.position - throwDestination).normalized * throwSpeed;
+    }
+
+    void Update()
+    {
+        if(thrown)
+        {
+            if(Vector3.Distance(throwDestination, transform.position) <= 0.1)
+            {
+                ThrowLanding();
+            }
+        }
+    }
+
+    private void ThrowLanding()
+    {
+        animator.Play("Item");
+        thrown = false;
+        rigidBody.velocity = Vector3.zero;
+
+        if(itemInside.type == ItemType.POTION)
+        {
+            IdentifyingMenager.instance.IdentifyItem(itemInside);
+            switch(itemInside.effectID)
+            {
+                case 3:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[0], transform.position, Quaternion.identity));
+                    break;
+                case 5:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[1], transform.position, Quaternion.identity));
+                    break;
+                case 6:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[2], transform.position, Quaternion.identity));
+                    break;
+                case 7:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[3], transform.position, Quaternion.identity));
+                    break;
+                case 8:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[4], transform.position, Quaternion.identity));
+                    break;
+                case 9:
+                    TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[5], transform.position, Quaternion.identity));
+                    break;
+            }
+            Destroy(gameObject);
+        }
+
+        TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 
     public void SetItem(ItemInstance item)
     {
         itemInside = item;
         GetComponent<SpriteRenderer>().sprite = itemInside.itemImage;
+        switch(item.type)
+        {
+            case ItemType.WEAPON:
+                mapImage.sprite = mapIcons[0];
+                break;
+            case ItemType.ARMOR:
+                mapImage.sprite = mapIcons[1];
+                break;
+            case ItemType.RING:
+                mapImage.sprite = mapIcons[2];
+                break;
+            case ItemType.POTION:
+                mapImage.sprite = mapIcons[3];
+                break;
+            case ItemType.SCROLL:
+                mapImage.sprite = mapIcons[4];
+                break;
+            case ItemType.FOOD:
+                mapImage.sprite = mapIcons[5];
+                break;
+            case ItemType.TORCH:
+                mapImage.sprite = mapIcons[6];
+                break;
+        }
     }
-
-    /**
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if(collision.CompareTag("Player"))
-        {          
-            UIManager.instance.pickUpButton.gameObject.SetActive(true);
-        }       
-    }**/
 
     private void OnTriggerExit2D(Collider2D collision)
     {

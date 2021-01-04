@@ -51,7 +51,7 @@ public class InventorySlot : MonoBehaviour
             requirementText.gameObject.SetActive(false);
         }
 
-        if(item.identified && item.requiresStrength)
+        if(item.identified && (item.requiresStrength || item.type == ItemType.RING))
         {
             if(item.level > 0)
             {

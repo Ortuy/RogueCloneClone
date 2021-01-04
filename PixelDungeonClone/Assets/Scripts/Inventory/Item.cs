@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum ItemType { NONE, WEAPON, ARMOR, POTION, SCROLL, FOOD }
+public enum ItemType { NONE, WEAPON, ARMOR, POTION, SCROLL, FOOD, TORCH, RING }
 
 [CreateAssetMenu(fileName = "Item", menuName = "Item", order = 1)]
 public class Item : ScriptableObject

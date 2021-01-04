@@ -22,7 +22,7 @@ public class InventoryManager : MonoBehaviour
     public int goldAmount;
     public Text goldText;
 
-    
+    public Gas[] potionGases;
 
     public ItemPickup itemTemplate;
 
@@ -30,6 +30,8 @@ public class InventoryManager : MonoBehaviour
 
     public int selectedSlotID;
     public bool waitingForSelection;
+
+    public int[] ringEquipped;
 
     // Start is called before the first frame update
     void Start()
@@ -54,39 +56,39 @@ public class InventoryManager : MonoBehaviour
         UIManager.instance.ToggleInventory();
 
         goldText.text = "" + goldAmount;
+        ringEquipped = new int[]{ -1, -1};
     }
 
     public void AddItem(ItemInstance itemToAdd)
     {
-        for(int i = 4; i < inventoryItems.Length; i++)
-        {
-            if(inventoryItems[i] != null && inventoryItems[i].itemImage == itemToAdd.itemImage && itemToAdd.stackable)
-            {
-                inventoryItems[i].amount += itemToAdd.amount;
-                inventorySlots[i].UpdateItem(inventoryItems[i]);
-                break;
-            }
-            else if(inventoryItems[i] == null)
-            {
-                Debug.Log(itemToAdd.level);
-                inventoryItems[i] = itemToAdd;
-                if (itemToAdd.type == ItemType.POTION)
-                {
-                    IdentifyingMenager.instance.CheckIfPotionIdentified(inventoryItems[i]);
-                }
-                else if(itemToAdd.type == ItemType.SCROLL)
-                {
-                    IdentifyingMenager.instance.CheckIfScrollIdentified(inventoryItems[i]);
-                }
-                inventorySlots[i].UpdateItem(inventoryItems[i]);
-                break;
-            }
-        }
+        AddItem(itemToAdd, out bool succ);
     }
 
     public void AddItem(ItemInstance itemToAdd, out bool success)
     {
         success = true;
+        
+        if(!itemToAdd.pickedUpOnce)
+        {
+            if (ringEquipped[0] == 8 && !inventoryItems[2].cursed)
+            {
+                int chance = 10 * inventoryItems[2].baseStatChangeMax;
+                if (Random.Range(0, 100) < chance)
+                {
+                    IdentifyingMenager.instance.IdentifyItem(itemToAdd);
+                }
+            }
+            if (ringEquipped[1] == 8 && !inventoryItems[3].cursed)
+            {
+                int chance = 10 * inventoryItems[3].baseStatChangeMax;
+                if (Random.Range(0, 100) < chance)
+                {
+                    IdentifyingMenager.instance.IdentifyItem(itemToAdd);
+                }
+            }
+            itemToAdd.pickedUpOnce = true;
+        }        
+        
         for (int i = 4; i < inventoryItems.Length; i++)
         {
             if (inventoryItems[i] != null && inventoryItems[i].itemImage == itemToAdd.itemImage && itemToAdd.stackable)
@@ -107,6 +109,10 @@ public class InventoryManager : MonoBehaviour
                 else if (itemToAdd.type == ItemType.SCROLL)
                 {
                     IdentifyingMenager.instance.CheckIfScrollIdentified(inventoryItems[i]);
+                }
+                else if (itemToAdd.type == ItemType.RING)
+                {
+                    IdentifyingMenager.instance.CheckIfRingIdentified(inventoryItems[i]);
                 }
                 success = true;
                 
@@ -189,7 +195,7 @@ public class InventoryManager : MonoBehaviour
                 Player.stats.AddStatusEffect(new FragilityEffect(0, 16, Player.stats));
                 break;
             case 9:
-                Player.stats.AddStatusEffect(new BlindnessEffect(0, 16, Player.stats));
+                Player.stats.AddStatusEffect(new BlindnessEffect(1.1f, 16, Player.stats));
                 break;
 
         }
@@ -197,6 +203,68 @@ public class InventoryManager : MonoBehaviour
         SubtractItem(slotID);
         UIManager.instance.ToggleInventory();
         potionUseFX[effID].Play();
+    }
+
+    private void EquipRing(int slotID)
+    {
+        var effID = inventoryItems[slotID].effectID;
+        var modifier = inventoryItems[slotID].baseStatChangeMax;
+        if(inventoryItems[slotID].cursed)
+        {
+            modifier = -modifier;
+        }
+        ringEquipped[slotID - 2] = effID;
+        switch (effID)
+        {
+            case 0:
+                Player.stats.evaModifier += modifier;
+                break;
+            case 1:
+                Player.stats.accModifier += modifier;
+                break;
+            case 2:
+                Player.stats.IncreaseStrength(modifier);
+                break;
+            case 3:
+                Player.stats.CheckForWrathRingModifiers(Player.stats.GetHealth(), Player.stats.GetMaxHealth());
+                break;
+            case 9:
+                Player.stats.evaModifier -= modifier;
+                Player.stats.accModifier -= modifier;
+                Player.stats.IncreaseMaxHP(-2*modifier);
+                break;
+        }
+    }
+
+    private void UnequipRing(int slotID)
+    {
+        var effID = inventoryItems[slotID].effectID;
+        var modifier = inventoryItems[slotID].baseStatChangeMax;
+        if (inventoryItems[slotID].cursed)
+        {
+            modifier = -modifier;
+        }
+        switch (effID)
+        {
+            case 0:
+                Player.stats.evaModifier -= modifier;
+                break;
+            case 1:
+                Player.stats.accModifier -= modifier;
+                break;
+            case 2:
+                Player.stats.IncreaseStrength(-modifier);
+                break;
+            case 3:
+                Player.stats.CheckForWrathRingModifiers(Player.stats.GetMaxHealth(), Player.stats.GetHealth());
+                break;
+            case 9:
+                Player.stats.evaModifier += modifier;
+                Player.stats.accModifier += modifier;
+                Player.stats.IncreaseMaxHP(2*modifier);
+                break;
+        }
+        ringEquipped[slotID - 2] = -1;
     }
 
     private void UseScroll(int slotID)
@@ -229,7 +297,22 @@ public class InventoryManager : MonoBehaviour
                 }
                 if(equipment.Count > 0)
                 {
-                    equipment[Random.Range(0, equipment.Count)].cursed = true;
+                    var rand = Random.Range(0, equipment.Count);
+                    var previouslyCursed = equipment[rand].cursed;
+
+                    equipment[rand].cursed = true;
+
+                    if(equipment[rand].type == ItemType.RING && !previouslyCursed)
+                    {
+                        for(int i = 2; i < 4; i++)
+                        {
+                            if(inventoryItems[i] == equipment[rand])
+                            {
+                                UpdateItemModifiers(i);
+                                UpdateItemModifiers(i);
+                            }
+                        }
+                    }
                 }
                 for (int i = 0; i < 4; i++)
                 {
@@ -252,7 +335,7 @@ public class InventoryManager : MonoBehaviour
                 }
                 Player.stats.AddStatusEffect(new WeaknessEffect(0, 12, Player.stats));
                 Player.stats.AddStatusEffect(new FragilityEffect(0, 12, Player.stats));
-                Player.stats.AddStatusEffect(new BlindnessEffect(0, 12, Player.stats));
+                Player.stats.AddStatusEffect(new BlindnessEffect(1.1f, 12, Player.stats));
                 UIManager.instance.ToggleInventory();
                 scrollUseFX[0].Play();
                 break;
@@ -321,6 +404,21 @@ public class InventoryManager : MonoBehaviour
         if(inventoryItems[selectedSlotID].requiresStrength)
         {
             inventoryItems[selectedSlotID].LevelUp(1);
+            UpdateItemModifiers(selectedSlotID);
+        }
+        else if(inventoryItems[selectedSlotID].type == ItemType.RING)
+        {
+            if(selectedSlotID < 4)
+            {
+                UnequipRing(selectedSlotID);
+            }
+            
+            inventoryItems[selectedSlotID].LevelUp(1);
+            if (selectedSlotID < 4)
+            {
+                UpdateItemModifiers(selectedSlotID);
+            }
+            
         }
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
         UIManager.instance.inventoryButton.interactable = true;
@@ -336,6 +434,7 @@ public class InventoryManager : MonoBehaviour
         if (inventoryItems[selectedSlotID].level < 0)
         {
             inventoryItems[selectedSlotID].LevelUp(0 - inventoryItems[selectedSlotID].level);
+            UpdateItemModifiers(selectedSlotID);
         }
         inventoryItems[selectedSlotID].cursed = false;
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
@@ -351,7 +450,8 @@ public class InventoryManager : MonoBehaviour
         yield return StartCoroutine(WaitForSelection());
         IdentifyingMenager.instance.TransmuteItem(selectedSlotID);
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
-        if(selectedSlotID < 4 && inventoryItems[selectedSlotID].strengthRequired > Player.stats.GetStrength())
+        UpdateItemModifiers(selectedSlotID);
+        if (selectedSlotID < 4 && inventoryItems[selectedSlotID].strengthRequired > Player.stats.GetStrength())
         {
             if (inventoryItems[inventoryItems.Length - 1] == null || inventoryItems[inventoryItems.Length - 1].amount < 1)
             {
@@ -396,9 +496,40 @@ public class InventoryManager : MonoBehaviour
             {
                 UseScroll(slotID);
             }
+            else if (inventoryItems[slotID].type == ItemType.TORCH)
+            {
+                Player.stats.AddStatusEffect(new TorchEffect(1, 96, Player.stats));
+                SubtractItem(slotID);
+                UIManager.instance.ToggleInventory();
+            }
             else if(inventoryItems[slotID].type == ItemType.FOOD)
             {
-                Player.stats.foodPoints += 192;
+                int foodmodifier = 0;
+
+                if(ringEquipped[0] == 5)
+                {
+                    if(inventoryItems[2].cursed)
+                    {
+                        foodmodifier -= 24 * inventoryItems[2].baseStatChangeMax;
+                    }
+                    else
+                    {
+                        foodmodifier += 24 * inventoryItems[2].baseStatChangeMax;
+                    }
+                }
+                if (ringEquipped[1] == 5)
+                {
+                    if (inventoryItems[3].cursed)
+                    {
+                        foodmodifier -= 24 * inventoryItems[3].baseStatChangeMax;
+                    }
+                    else
+                    {
+                        foodmodifier += 24 * inventoryItems[3].baseStatChangeMax;
+                    }
+                }
+
+                Player.stats.foodPoints += 192 + foodmodifier;
                 Player.actions.turnCost = 3;
                 SubtractItem(slotID);
                 UIManager.instance.ToggleInventory();
@@ -437,8 +568,27 @@ public class InventoryManager : MonoBehaviour
                     Player.stats.minDefence = inventoryItems[1].statChangeMin;
                     Player.stats.maxDefence = inventoryItems[1].statChangeMax;
                     inventorySlots[1].UpdateItem(inventoryItems[1]);
+                }               
+            }
+            else if (inventoryItems[slotID].type == ItemType.RING)
+            {
+                IdentifyingMenager.instance.IdentifyItem(inventoryItems[slotID]);
+                if (inventoryItems[2] == null)
+                {
+                    ItemInstance temp = inventoryItems[slotID];
+                    SubtractItem(slotID);
+                    inventoryItems[2] = temp;
+                    EquipRing(2);
+                    inventorySlots[2].UpdateItem(inventoryItems[2]);
                 }
-                
+                else if (inventoryItems[3] == null)
+                {
+                    ItemInstance temp = inventoryItems[slotID];
+                    SubtractItem(slotID);
+                    inventoryItems[3] = temp;
+                    EquipRing(3);
+                    inventorySlots[3].UpdateItem(inventoryItems[3]);
+                }
             }
         }
         else if(!inventoryItems[slotID].cursed)
@@ -461,8 +611,33 @@ public class InventoryManager : MonoBehaviour
             {
                 Player.stats.ResetDefence();
             }
+            else
+            {
+                UnequipRing(slotID);
+            }
 
             SubtractItem(slotID);
+        }
+    }
+
+    public void UpdateItemModifiers(int slotID)
+    {
+        switch(slotID)
+        {
+            case 0:
+                Player.stats.minBaseDamage = inventoryItems[0].statChangeMin;
+                Player.stats.maxBaseDamage = inventoryItems[0].statChangeMax;
+                break;
+            case 1:
+                Player.stats.minDefence = inventoryItems[1].statChangeMin;
+                Player.stats.maxDefence = inventoryItems[1].statChangeMax;
+                break;
+            case 2:
+                EquipRing(2);
+                break;
+            case 3:
+                EquipRing(3);
+                break;
         }
     }
 

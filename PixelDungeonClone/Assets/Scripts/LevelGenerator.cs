@@ -22,7 +22,20 @@ public class LevelGenerator : MonoBehaviour
             centerPoint = new Vector2Int(Mathf.FloorToInt(min.x + (xSize / 2)), Mathf.FloorToInt(min.y + (ySize / 2)));
         }
     }
+
+    public struct Corridor
+    {
+        public Vector2Int minCorner, maxCorner;
+
+        public Corridor(Vector2Int min, Vector2Int max)
+        {
+            minCorner = min;
+            maxCorner = max;
+        }
+    }
     public List<Room> rooms;
+
+    public List<Corridor> corridors;
 
     private List<List<Room>> roomClusters;
 
@@ -66,6 +79,14 @@ public class LevelGenerator : MonoBehaviour
     public int[] enemyPool;
     public int[] enemyWeightPool;
 
+    [Header("Minimap")]
+    public GameObject tilemapGrid;
+    public Camera minimapCamera;
+    public Tilemap minimapTilemapBase;
+    public Tile[] minimapWallTiles, minimapCornerTiles, minimapCorridorTiles;
+
+    public GameObject mapPickup;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,7 +100,34 @@ public class LevelGenerator : MonoBehaviour
         }
 
         rooms = new List<Room>();
+        corridors = new List<Corridor>();
         roomClusters = new List<List<Room>>();
+
+        if(InventoryManager.instance != null)
+        {
+            if(InventoryManager.instance.ringEquipped[0] == 6)
+            {
+                if(InventoryManager.instance.inventoryItems[2].cursed)
+                {
+                    maxItems -= InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+                }
+                else
+                {
+                    maxItems += InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+                }
+            }
+            if (InventoryManager.instance.ringEquipped[1] == 6)
+            {
+                if (InventoryManager.instance.inventoryItems[3].cursed)
+                {
+                    maxItems -= InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
+                }
+                else
+                {
+                    maxItems += InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
+                }
+            }
+        }
 
         GenerateLevel(LevelLayoutType.BASIC);
         //DrawCorridor(rooms[0], rooms[1]);
@@ -181,6 +229,8 @@ public class LevelGenerator : MonoBehaviour
         rX = Random.Range(rooms[0].minCorner.x + 1, rooms[0].maxCorner.x);
         rY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
         playerStartPos = new Vector2(rX + 0.5f, rY + 0.5f);
+
+        DrawMinimap();
     }
 
     private void PopulateWithItems()
@@ -219,6 +269,17 @@ public class LevelGenerator : MonoBehaviour
             else if(itemToDrop.type == ItemType.SCROLL)
             {
                 itemToDrop = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(0, IdentifyingMenager.instance.scrolls.Length)], 0);
+            }
+            else if (itemToDrop.type == ItemType.RING && itemToDrop.effectID != 10)
+            {
+                itemToDrop = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 0);
+                if (Random.Range(0, 4) == 0 && itemToDrop.effectID != 9)
+                {
+                    itemToDrop.cursed = true;
+                }
+                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
             }
             else if(itemToDrop.type == ItemType.ARMOR || itemToDrop.type == ItemType.WEAPON)
             {
@@ -469,6 +530,16 @@ public class LevelGenerator : MonoBehaviour
         int distanceX = room1.centerPoint.x - room0.centerPoint.x;
         int distanceY = room1.centerPoint.y - room0.centerPoint.y;
 
+        var min = new Vector2Int(Mathf.Min(room0.centerPoint.x, room1.centerPoint.x), Mathf.Min(room0.centerPoint.y, room1.centerPoint.y));
+
+        var max = new Vector2Int(Mathf.Max(room0.centerPoint.x, room1.centerPoint.x), Mathf.Max(room0.centerPoint.y, room1.centerPoint.y));
+
+        Corridor corridor = new Corridor(min, max);
+
+        corridors.Add(corridor);
+
+        
+
         //This line may make something crash and burn :)
         Vector2Int direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
 
@@ -587,5 +658,142 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void DrawMinimap()
+    {
+        for(int i = 0; i < rooms.Count; i++)
+        {
+            var tilemap = Instantiate(minimapTilemapBase, Vector3.zero, Quaternion.identity, tilemapGrid.transform);
+            for(int x = rooms[i].minCorner.x - 1; x <= rooms[i].maxCorner.x + 1; x++)
+            {
+                for (int y = rooms[i].minCorner.y - 1; y <= rooms[i].maxCorner.y + 1; y++)
+                {
+                    if(ground.GetTile(new Vector3Int(x, y, 0))
+                        && !(ground.GetTile(new Vector3Int(x, y - 1, 0)) && ground.GetTile(new Vector3Int(x - 1, y, 0)) && ground.GetTile(new Vector3Int(x + 1, y, 0)) && ground.GetTile(new Vector3Int(x, y + 1, 0))))
+                    {
+                        if(!ground.GetTile(new Vector3Int(x - 1, y, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCorridorTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x, y + 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCorridorTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)) && !ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[2]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[3]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[2]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[3]);
+                        }
+                    }
+                }
+            }
+
+            tilemap.GetComponent<MapObject>().minCorner = rooms[i].minCorner;
+            tilemap.GetComponent<MapObject>().maxCorner = rooms[i].maxCorner;
+        }
+
+        for (int i = 0; i < corridors.Count; i++)
+        {
+            var tilemap = Instantiate(minimapTilemapBase, Vector3.zero, Quaternion.identity, tilemapGrid.transform);
+            for (int x = corridors[i].minCorner.x - 1; x <= corridors[i].maxCorner.x + 1; x++)
+            {
+                for (int y = corridors[i].minCorner.y - 1; y <= corridors[i].maxCorner.y + 1; y++)
+                {
+                    if (ground.GetTile(new Vector3Int(x, y, 0))
+                        && !(ground.GetTile(new Vector3Int(x, y - 1, 0)) && ground.GetTile(new Vector3Int(x - 1, y, 0)) && ground.GetTile(new Vector3Int(x + 1, y, 0)) && ground.GetTile(new Vector3Int(x, y + 1, 0))))
+                    {
+                        if (!ground.GetTile(new Vector3Int(x - 1, y, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCorridorTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x, y + 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCorridorTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)) && !ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)) && !ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[2]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)) && !ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapCornerTiles[3]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y - 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[0]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x + 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[1]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x, y + 1, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[2]);
+                        }
+                        else if (!ground.GetTile(new Vector3Int(x - 1, y, 0)))
+                        {
+                            tilemap.SetTile(new Vector3Int(x, y, 0), minimapWallTiles[3]);
+                        }
+                    }
+                }
+            }
+
+            tilemap.GetComponent<MapObject>().minCorner = corridors[i].minCorner;
+            tilemap.GetComponent<MapObject>().maxCorner = corridors[i].maxCorner;
+        }
+
+        Vector3 camPos = new Vector3(minCorner.x + width / 2, minCorner.y + height / 2, -10);
+        minimapCamera.transform.position = camPos;
+        if(width < height)
+        {
+            minimapCamera.orthographicSize = (height + 2) / 2;
+        }
+        else
+        {
+            minimapCamera.orthographicSize = (width + 2) / (2 * minimapCamera.aspect);
+        }
+
+        int roomID = Random.Range(roomClusters[0].Count, rooms.Count - 1);
+
+        float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
+        float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
+
+        Instantiate(mapPickup, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
     }
 }

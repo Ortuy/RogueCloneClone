@@ -41,7 +41,7 @@ public class PlayerStatistics : Entity
 
     public int foodPoints = 192;
 
-    public GameObject normalLight, blindLight;
+    public GameObject normalLight, blindLight, torchLight;
     /**
     public bool immune;
     public bool invisible;
@@ -77,12 +77,26 @@ public class PlayerStatistics : Entity
 
     public override void AddStatusEffect(StatusEffect status)
     {
-        if(!immune || status.effectID == 7 || status.effectID == 8)
+        if(!immune || status.effectID >= 7)
         {
-            statusEffects.Add(status);
-            status.OnEffectApplied();
-            UIManager.instance.AddStatusToDisplay(status.icon);
-            statusEffects[statusEffects.Count - 1].iconDisplay = UIManager.instance.statusDisplay[UIManager.instance.statusDisplay.Count - 1].gameObject;
+            var temp = false;
+
+            for (int i = 0; i < statusEffects.Count; i++)
+            {
+                if (statusEffects[i].effectID == status.effectID && statusEffects[i].effectValue == status.effectValue)
+                {
+                    temp = true;
+                    statusEffects[i].durationLeft += status.durationLeft;
+                    break;
+                }
+            }
+            if (!temp)
+            {
+                statusEffects.Add(status);
+                status.OnEffectApplied();
+                UIManager.instance.AddStatusToDisplay(status.icon);
+                statusEffects[statusEffects.Count - 1].iconDisplay = UIManager.instance.statusDisplay[UIManager.instance.statusDisplay.Count - 1].gameObject;
+            }            
         }       
     }
 
@@ -135,8 +149,21 @@ public class PlayerStatistics : Entity
         strength++;
     }
 
+    public void IncreaseMaxHP(int amount)
+    {
+        maxHealth += amount;
+        float value = (health / maxHealth);
+        UIManager.instance.playerHealthBar.value = value;
+    }
+
+    public void IncreaseStrength(int amount)
+    {
+        strength += amount;
+    }
+
     public void Heal(int healedHP)
     {
+        CheckForWrathRingModifiers(health + healedHP, health);
         health += healedHP;
         if(health > maxHealth)
         {
@@ -176,6 +203,7 @@ public class PlayerStatistics : Entity
             }
 
             ShowDamageText(totaldmg.ToString());
+            CheckForWrathRingModifiers(health - totaldmg, health);
 
             health -= totaldmg;
             float value = (health / maxHealth);
@@ -183,18 +211,66 @@ public class PlayerStatistics : Entity
 
             if (health <= 0)
             {
-                UIManager.instance.ToggleDeathScreen();
-                Debug.LogError("DEATH!");
-                gameObject.SetActive(false);
+                bool deathPrevented = false;
+                if(InventoryManager.instance.ringEquipped[0] == 10)
+                {
+                    deathPrevented = true;
+                    InventoryManager.instance.ringEquipped[0] = -1;
+                }
+                if (InventoryManager.instance.ringEquipped[1] == 10 && !deathPrevented)
+                {
+                    deathPrevented = true;
+                    InventoryManager.instance.ringEquipped[0] = -1;
+                }
+
+                if(!deathPrevented)
+                {
+                    UIManager.instance.ToggleDeathScreen();
+                    Debug.LogError("DEATH!");
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+                    Heal(Mathf.RoundToInt(maxHealth / 2));
+                    AddStatusEffect(new StatusEffect(0, -1, this));
+                }
+            }
+        }
+    }
+
+    public void CheckForWrathRingModifiers(float currentHP, float oldHP)
+    {
+        if(currentHP <= maxHealth/2 && oldHP > maxHealth / 2)
+        {
+            if(InventoryManager.instance.ringEquipped[0] == 3)
+            {
+                dmgModifier += InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+            }
+            if (InventoryManager.instance.ringEquipped[1] == 3)
+            {
+                dmgModifier += InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
+            }
+        }
+        else if(currentHP > maxHealth / 2 && oldHP <= maxHealth / 2)
+        {
+            if (InventoryManager.instance.ringEquipped[0] == 3)
+            {
+                dmgModifier -= InventoryManager.instance.inventoryItems[2].baseStatChangeMax;
+            }
+            if (InventoryManager.instance.ringEquipped[1] == 3)
+            {
+                dmgModifier -= InventoryManager.instance.inventoryItems[3].baseStatChangeMax;
             }
         }
     }
 
     public override void TakeTrueDamage(int damage)
-    {        
+    {
         //hitFX.transform.rotation = Quaternion.AngleAxis(angle - 120, Vector3.forward);
         //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
         //hitFX.Play();
+
+        CheckForWrathRingModifiers(health - damage, health);
 
         health -= damage;
         float value = (health / maxHealth);
@@ -240,11 +316,6 @@ public class PlayerStatistics : Entity
         return health;
     }
 
-    public float GetMaxHealth()
-    {
-        return maxHealth;
-    }
-
     public void AddXP(int xpToAdd)
     {
         xp += xpToAdd;
@@ -257,6 +328,7 @@ public class PlayerStatistics : Entity
 
     public void LevelUp()
     {
+        CheckForWrathRingModifiers(maxHealth, health);
         Debug.Log("Level up!!");
         maxHealth += 5;
         health = maxHealth;

@@ -7,14 +7,37 @@ public class FloorExit : MonoBehaviour
 {
     private bool transitionStarted;
 
+    [SerializeField]
+    private SpriteRenderer mapIcon;
+
+    private void Start()
+    {
+        //StartCoroutine(CheckForPlayer());
+        mapIcon.color = Color.white;
+    }
+
     private void Update()
     {
         if(transitionStarted && UIManager.instance.fadeOutDone)
         {
+            UIManager.instance.mapButton.gameObject.SetActive(false);
             transitionStarted = false;
             //Player.instance.transform.position = new Vector2(0.5f, 0.5f);
             Player.movement.StopMovement();
             SceneManager.LoadScene(FindObjectOfType<LevelGenerator>().floorID + 1);
+        }
+    }
+
+    IEnumerator CheckForPlayer()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.5f);
+            if(Vector3.Distance(transform.position, Player.instance.transform.position) <= 7f)
+            {
+                mapIcon.color = Color.white;
+                break;
+            }
         }
     }
 
