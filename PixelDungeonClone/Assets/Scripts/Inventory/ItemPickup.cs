@@ -18,6 +18,8 @@ public class ItemPickup : MonoBehaviour
     [SerializeField]
     private Sprite[] mapIcons;
     public SpriteRenderer mapImage;
+    private AudioSource audioSource;
+    public AudioClip dropSound, breakSound;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +35,7 @@ public class ItemPickup : MonoBehaviour
         }
         animator = GetComponent<Animator>();
         rigidBody = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void SetThrown(Vector2 destination)
@@ -84,9 +87,15 @@ public class ItemPickup : MonoBehaviour
                     TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[5], transform.position, Quaternion.identity));
                     break;
             }
-            Destroy(gameObject);
+            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+            PlaySound(breakSound);
+            SetItem(null);
+            Destroy(gameObject, 1f);
         }
-
+        else
+        {
+            PlaySound(dropSound);
+        }
         TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 
@@ -126,5 +135,11 @@ public class ItemPickup : MonoBehaviour
         {
             UIManager.instance.pickUpButton.gameObject.SetActive(false);
         }
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 }

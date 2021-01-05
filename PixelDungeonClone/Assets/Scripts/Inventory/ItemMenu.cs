@@ -42,6 +42,7 @@ public class ItemMenu : MonoBehaviour
             InventoryManager.instance.SubtractItem(slotID);
             TurnManager.instance.SwitchTurn(TurnState.ENEMY);
             gameObject.SetActive(false);
+            Player.movement.PlaySound(InventoryManager.instance.itemDropSound);
         }        
     }
 

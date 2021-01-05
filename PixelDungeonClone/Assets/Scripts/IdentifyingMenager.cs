@@ -218,9 +218,17 @@ public class IdentifyingMenager : MonoBehaviour
         {
             case ItemType.POTION:
                 InventoryManager.instance.inventoryItems[slotID] = new ItemInstance(potions[Random.Range(0, potions.Length)], amount);
+                IdentifyPotion(InventoryManager.instance.inventoryItems[slotID]);
                 break;
             case ItemType.SCROLL:
                 InventoryManager.instance.inventoryItems[slotID] = new ItemInstance(scrolls[Random.Range(0, scrolls.Length)], amount);
+                IdentifyScroll(InventoryManager.instance.inventoryItems[slotID]);
+                break;
+            case ItemType.RING:
+                InventoryManager.instance.inventoryItems[slotID] = new ItemInstance(rings[Random.Range(0, rings.Length)], amount);
+                InventoryManager.instance.inventoryItems[slotID].cursed = cursed;
+                InventoryManager.instance.inventoryItems[slotID].LevelUp(level);
+                IdentifyRing(InventoryManager.instance.inventoryItems[slotID]);
                 break;
             case ItemType.WEAPON:
                 InventoryManager.instance.inventoryItems[slotID] = new ItemInstance(weapons[Random.Range(0, weapons.Length)], amount);

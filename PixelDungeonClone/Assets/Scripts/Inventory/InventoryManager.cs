@@ -15,6 +15,7 @@ public class InventoryManager : MonoBehaviour
     public ItemInstance[] inventoryItems;
     public InventorySlot[] inventorySlots;
     public ParticleSystem[] scrollUseFX, potionUseFX;
+    public AudioClip potionSound, weaponSound, armourSound, ringSound, scrollSound, torchSound, foodSound, itemDropSound;
 
     //public Item weapon, armour;
     //public InventorySlot weaponSlot, armourSlot;
@@ -208,7 +209,7 @@ public class InventoryManager : MonoBehaviour
     private void EquipRing(int slotID)
     {
         var effID = inventoryItems[slotID].effectID;
-        var modifier = inventoryItems[slotID].baseStatChangeMax;
+        var modifier = inventoryItems[slotID].statChangeMax;
         if(inventoryItems[slotID].cursed)
         {
             modifier = -modifier;
@@ -239,7 +240,7 @@ public class InventoryManager : MonoBehaviour
     private void UnequipRing(int slotID)
     {
         var effID = inventoryItems[slotID].effectID;
-        var modifier = inventoryItems[slotID].baseStatChangeMax;
+        var modifier = inventoryItems[slotID].statChangeMax;
         if (inventoryItems[slotID].cursed)
         {
             modifier = -modifier;
@@ -393,6 +394,7 @@ public class InventoryManager : MonoBehaviour
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
         UIManager.instance.inventoryButton.interactable = true;
         UIManager.instance.commandText.text = "Inventory";
+        Player.movement.PlaySound(scrollSound);
     }
 
     IEnumerator UpgradeItem()
@@ -423,6 +425,7 @@ public class InventoryManager : MonoBehaviour
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
         UIManager.instance.inventoryButton.interactable = true;
         UIManager.instance.commandText.text = "Inventory";
+        Player.movement.PlaySound(scrollSound);
     }
 
     IEnumerator CleanseItem()
@@ -440,6 +443,7 @@ public class InventoryManager : MonoBehaviour
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
         UIManager.instance.inventoryButton.interactable = true;
         UIManager.instance.commandText.text = "Inventory";
+        Player.movement.PlaySound(scrollSound);
     }
 
     IEnumerator TransmuteItem()
@@ -448,6 +452,10 @@ public class InventoryManager : MonoBehaviour
         UIManager.instance.inventoryButton.interactable = false;
         waitingForSelection = true;
         yield return StartCoroutine(WaitForSelection());
+        if(inventoryItems[selectedSlotID].type == ItemType.RING && selectedSlotID < 4)
+        {
+            UnequipRing(selectedSlotID);
+        }
         IdentifyingMenager.instance.TransmuteItem(selectedSlotID);
         inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
         UpdateItemModifiers(selectedSlotID);
@@ -461,6 +469,7 @@ public class InventoryManager : MonoBehaviour
             {
                 ItemPickup temp = Instantiate(itemTemplate, Player.instance.transform.position, Quaternion.identity);
                 temp.SetItem(new ItemInstance(inventoryItems[selectedSlotID], 1));
+                Player.movement.PlaySound(itemDropSound);
             }
 
             if (inventoryItems[selectedSlotID].type == ItemType.WEAPON)
@@ -474,8 +483,13 @@ public class InventoryManager : MonoBehaviour
 
             SubtractItem(selectedSlotID);
         }
+        if (inventoryItems[selectedSlotID].type == ItemType.RING && selectedSlotID < 4)
+        {
+            EquipRing(selectedSlotID);
+        }
         UIManager.instance.inventoryButton.interactable = true;
         UIManager.instance.commandText.text = "Inventory";
+        Player.movement.PlaySound(scrollSound);
     }
 
     IEnumerator WaitForSelection()
@@ -491,15 +505,19 @@ public class InventoryManager : MonoBehaviour
             if(inventoryItems[slotID].type == ItemType.POTION)
             {
                 DrinkPotion(slotID);
+                Player.movement.PlaySound(potionSound);
             }
             else if(inventoryItems[slotID].type == ItemType.SCROLL)
             {
                 UseScroll(slotID);
+                Player.movement.PlaySound(scrollSound);
             }
             else if (inventoryItems[slotID].type == ItemType.TORCH)
             {
                 Player.stats.AddStatusEffect(new TorchEffect(1, 96, Player.stats));
                 SubtractItem(slotID);
+                Player.movement.PlaySound(torchSound);
+                potionUseFX[11].Play();
                 UIManager.instance.ToggleInventory();
             }
             else if(inventoryItems[slotID].type == ItemType.FOOD)
@@ -533,6 +551,7 @@ public class InventoryManager : MonoBehaviour
                 Player.actions.turnCost = 3;
                 SubtractItem(slotID);
                 UIManager.instance.ToggleInventory();
+                Player.movement.PlaySound(foodSound);
             }
             else if (inventoryItems[slotID].type == ItemType.WEAPON && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
             {
@@ -550,6 +569,7 @@ public class InventoryManager : MonoBehaviour
                     Player.stats.minBaseDamage = inventoryItems[0].statChangeMin;
                     Player.stats.maxBaseDamage = inventoryItems[0].statChangeMax;
                     inventorySlots[0].UpdateItem(inventoryItems[0]);
+                    Player.movement.PlaySound(weaponSound);
                 }               
             }
             else if (inventoryItems[slotID].type == ItemType.ARMOR && Player.stats.GetStrength() >= inventoryItems[slotID].strengthRequired)
@@ -568,6 +588,7 @@ public class InventoryManager : MonoBehaviour
                     Player.stats.minDefence = inventoryItems[1].statChangeMin;
                     Player.stats.maxDefence = inventoryItems[1].statChangeMax;
                     inventorySlots[1].UpdateItem(inventoryItems[1]);
+                    Player.movement.PlaySound(armourSound);
                 }               
             }
             else if (inventoryItems[slotID].type == ItemType.RING)
@@ -580,6 +601,7 @@ public class InventoryManager : MonoBehaviour
                     inventoryItems[2] = temp;
                     EquipRing(2);
                     inventorySlots[2].UpdateItem(inventoryItems[2]);
+                    Player.movement.PlaySound(ringSound);
                 }
                 else if (inventoryItems[3] == null)
                 {
@@ -588,6 +610,7 @@ public class InventoryManager : MonoBehaviour
                     inventoryItems[3] = temp;
                     EquipRing(3);
                     inventorySlots[3].UpdateItem(inventoryItems[3]);
+                    Player.movement.PlaySound(ringSound);
                 }
             }
         }
@@ -600,20 +623,24 @@ public class InventoryManager : MonoBehaviour
             else
             {
                 ItemPickup temp = Instantiate(itemTemplate, Player.instance.transform.position, Quaternion.identity);
-                temp.SetItem(new ItemInstance(inventoryItems[slotID], 1));               
+                temp.SetItem(new ItemInstance(inventoryItems[slotID], 1));
+                Player.movement.PlaySound(itemDropSound);
             }
 
             if (inventoryItems[slotID].type == ItemType.WEAPON)
             {
                 Player.stats.ResetDamage();
+                Player.movement.PlaySound(weaponSound);
             }
             else if(inventoryItems[slotID].type == ItemType.ARMOR)
             {
                 Player.stats.ResetDefence();
+                Player.movement.PlaySound(armourSound);
             }
             else
             {
                 UnequipRing(slotID);
+                Player.movement.PlaySound(ringSound);
             }
 
             SubtractItem(slotID);

@@ -59,23 +59,30 @@ public class TurnManager : MonoBehaviour
             }
             else
             {
-                Player.movement.StopMovement(false);
+                if(Physics2D.OverlapCircle(Player.instance.transform.position, 10f, LayerMask.GetMask("Enemies")))
+                {
+                    Player.movement.StopMovement(false);
 
-                if (currentActingEnemy >= enemies.Count)
-                {
-                    SwitchTurn();
-                }
-                else
-                {
-                    enemies[currentActingEnemy].turnCost--;
-                    if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
+                    if (currentActingEnemy >= enemies.Count)
                     {
-                        enemies[currentActingEnemy].DoTurn();
+                        SwitchTurn();
                     }
                     else
                     {
-                        PassToNextEnemy();
+                        enemies[currentActingEnemy].turnCost--;
+                        if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
+                        {
+                            enemies[currentActingEnemy].DoTurn();
+                        }
+                        else
+                        {
+                            PassToNextEnemy();
+                        }
                     }
+                }
+                else
+                {
+                    SwitchTurn();
                 }
             }
         }       
@@ -83,13 +90,17 @@ public class TurnManager : MonoBehaviour
 
     public void PassToNextEnemy()
     {
-        enemies[currentActingEnemy].TickStatusEffects();
-
-        var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
-
-        if (gasNearEnemy != null)
+        if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) < 10f)
         {
-            gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
+            enemies[currentActingEnemy].TickStatusEffects();
+
+            var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
+
+            if (gasNearEnemy != null)
+            {
+                gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
+            }
+
         }
 
         currentActingEnemy++;

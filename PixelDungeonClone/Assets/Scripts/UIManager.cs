@@ -51,6 +51,10 @@ public class UIManager : MonoBehaviour
 
     public Text commandText;
     public Button inventoryButton;
+    private AudioSource audioSource;
+    public AudioClip buttonSound, buttonSoundAlt;
+
+    private AudioLowPassFilter[] ambiance;
 
     // Start is called before the first frame update
     void Start()
@@ -66,6 +70,8 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         SceneManager.sceneLoaded += OnLevelLoaded;
         StartFadeIn();
+        audioSource = GetComponent<AudioSource>();
+        ambiance = FindObjectsOfType<AudioLowPassFilter>();
     }
 
     private void Update()
@@ -99,6 +105,24 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void PlayButtonSound(bool alternativeSound)
+    {
+        if(alternativeSound)
+        {
+            PlaySound(buttonSoundAlt);
+        }
+        else
+        {
+            PlaySound(buttonSound);
+        }
+    }
+
     public void AddStatusToDisplay(Sprite icon)
     {
         statusDisplay.Add(Instantiate(statusDisplayTemplate, statusDisplayParent));
@@ -108,6 +132,7 @@ public class UIManager : MonoBehaviour
     void OnLevelLoaded(Scene scene, LoadSceneMode mode)
     {
         StartFadeIn();
+        ambiance = FindObjectsOfType<AudioLowPassFilter>();
     }
 
     public void ToggleInventory()
@@ -141,10 +166,12 @@ public class UIManager : MonoBehaviour
         if (deathScreen.activeInHierarchy)
         {
             deathScreen.SetActive(false);
+            UnmuffleAmbiance();
         }
         else
         {
             deathScreen.SetActive(true);
+            MuffleAmbiance();
         }
     }
 
@@ -316,11 +343,13 @@ public class UIManager : MonoBehaviour
         if (pauseMenu.activeInHierarchy)
         {
             pauseMenu.SetActive(false);
+            UnmuffleAmbiance();
             Time.timeScale = 1;
         }
         else
         {
             pauseMenu.SetActive(true);
+            MuffleAmbiance();
             Time.timeScale = 0;
             inventory.SetActive(false);
             itemMenu.SetActive(false);
@@ -340,6 +369,22 @@ public class UIManager : MonoBehaviour
         fadeOutDone = false;
         fadeImage.gameObject.SetActive(true);
         fadeOut = true;
+    }
+
+    public void MuffleAmbiance()
+    {
+        for(int i = 0; i < ambiance.Length; i++)
+        {
+            ambiance[i].cutoffFrequency = 2000;
+        }
+    }
+
+    public void UnmuffleAmbiance()
+    {
+        for (int i = 0; i < ambiance.Length; i++)
+        {
+            ambiance[i].cutoffFrequency = 22000;
+        }
     }
 
     private void OnDestroy()
