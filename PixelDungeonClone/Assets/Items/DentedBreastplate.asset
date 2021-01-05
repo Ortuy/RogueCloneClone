@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: DentedBreastplate
   m_EditorClassIdentifier: 
   itemName: Dented Breastplate
-  description: "A beaten up, mangled steel breastplate. Wearing it might be far from
-    comfortable, but it\u2019s surely preferable to being far from safe. This particular
-    breastplate will absorb"
+  description: A beaten up, mangled steel breastplate. Wearing it might be far from
+    comfortable but the safety's surely worth it. This particular breastplate will
+    absorb
   itemImage: {fileID: 21300000, guid: 37420d3e7417c1945ae54ce7fb81e035, type: 3}
   amount: 1
   strengthRequired: 15

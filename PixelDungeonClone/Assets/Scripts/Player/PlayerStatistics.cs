@@ -33,7 +33,13 @@ public class PlayerStatistics : Entity
     public int minBaseDamage, maxBaseDamage;
     **/
     [SerializeField]
-    private ParticleSystem hitFX;
+    private ParticleSystem hitFX, spiritStoneFX;
+
+    [SerializeField]
+    private AudioSource hitPlayer;
+
+    [SerializeField]
+    private AudioClip hitSound, trueDamageSound, levelUpSound, deathSound, spiritStoneSound;
 
     //public List<StatusEffect> statusEffects;
 
@@ -98,6 +104,12 @@ public class PlayerStatistics : Entity
                 statusEffects[statusEffects.Count - 1].iconDisplay = UIManager.instance.statusDisplay[UIManager.instance.statusDisplay.Count - 1].gameObject;
             }            
         }       
+    }
+
+    private void PlayHitSound(AudioClip clip)
+    {
+        hitPlayer.clip = clip;
+        hitPlayer.Play();
     }
 
     public override void TickStatusEffects()
@@ -178,11 +190,9 @@ public class PlayerStatistics : Entity
         
         //Evasion chance
         int evasionPercent = Mathf.FloorToInt(((evasion + evaModifier - attackerAccuracy) / (evasion + evaModifier + 10)) * 100);
-        Debug.Log("Evasion chacne: " + evasionPercent + "%");
         int evasionRoll = Random.Range(1, 101);
         if (evasionRoll <= evasionPercent)
         {
-            Debug.Log("Dodge!");
             ShowDamageText("Miss!");
         }
         else
@@ -193,6 +203,7 @@ public class PlayerStatistics : Entity
             hitFX.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
             //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
             hitFX.Play();
+            PlayHitSound(hitSound);
 
             var defence = Random.Range(minDefence, maxDefence + 1);
 
@@ -227,12 +238,17 @@ public class PlayerStatistics : Entity
                 {
                     UIManager.instance.ToggleDeathScreen();
                     Debug.LogError("DEATH!");
+                    PlayHitSound(deathSound);
+                    Camera.main.transform.SetParent(null);
+                    hitPlayer.transform.SetParent(null);
                     gameObject.SetActive(false);
                 }
                 else
                 {
                     Heal(Mathf.RoundToInt(maxHealth / 2));
                     AddStatusEffect(new StatusEffect(0, -1, this));
+                    PlayHitSound(spiritStoneSound);
+                    spiritStoneFX.Play();
                 }
             }
         }
@@ -271,6 +287,7 @@ public class PlayerStatistics : Entity
         //hitFX.Play();
 
         CheckForWrathRingModifiers(health - damage, health);
+        PlayHitSound(trueDamageSound);
 
         health -= damage;
         float value = (health / maxHealth);
@@ -338,6 +355,7 @@ public class PlayerStatistics : Entity
 
         float value = (health / maxHealth);
         UIManager.instance.playerHealthBar.value = value;
+        PlayHitSound(levelUpSound);
         InventoryManager.instance.potionUseFX[2].Play();
     }
 

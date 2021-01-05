@@ -19,6 +19,9 @@ public class PlayerMovement : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
     private Animator animator;
+    private AudioSource audioSource;
+    public AudioClip[] footsteps;
+    public AudioClip[] attacks;
 
     //public static PlayerMovement instance;
 
@@ -38,6 +41,7 @@ public class PlayerMovement : MonoBehaviour
         body = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         path = null;
     }
     
@@ -65,6 +69,24 @@ public class PlayerMovement : MonoBehaviour
         MoveOnPath();        
     }
 
+    public void PlayFootstep()
+    {
+        var rand = Random.Range(0, footsteps.Length);
+        PlaySound(footsteps[rand]);
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void PlayAttack()
+    {
+        var rand = Random.Range(0, attacks.Length);
+        PlaySound(attacks[rand]);
+    }
+
     public void QueueMovement(Vector2 target)
     {
         if (path == null)
@@ -89,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
     {
         animator.speed = 1;
         spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
-        if (path != null)
+        if (path != null && currentPathIndex < path.Count)
         {
             Vector2 targetPos = path[currentPathIndex];
 
@@ -101,7 +123,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                if (Vector2.Distance(transform.position, targetPos) > 0.05f)
+                if (Vector2.Distance(transform.position, targetPos) > 0.09f)
                 {
                     Vector2 movementDir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
 

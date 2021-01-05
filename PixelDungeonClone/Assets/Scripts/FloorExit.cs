@@ -9,11 +9,13 @@ public class FloorExit : MonoBehaviour
 
     [SerializeField]
     private SpriteRenderer mapIcon;
+    private AudioSource audioSource;
 
     private void Start()
     {
         //StartCoroutine(CheckForPlayer());
         mapIcon.color = Color.white;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -41,12 +43,18 @@ public class FloorExit : MonoBehaviour
         }
     }
 
+    public void Descend()
+    {
+        transitionStarted = true;
+        UIManager.instance.StartFadeOut();
+        audioSource.Play();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player"))
         {
-            transitionStarted = true;
-            UIManager.instance.StartFadeOut();         
+            Descend();   
         }
     }    
 }

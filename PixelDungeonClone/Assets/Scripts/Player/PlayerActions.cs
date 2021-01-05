@@ -19,11 +19,16 @@ public class PlayerActions : MonoBehaviour
     public GameObject popupText;
     private Animator animator;
 
+    private AudioSource audioSource;
+    [SerializeField]
+    private AudioClip itemDropSound, itemThrowSound, itemPickupSound, mapSound;
+
     // Start is called before the first frame update
     void Start()
     {
         body = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }  
 
     public void DoPlayerTurn()
@@ -51,6 +56,7 @@ public class PlayerActions : MonoBehaviour
         var thrown = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
         thrown.SetItem(itemToThrow);
         thrown.SetThrown(destination);
+        PlaySound(itemThrowSound);
         throwQueued = false;
     }
 
@@ -60,6 +66,7 @@ public class PlayerActions : MonoBehaviour
         var thrown = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
         thrown.SetItem(itemToThrow);
         thrown.SetThrown(destination);
+        PlaySound(itemThrowSound);
     }
 
     IEnumerator Attack(Enemy target, int damage, int cost)
@@ -161,6 +168,7 @@ public class PlayerActions : MonoBehaviour
             {
                 UIManager.instance.mapButton.gameObject.SetActive(true);
                 InventoryManager.instance.potionUseFX[10].Play();
+                PlaySound(mapSound);
                 Destroy(foundObject.gameObject);
             }
             if (itemPickup != null)
@@ -170,6 +178,11 @@ public class PlayerActions : MonoBehaviour
                 {
                     ShowItemText(itemPickup.itemInside.itemName);
                     Destroy(itemPickup.gameObject);
+                    PlaySound(itemPickupSound);
+                }
+                else
+                {
+                    PlaySound(itemDropSound);
                 }
             }
             if (goldPickup != null)
@@ -220,5 +233,11 @@ public class PlayerActions : MonoBehaviour
         List<Collider2D> enemyColliders = Physics2D.OverlapCircleAll(target, range).ToList();
 
         return enemyColliders;
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 }

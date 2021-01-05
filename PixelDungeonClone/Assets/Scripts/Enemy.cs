@@ -60,6 +60,12 @@ public class Enemy : Entity
 
     private Animator animator;
 
+    [SerializeField]
+    private AudioSource hitPlayer;
+
+    [SerializeField]
+    private AudioClip hitSound, trueDamageSound;
+
     [Header("Movement")]
     private Rigidbody2D body;
 
@@ -122,12 +128,15 @@ public class Enemy : Entity
     {
         //If the condition is met, wake up and get alerted
         
-        if(!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+        if(!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= awakeRange)
         {
-            Debug.Log("Wake up!");
-            sleepFX.Stop();
-            alertFX.Play();
-            behaviourState = AIState.ALERTED;
+            if(Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+            {
+                Debug.Log("Wake up!");
+                sleepFX.Stop();
+                alertFX.Play();
+                behaviourState = AIState.ALERTED;
+            }
         }
 
         TurnManager.instance.PassToNextEnemy();
@@ -136,12 +145,16 @@ public class Enemy : Entity
     private void DoUnalertedTurn()
     {
         //If the condition is met, get alerted
-        if (!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= alertRange && Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+        if (!Player.stats.invisible && Vector2.Distance(transform.position, Player.instance.transform.position) <= alertRange)
         {
-            Debug.Log("I see you!");
-            sleepFX.Stop();
-            alertFX.Play();
-            behaviourState = AIState.ALERTED;
+            if(Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+            {
+                Debug.Log("I see you!");
+                sleepFX.Stop();
+                alertFX.Play();
+                behaviourState = AIState.ALERTED;
+            }
+            
         }
 
         //If not, roam (this will need procedural generation to be done)
@@ -161,6 +174,7 @@ public class Enemy : Entity
                 var baseDamage = Random.Range(minBaseDamage, maxBaseDamage + 1);
                 actionState = ActionState.ACTIVE;
                 StartCoroutine(AttackPlayer(baseDamage, 1));
+                
             }
             else if (path == null && actionState == ActionState.WAITING)
             {
@@ -249,6 +263,7 @@ public class Enemy : Entity
 
     private void MoveOnPath()
     {
+        animator.speed = 1;
         spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
         if (path != null)
         {
@@ -266,7 +281,7 @@ public class Enemy : Entity
             else
             {
                 Vector2 tempPos = new Vector2(transform.position.x, transform.position.y);
-                if (Vector2.Distance(tempPos, targetPos) > 0.05f)
+                if (Vector2.Distance(tempPos, targetPos) > 0.09f)
                 {
                     Debug.Log("SettingVelocity");
                     Vector2 movementDir = (targetPos - new Vector2(transform.position.x, transform.position.y)).normalized;
@@ -274,6 +289,11 @@ public class Enemy : Entity
                     if (movementDir.x != 0)
                     {
                         animator.SetFloat("MoveDirection", movementDir.x);
+                    }
+
+                    if (!animator.GetBool("Moving"))
+                    {
+                        animator.SetBool("Moving", true);
                     }
 
                     body.velocity = movementDir * movementSpeed;
@@ -301,6 +321,8 @@ public class Enemy : Entity
                     {
                         actionState = ActionState.WAITING;
                         body.velocity = Vector2.zero;
+                        animator.SetBool("Moving", false);
+                        //animator.speed = 0;
                     }                    
                 }
             }
@@ -309,6 +331,8 @@ public class Enemy : Entity
         {
             actionState = ActionState.WAITING;
             body.velocity = Vector2.zero;
+            animator.SetBool("Moving", false);
+            //animator.speed = 0;
         }
     }
 
@@ -318,10 +342,12 @@ public class Enemy : Entity
         currentPathIndex = 0;
         body.velocity = Vector2.zero;
         actionState = ActionState.WAITING;
+        //animator.speed = 0;
     }
 
     IEnumerator AttackPlayer(int damage, int cost)
     {
+        StopMovement();
         var dir = transform.position.x - Player.instance.transform.position.x;
 
         if (dir != 0)
@@ -346,26 +372,39 @@ public class Enemy : Entity
 
     IEnumerator AttackTarget(int damage, int cost)
     {
-        var dir = transform.position.x - attackTarget.transform.position.x;
+        StopMovement();
+        if (attackTarget.gameObject.activeInHierarchy)
+        {
+            
+            var dir = transform.position.x - attackTarget.transform.position.x;
 
-        if (dir != 0)
-        {
-            animator.SetFloat("MoveDirection", -dir);
-        }
-        actionState = ActionState.ACTIVE;
-        yield return new WaitForSeconds(0.5f);
-        Debug.LogWarning("Attackin");
-        attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);       
-        for (int i = attackTarget.statusEffects.Count - 1; i >= 0; i--)
-        {
-            if (attackTarget.statusEffects[i].effectID == 3)
+            if (dir != 0)
             {
-                attackTarget.EndStatusEffect(i);
+                animator.SetFloat("MoveDirection", -dir);
             }
+            actionState = ActionState.ACTIVE;
+            yield return new WaitForSeconds(0.5f);
+            Debug.LogWarning("Attackin");
+            attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position);
+            for (int i = attackTarget.statusEffects.Count - 1; i >= 0; i--)
+            {
+                if (attackTarget.statusEffects[i].effectID == 3)
+                {
+                    attackTarget.EndStatusEffect(i);
+                }
+            }
+            turnCost = cost;
+            TurnManager.instance.PassToNextEnemy();
+            actionState = ActionState.WAITING;
         }
-        turnCost = cost;
-        TurnManager.instance.PassToNextEnemy();
-        actionState = ActionState.WAITING;
+        else
+        {
+            yield return null;
+            turnCost = cost;
+            TurnManager.instance.PassToNextEnemy();
+            actionState = ActionState.WAITING;
+        }
+        
     }
 
     public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
@@ -385,7 +424,7 @@ public class Enemy : Entity
             {
                 healthBar.gameObject.SetActive(true);
             }
-
+            PlayHitSound(hitSound);
             var hitDirection = (transform.position - attackerPos).normalized;
             var angle = Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg;
             hitFX.transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
@@ -427,6 +466,7 @@ public class Enemy : Entity
         //hitFX.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
         hitFX.Play();
+        PlayHitSound(trueDamageSound);
 
         //var defence = Random.Range(minDefence, maxDefence + 1);
         //var totaldmg = damage - defence;
@@ -521,5 +561,11 @@ public class Enemy : Entity
         health = maxHealth;
         behaviourState = AIState.SLEEPING;
         sleepFX.Play();
+    }
+
+    public void PlayHitSound(AudioClip clip)
+    {
+        hitPlayer.clip = clip;
+        hitPlayer.Play();
     }
 }
