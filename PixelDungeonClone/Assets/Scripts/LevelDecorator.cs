@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 using UnityEngine.Tilemaps;
 
 public class LevelDecorator : MonoBehaviour
@@ -25,6 +26,8 @@ public class LevelDecorator : MonoBehaviour
 
     public GameObject extraLight;
 
+    public ParticleSystem[] enviroParticles;
+
     [Header("Other")]
     public Vector2Int minCorner;
     public Vector2Int maxCorner;
@@ -35,6 +38,7 @@ public class LevelDecorator : MonoBehaviour
         maxCorner = generator.maxCorner;
         DrawOverlay();
         DrawDecor();
+        SetUpParticles();
     }
 
     // Update is called once per frame
@@ -403,6 +407,31 @@ public class LevelDecorator : MonoBehaviour
                     floorDecor.SetTile(new Vector3Int(x, y, 0), floorDecorTiles[Random.Range(0, floorDecorTiles.Length)]);
                 }
             }
+        }
+    }
+
+    private void SetUpParticles()
+    {
+        Vector3 levelCentre = new Vector3(maxCorner.x - (maxCorner.x - minCorner.x + 1) / 2, maxCorner.y - (maxCorner.y - minCorner.y + 1) / 2);
+
+        float levelArea = (maxCorner.x - minCorner.x + 1) * (maxCorner.y - minCorner.y + 1);
+
+        for (int i = 0; i < enviroParticles.Length; i++)
+        {
+            var particle = Instantiate(enviroParticles[i], levelCentre, Quaternion.identity);
+            //var sParticle = new SerializedObject(particle);
+
+            var emission = particle.emission;
+            var shape = particle.shape;
+
+            //Debug.LogError("RoT: " + particle.emission.rateOverTime.constant);
+
+            //particle.shape.scale
+            
+
+            emission.rateOverTime = emission.rateOverTime.constant * levelArea / 100;
+            particle.transform.position = levelCentre;
+            shape.scale = new Vector3((maxCorner.x - minCorner.x + 1), (maxCorner.y - minCorner.y + 1), 1);
         }
     }
 }

@@ -223,6 +223,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2901ef254816ab745bd2701d8bb464f7, type: 2}
   extraLight: {fileID: 8473375291736799579, guid: 2d8fbea390bfb044ea485af9223d0df9,
     type: 3}
+  enviroParticles:
+  - {fileID: 428893639994084096, guid: a6ce72afb2aca2f4fb297c94850faf79, type: 3}
+  - {fileID: 8510148004516283671, guid: 19b1a360fcc4e3b458d3199431293b70, type: 3}
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
 --- !u!114 &27238168
@@ -243,7 +246,7 @@ MonoBehaviour:
   exit: {fileID: 5713198309748566241, guid: a370fa9064e882043868cb5275b3b89e, type: 3}
   playerStartPos: {x: 0, y: 0}
   minRoomSize: 4
-  maxRoomSize: 8
+  maxRoomSize: 7
   minRoomClusterAmount: 2
   maxRoomClusterAmount: 3
   minDistanceFromStart: 20
@@ -7179,7 +7182,7 @@ GameObject:
   - component: {fileID: 1688125587}
   - component: {fileID: 1688125589}
   - component: {fileID: 1688125588}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WallsOverlay0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

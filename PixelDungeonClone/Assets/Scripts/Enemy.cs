@@ -62,9 +62,12 @@ public class Enemy : Entity
 
     [SerializeField]
     private AudioSource hitPlayer;
+    private AudioSource audioSource;
 
     [SerializeField]
-    private AudioClip hitSound, trueDamageSound;
+    private AudioClip hitSound, trueDamageSound, deathSound, alertSound;
+    [SerializeField]
+    private AudioClip[] footsteps;
 
     [Header("Movement")]
     private Rigidbody2D body;
@@ -100,11 +103,13 @@ public class Enemy : Entity
         spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void DoTurn()
     {
-        switch(behaviourState)
+        
+        switch (behaviourState)
         {
             case AIState.SLEEPING:
                 //Debug.Log("Sleeping");
@@ -136,6 +141,7 @@ public class Enemy : Entity
                 sleepFX.Stop();
                 alertFX.Play();
                 behaviourState = AIState.ALERTED;
+                PlaySound(alertSound);
             }
         }
 
@@ -153,6 +159,7 @@ public class Enemy : Entity
                 sleepFX.Stop();
                 alertFX.Play();
                 behaviourState = AIState.ALERTED;
+                PlaySound(alertSound);
             }
             
         }
@@ -264,7 +271,7 @@ public class Enemy : Entity
     private void MoveOnPath()
     {
         animator.speed = 1;
-        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+        
         if (path != null)
         {
             actionState = ActionState.ACTIVE;
@@ -280,6 +287,7 @@ public class Enemy : Entity
             }
             else
             {
+                spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
                 Vector2 tempPos = new Vector2(transform.position.x, transform.position.y);
                 if (Vector2.Distance(tempPos, targetPos) > 0.09f)
                 {
@@ -348,12 +356,17 @@ public class Enemy : Entity
     IEnumerator AttackPlayer(int damage, int cost)
     {
         StopMovement();
+        
+
         var dir = transform.position.x - Player.instance.transform.position.x;
 
         if (dir != 0)
         {
             animator.SetFloat("MoveDirection", -dir);
         }
+
+        animator.speed = 1;
+        animator.Play("Attack");
         actionState = ActionState.ACTIVE;       
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("Attackin");
@@ -382,6 +395,8 @@ public class Enemy : Entity
             {
                 animator.SetFloat("MoveDirection", -dir);
             }
+            animator.speed = 1;
+            animator.Play("Attack");
             actionState = ActionState.ACTIVE;
             yield return new WaitForSeconds(0.5f);
             Debug.LogWarning("Attackin");
@@ -493,6 +508,8 @@ public class Enemy : Entity
         TurnManager.instance.enemies.Remove(this);
         Instantiate(deathFX, transform.position, Quaternion.AngleAxis(angle - 45, Vector3.forward)).GetComponent<ParticleSystem>().Play();
 
+        SpawnManager.instance.PlaySound(deathSound);
+
         int randomDrop = Random.Range(0, 100);
         Debug.Log(randomDrop);
         for (int i = 0; i < dropPercentRanges.Length && i < drops.Length; i++)
@@ -567,5 +584,17 @@ public class Enemy : Entity
     {
         hitPlayer.clip = clip;
         hitPlayer.Play();
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void PlayFootstep()
+    {
+        var rand = Random.Range(0, footsteps.Length);
+        PlaySound(footsteps[rand]);
     }
 }

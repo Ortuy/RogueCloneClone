@@ -9,6 +9,8 @@ public class SpawnManager : MonoBehaviour
     [SerializeField]
     private ObjectPooler[] enemySpawners;
 
+    private AudioSource audioSource;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +22,8 @@ public class SpawnManager : MonoBehaviour
         {
             instance = this;
         }
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     public Enemy SpawnEnemy(int enemyTypeID, Vector2 postion)
@@ -32,5 +36,11 @@ public class SpawnManager : MonoBehaviour
         }
         TurnManager.instance.enemies.Add(tempEnemy);
         return tempEnemy;
+    }
+
+    public void PlaySound(AudioClip clip)
+    {
+        audioSource.clip = clip;
+        audioSource.Play();
     }
 }

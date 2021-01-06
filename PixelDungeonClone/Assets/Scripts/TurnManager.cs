@@ -92,15 +92,20 @@ public class TurnManager : MonoBehaviour
     {
         if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) < 10f)
         {
-            enemies[currentActingEnemy].TickStatusEffects();
-
-            var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
-
-            if (gasNearEnemy != null)
+            if(enemies[currentActingEnemy].statusEffects.Count > 0)
             {
-                gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
-            }
+                enemies[currentActingEnemy].TickStatusEffects();
+            }           
 
+            if(gases.Count > 0)
+            {
+                var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
+
+                if (gasNearEnemy != null)
+                {
+                    gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
+                }
+            }           
         }
 
         currentActingEnemy++;

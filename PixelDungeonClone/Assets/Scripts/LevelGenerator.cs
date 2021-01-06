@@ -92,7 +92,15 @@ public class LevelGenerator : MonoBehaviour
     {
         if(startWithRandomSeed)
         {
-            SetLevelSeed(System.Environment.TickCount);
+            if(GameManager.instance != null)
+            {
+                SetLevelSeed(GameManager.instance.seed);
+            }
+            else
+            {
+                SetLevelSeed(System.Environment.TickCount);
+                StartCoroutine(SetGameManagerSeed());
+            }            
         }
         else
         {
@@ -131,6 +139,12 @@ public class LevelGenerator : MonoBehaviour
 
         GenerateLevel(LevelLayoutType.BASIC);
         //DrawCorridor(rooms[0], rooms[1]);
+    }
+
+    IEnumerator SetGameManagerSeed()
+    {
+        yield return null;
+        GameManager.instance.seed = seed;
     }
 
     public void SetLevelSeed(int newSeed)
@@ -662,9 +676,11 @@ public class LevelGenerator : MonoBehaviour
 
     private void DrawMinimap()
     {
+        Vector3 tempPos = new Vector3(0, 0, 20);
+
         for(int i = 0; i < rooms.Count; i++)
         {
-            var tilemap = Instantiate(minimapTilemapBase, Vector3.zero, Quaternion.identity, tilemapGrid.transform);
+            var tilemap = Instantiate(minimapTilemapBase, tempPos, Quaternion.identity, tilemapGrid.transform);
             for(int x = rooms[i].minCorner.x - 1; x <= rooms[i].maxCorner.x + 1; x++)
             {
                 for (int y = rooms[i].minCorner.y - 1; y <= rooms[i].maxCorner.y + 1; y++)
@@ -722,7 +738,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < corridors.Count; i++)
         {
-            var tilemap = Instantiate(minimapTilemapBase, Vector3.zero, Quaternion.identity, tilemapGrid.transform);
+            var tilemap = Instantiate(minimapTilemapBase, tempPos, Quaternion.identity, tilemapGrid.transform);
             for (int x = corridors[i].minCorner.x - 1; x <= corridors[i].maxCorner.x + 1; x++)
             {
                 for (int y = corridors[i].minCorner.y - 1; y <= corridors[i].maxCorner.y + 1; y++)
@@ -778,7 +794,7 @@ public class LevelGenerator : MonoBehaviour
             tilemap.GetComponent<MapObject>().maxCorner = corridors[i].maxCorner;
         }
 
-        Vector3 camPos = new Vector3(minCorner.x + width / 2, minCorner.y + height / 2, -10);
+        Vector3 camPos = new Vector3(minCorner.x + width / 2, minCorner.y + height / 2, 10);
         minimapCamera.transform.position = camPos;
         if(width < height)
         {
