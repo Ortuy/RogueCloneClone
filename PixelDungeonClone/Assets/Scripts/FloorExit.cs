@@ -48,6 +48,7 @@ public class FloorExit : MonoBehaviour
         transitionStarted = true;
         UIManager.instance.StartFadeOut();
         audioSource.Play();
+        GameManager.instance.currentFloor++;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

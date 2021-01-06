@@ -37,6 +37,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject pauseMenu;
     public GameObject mapMenu;
+    public Text mapText;
 
     public Image fadeImage;
     private bool fadeIn, fadeOut;
@@ -158,6 +159,7 @@ public class UIManager : MonoBehaviour
         else
         {
             mapMenu.SetActive(true);
+            mapText.text = "Floor " + GameManager.instance.currentFloor;
         }
     }
 

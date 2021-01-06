@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void DoPlayerTurn()
     {
+        
         /**
         if (Input.GetMouseButtonDown(0))
         {
@@ -110,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
     private void MoveOnPath()
     {
         animator.speed = 1;
-        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+        
         if (path != null && currentPathIndex < path.Count)
         {
             Vector2 targetPos = path[currentPathIndex];
@@ -141,6 +142,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
+                    spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
                     transform.position = targetPos;
                     if (pathChangeQueued)
                     {
