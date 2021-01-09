@@ -21,7 +21,7 @@ TagManager:
   - Items
   - Gases
   - Minimap
-  - 
+  - Decor
   - 
   - 
   - 
@@ -44,11 +44,14 @@ TagManager:
   - name: Ground
     uniqueID: 1659931371
     locked: 0
-  - name: Items
-    uniqueID: 2942854843
+  - name: Vegetation
+    uniqueID: 1977012059
     locked: 0
   - name: EntitiesMain
     uniqueID: 3019788219
+    locked: 0
+  - name: Items
+    uniqueID: 2942854843
     locked: 0
   - name: Entities
     uniqueID: 2974165323

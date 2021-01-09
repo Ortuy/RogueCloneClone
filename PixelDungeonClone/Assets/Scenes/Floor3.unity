@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 134259037}
+  drawOverlay: 1
+  generateParticles: 1
+  drawDecor: 1
   blackOverlay: {fileID: 1394927086}
   overlayBottomTiles:
   - {fileID: 11400000, guid: dbe15978c939c7545a9cfb4c4ec52608, type: 2}
@@ -226,6 +229,10 @@ MonoBehaviour:
   enviroParticles:
   - {fileID: 428893639994084096, guid: a6ce72afb2aca2f4fb297c94850faf79, type: 3}
   - {fileID: 8510148004516283671, guid: 19b1a360fcc4e3b458d3199431293b70, type: 3}
+  tallVegetation: {fileID: 8038483350867982676, guid: ff6ca0a9e59a77d43a723f50322843b8,
+    type: 3}
+  smallVegetation: {fileID: 843835024984521177, guid: 85f55945d73583146a74a175c148911b,
+    type: 3}
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
 --- !u!114 &134259037
@@ -310,7 +317,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &207535804
 GameObject:
@@ -381,7 +388,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: 5
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -536,7 +543,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &525331056
 GameObject:
@@ -5348,7 +5355,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!1 &574980264
 GameObject:
@@ -5479,7 +5486,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &633875938
 GameObject:
@@ -5550,7 +5557,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: -2
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -5629,6 +5636,83 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &693156939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 693156941}
+  - component: {fileID: 693156940}
+  m_Layer: 0
+  m_Name: SecondaryDecorator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &693156940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693156939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd8da2a1fd96f8c49b5aeb415e4e0009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generator: {fileID: 134259037}
+  drawOverlay: 0
+  generateParticles: 0
+  drawDecor: 1
+  blackOverlay: {fileID: 0}
+  overlayBottomTiles: []
+  overlayTopTiles: []
+  overlayLeftTiles: []
+  overlayRightTiles: []
+  overlayTile: {fileID: 0}
+  overlayCornerTL: {fileID: 0}
+  overlayCornerTR: {fileID: 0}
+  overlayCornerBL: {fileID: 0}
+  overlayCornerBR: {fileID: 0}
+  overlayInnerCornerTL: {fileID: 0}
+  overlayInnerCornerTR: {fileID: 0}
+  overlayInnerCornerBL: {fileID: 0}
+  overlayInnerCornerBR: {fileID: 0}
+  overlayWeirdCornerL: {fileID: 0}
+  overlayWeirdCornerR: {fileID: 0}
+  roots: []
+  wallDecor: {fileID: 0}
+  wallExtraDecor: {fileID: 0}
+  floorDecor: {fileID: 0}
+  wallDecorTiles: []
+  extraWallDecorTiles: []
+  floorDecorTiles: []
+  extraLight: {fileID: 0}
+  enviroParticles: []
+  tallVegetation: {fileID: 6614791005912329257, guid: 3039de17dc1614941adc0f2409777e5c,
+    type: 3}
+  smallVegetation: {fileID: 0}
+  minCorner: {x: 0, y: 0}
+  maxCorner: {x: 0, y: 0}
+--- !u!4 &693156941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693156939}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &828294029
 GameObject:
   m_ObjectHideFlags: 0
@@ -5678,7 +5762,7 @@ Transform:
   - {fileID: 1084244731}
   - {fileID: 1568806926}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &954151879
 GameObject:
@@ -5749,7 +5833,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: 6
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -5989,7 +6073,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: 4
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -7177,7 +7261,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: 1
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -7479,7 +7563,7 @@ TilemapRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1659931371
-  m_SortingLayer: -6
+  m_SortingLayer: -7
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -7690,7 +7774,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1694304733
 GameObject:
@@ -7950,5 +8034,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

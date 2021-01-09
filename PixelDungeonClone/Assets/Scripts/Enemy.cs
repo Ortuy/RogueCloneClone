@@ -207,7 +207,7 @@ public class Enemy : Entity
                 MoveOnPath();
             }
             //If they are not found, become unalerted
-            else if(Player.stats.invisible || !Pathfinding.instance.CheckLineOfSight(transform.position, Player.instance.transform.position))
+            else if(Player.stats.invisible || !Pathfinding.instance.CheckLineOfSightOptimised(transform.position, Player.instance.transform.position))
             {
                 behaviourState = AIState.UNALERTED;
             }
@@ -277,6 +277,7 @@ public class Enemy : Entity
             actionState = ActionState.ACTIVE;
 
             targetPos = path[currentPathIndex];
+            spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(targetPos.y + 0.5f)) + 1;
 
             if (Pathfinding.instance.FindPlayerOnTile(targetPos) || Pathfinding.instance.FindAnotherEnemyOnTile(path[currentPathIndex], this))
             {
@@ -287,7 +288,7 @@ public class Enemy : Entity
             }
             else
             {
-                spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+                //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
                 Vector2 tempPos = new Vector2(transform.position.x, transform.position.y);
                 if (Vector2.Distance(tempPos, targetPos) > 0.09f)
                 {
@@ -350,6 +351,7 @@ public class Enemy : Entity
         currentPathIndex = 0;
         body.velocity = Vector2.zero;
         actionState = ActionState.WAITING;
+        //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         //animator.speed = 0;
     }
 

@@ -57,33 +57,32 @@ public class TurnManager : MonoBehaviour
                     StartCoroutine(FreezePlayer());
                 }                                
             }
-            else
+            else if(Physics2D.OverlapCircle(Player.instance.transform.position, 10f, LayerMask.GetMask("Enemies")))
             {
-                if(Physics2D.OverlapCircle(Player.instance.transform.position, 10f, LayerMask.GetMask("Enemies")))
-                {
-                    Player.movement.StopMovement(false);
+                Debug.Log("Enemy: " + currentActingEnemy);                         
 
-                    if (currentActingEnemy >= enemies.Count)
-                    {
-                        SwitchTurn();
-                    }
-                    else
-                    {
-                        enemies[currentActingEnemy].turnCost--;
-                        if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
-                        {
-                            enemies[currentActingEnemy].DoTurn();
-                        }
-                        else
-                        {
-                            PassToNextEnemy();
-                        }
-                    }
-                }
-                else
+                if (currentActingEnemy >= enemies.Count)
                 {
                     SwitchTurn();
                 }
+                else
+                {
+                    
+                    Player.movement.StopMovement(false);
+                    enemies[currentActingEnemy].turnCost--;
+                    if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
+                    {
+                        enemies[currentActingEnemy].DoTurn();
+                    }
+                    else
+                    {
+                        PassToNextEnemy();
+                    }
+                }
+            }
+            else
+            {
+                SwitchTurn();
             }
         }       
     }

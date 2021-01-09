@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
     public Text itemMenuText, itemDescriptionText;
 
     public GameObject pauseMenu;
-    public GameObject mapMenu;
+    public GameObject mapMenu, mapKnown, mapUnknown;
     public Text mapText;
 
     public Image fadeImage;
@@ -160,6 +160,16 @@ public class UIManager : MonoBehaviour
         {
             mapMenu.SetActive(true);
             mapText.text = "Floor " + GameManager.instance.currentFloor;
+            if(GameManager.instance.mapRevealed)
+            {
+                mapKnown.SetActive(true);
+                mapUnknown.SetActive(false);
+            }
+            else
+            {
+                mapKnown.SetActive(false);
+                mapUnknown.SetActive(true);
+            }
         }
     }
 
@@ -332,6 +342,7 @@ public class UIManager : MonoBehaviour
 
     public void RestartGame()
     {
+        Destroy(Camera.main);
         SceneManager.LoadScene(0);
     }
 

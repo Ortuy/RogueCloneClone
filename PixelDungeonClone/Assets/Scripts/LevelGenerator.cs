@@ -94,7 +94,7 @@ public class LevelGenerator : MonoBehaviour
         {
             if(GameManager.instance != null)
             {
-                SetLevelSeed(GameManager.instance.seed);
+                //SetLevelSeed(GameManager.instance.seed);
             }
             else
             {

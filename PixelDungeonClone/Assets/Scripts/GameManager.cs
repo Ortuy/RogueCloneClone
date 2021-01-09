@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
 
     public int seed;
     public int currentFloor = 1;
+    public bool mapRevealed;
 
     // Start is called before the first frame update
     void Start()

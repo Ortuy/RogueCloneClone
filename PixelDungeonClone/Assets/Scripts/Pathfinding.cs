@@ -317,4 +317,31 @@ public class Pathfinding
             return true;
         }        
     }
+
+    public bool CheckLineOfSightOptimised(Vector2 origin, Vector2 target)
+    {
+        grid.GetXY(origin, out int oX, out int oY);
+        Vector2 oCell = grid.GetWorldPosition(oX, oY);
+        grid.GetXY(target, out int tX, out int tY);
+        Vector2 tCell = grid.GetWorldPosition(tX, tY);
+
+        Vector2 originCell = new Vector2(oCell.x + 0.5f, oCell.y + 0.5f);
+        Vector2 targetCell = new Vector2(tCell.x + 0.5f, tCell.y + 0.5f);
+
+        var wallCheck = Physics2D.Raycast(originCell, targetCell - originCell, Vector2.Distance(originCell, targetCell), LayerMask.GetMask("Walls"));
+
+
+        Debug.DrawLine(originCell, targetCell, Color.red, 50);
+
+
+        if (wallCheck)
+        {
+            //Debug.Log("LoS: " + false);
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
 }

@@ -115,8 +115,9 @@ public class PlayerMovement : MonoBehaviour
         if (path != null && currentPathIndex < path.Count)
         {
             Vector2 targetPos = path[currentPathIndex];
+            spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(targetPos.y + 0.5f)) + 1;
 
-            if(Pathfinding.instance.FindEnemyOnTile(targetPos))
+            if (Pathfinding.instance.FindEnemyOnTile(targetPos))
             {
                 Debug.Log("Enemy!");
                 path = null;
@@ -142,7 +143,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+                    
                     transform.position = targetPos;
                     if (pathChangeQueued)
                     {
@@ -192,6 +193,7 @@ public class PlayerMovement : MonoBehaviour
         currentPathIndex = 0;
         body.velocity = Vector2.zero;
         //animator.SetBool("Moving", false);
+        //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         animator.speed = 0;
     }
 
@@ -203,6 +205,7 @@ public class PlayerMovement : MonoBehaviour
             currentPathIndex = 0;
         }
         //animator.SetBool("Moving", false);
+        //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         body.velocity = Vector2.zero;
     }
 }
