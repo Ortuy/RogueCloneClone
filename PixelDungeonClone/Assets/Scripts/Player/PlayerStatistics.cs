@@ -222,35 +222,40 @@ public class PlayerStatistics : Entity
 
             if (health <= 0)
             {
-                bool deathPrevented = false;
-                if(InventoryManager.instance.ringEquipped[0] == 10)
-                {
-                    deathPrevented = true;
-                    InventoryManager.instance.ringEquipped[0] = -1;
-                }
-                if (InventoryManager.instance.ringEquipped[1] == 10 && !deathPrevented)
-                {
-                    deathPrevented = true;
-                    InventoryManager.instance.ringEquipped[0] = -1;
-                }
-
-                if(!deathPrevented)
-                {
-                    UIManager.instance.ToggleDeathScreen();
-                    Debug.LogError("DEATH!");
-                    PlayHitSound(deathSound);
-                    Camera.main.transform.SetParent(null);
-                    hitPlayer.transform.SetParent(null);
-                    gameObject.SetActive(false);
-                }
-                else
-                {
-                    Heal(Mathf.RoundToInt(maxHealth / 2));
-                    AddStatusEffect(new StatusEffect(0, -1, this));
-                    PlayHitSound(spiritStoneSound);
-                    spiritStoneFX.Play();
-                }
+                Die();
             }
+        }
+    }
+
+    private void Die()
+    {
+        bool deathPrevented = false;
+        if (InventoryManager.instance.ringEquipped[0] == 10)
+        {
+            deathPrevented = true;
+            InventoryManager.instance.ringEquipped[0] = -1;
+        }
+        if (InventoryManager.instance.ringEquipped[1] == 10 && !deathPrevented)
+        {
+            deathPrevented = true;
+            InventoryManager.instance.ringEquipped[0] = -1;
+        }
+
+        if (!deathPrevented)
+        {
+            UIManager.instance.ToggleDeathScreen();
+            Debug.LogError("DEATH!");
+            PlayHitSound(deathSound);
+            Camera.main.transform.SetParent(null);
+            hitPlayer.transform.SetParent(null);
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            Heal(Mathf.RoundToInt(maxHealth / 2));
+            AddStatusEffect(new StatusEffect(0, -1, this));
+            PlayHitSound(spiritStoneSound);
+            spiritStoneFX.Play();
         }
     }
 
@@ -297,9 +302,7 @@ public class PlayerStatistics : Entity
 
         if (health <= 0)
         {
-            UIManager.instance.ToggleDeathScreen();
-            Debug.LogError("DEATH!");
-            gameObject.SetActive(false);
+            Die();
         }
     }
 

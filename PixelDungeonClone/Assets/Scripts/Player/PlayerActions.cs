@@ -37,7 +37,7 @@ public class PlayerActions : MonoBehaviour
         if (attackTarget != null)
         {
             var distance = Vector2.Distance(transform.position, attackTarget.transform.position);
-            if (distance <= 1.5f && attackQueued && body.velocity == Vector2.zero && Player.instance.actionState == ActionState.WAITING)
+            if (distance <= 1.5f && attackQueued && body.velocity == Vector2.zero && Player.instance.actionState == ActionState.WAITING && Player.stats.GetHealth() > 0)
             {
                 var baseDamage = Player.stats.GetRandomDamageValue();
                 StartCoroutine(Attack(attackTarget, baseDamage, 1));            
@@ -166,7 +166,8 @@ public class PlayerActions : MonoBehaviour
 
             if(foundObject.CompareTag("Map"))
             {
-                UIManager.instance.mapButton.gameObject.SetActive(true);
+                //UIManager.instance.mapButton.gameObject.SetActive(true);
+                GameManager.instance.mapRevealed = true;
                 InventoryManager.instance.potionUseFX[10].Play();
                 PlaySound(mapSound);
                 Destroy(foundObject.gameObject);

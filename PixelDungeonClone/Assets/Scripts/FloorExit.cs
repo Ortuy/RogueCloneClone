@@ -22,7 +22,8 @@ public class FloorExit : MonoBehaviour
     {
         if(transitionStarted && UIManager.instance.fadeOutDone)
         {
-            UIManager.instance.mapButton.gameObject.SetActive(false);
+            GameManager.instance.mapRevealed = false;
+            //UIManager.instance.mapButton.gameObject.SetActive(false);
             transitionStarted = false;
             //Player.instance.transform.position = new Vector2(0.5f, 0.5f);
             Player.movement.StopMovement();
