@@ -276,9 +276,10 @@ GameObject:
   - component: {fileID: 6977649515691734084}
   - component: {fileID: 6331620712989477237}
   - component: {fileID: 3887318305879353575}
+  - component: {fileID: 1020929713303572421}
   m_Layer: 8
   m_Name: BurrowingFolk
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -340,7 +341,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1275179077
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 5bb37c7ed4895a44caca67f55c221589, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -567,6 +568,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1020929713303572421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6977649515691734089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Burrower
+  objectDesc: A senior denizen of The Burrow, who found a home among its putrid halls.
+    Unlike their greenish kin, they appear to be a part of a budding civilisation.
+    They will do their best to drive you out of here.
 --- !u!1 &7019803222688441079
 GameObject:
   m_ObjectHideFlags: 0

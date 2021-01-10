@@ -76,6 +76,7 @@ public class InventoryManager : MonoBehaviour
                 int chance = 10 * inventoryItems[2].baseStatChangeMax;
                 if (Random.Range(0, 100) < chance)
                 {
+                    Debug.LogWarning("The ring worked!");
                     IdentifyingMenager.instance.IdentifyItem(itemToAdd);
                 }
             }
@@ -84,6 +85,7 @@ public class InventoryManager : MonoBehaviour
                 int chance = 10 * inventoryItems[3].baseStatChangeMax;
                 if (Random.Range(0, 100) < chance)
                 {
+                    Debug.LogWarning("The ring worked!");
                     IdentifyingMenager.instance.IdentifyItem(itemToAdd);
                 }
             }
@@ -569,6 +571,18 @@ public class InventoryManager : MonoBehaviour
                     Player.stats.minBaseDamage = inventoryItems[0].statChangeMin;
                     Player.stats.maxBaseDamage = inventoryItems[0].statChangeMax;
                     inventorySlots[0].UpdateItem(inventoryItems[0]);
+
+                    switch(inventoryItems[0].effectID)
+                    {
+                        case 1:
+                            Player.stats.accModifier += 3;
+                            Player.stats.evaModifier += 3;
+                            break;
+                        case 2:
+                            Player.actions.attackExtraTurnCost++;
+                            break;
+                    }
+
                     Player.movement.PlaySound(weaponSound);
                 }               
             }
@@ -630,6 +644,18 @@ public class InventoryManager : MonoBehaviour
             if (inventoryItems[slotID].type == ItemType.WEAPON)
             {
                 Player.stats.ResetDamage();
+
+                switch (inventoryItems[0].effectID)
+                {
+                    case 1:
+                        Player.stats.accModifier -= 3;
+                        Player.stats.evaModifier -= 3;
+                        break;
+                    case 2:
+                        Player.actions.attackExtraTurnCost--;
+                        break;
+                }
+
                 Player.movement.PlaySound(weaponSound);
             }
             else if(inventoryItems[slotID].type == ItemType.ARMOR)

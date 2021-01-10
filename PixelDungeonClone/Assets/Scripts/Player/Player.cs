@@ -33,6 +33,7 @@ public class Player : MonoBehaviour
         stats = GetComponent<PlayerStatistics>();
 
         transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
+        movement.SetSortingOrder();
     }
 
     public void DoPlayerTurn()

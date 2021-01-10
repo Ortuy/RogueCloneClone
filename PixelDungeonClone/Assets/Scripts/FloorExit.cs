@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FloorExit : MonoBehaviour
+public class FloorExit : InteractibleObject
 {
     private bool transitionStarted;
 
@@ -14,8 +14,11 @@ public class FloorExit : MonoBehaviour
     private void Start()
     {
         //StartCoroutine(CheckForPlayer());
+        SetTileUnwalkable();
         mapIcon.color = Color.white;
         audioSource = GetComponent<AudioSource>();
+        interactionDescription = interactionDescription.Replace("$n", "\n");
+        SetItemsAside();
     }
 
     private void Update()
@@ -30,6 +33,8 @@ public class FloorExit : MonoBehaviour
             SceneManager.LoadScene(FindObjectOfType<LevelGenerator>().floorID + 1);
         }
     }
+
+   
 
     IEnumerator CheckForPlayer()
     {
@@ -46,17 +51,26 @@ public class FloorExit : MonoBehaviour
 
     public void Descend()
     {
+        Player.instance.transform.position = transform.position;
         transitionStarted = true;
         UIManager.instance.StartFadeOut();
         audioSource.Play();
         GameManager.instance.currentFloor++;
     }
 
+    public override void DoInteraction()
+    {
+        base.DoInteraction();
+        Descend();
+    }
+
+    /**
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.CompareTag("Player"))
         {
             Descend();   
         }
-    }    
+    }   
+    **/
 }

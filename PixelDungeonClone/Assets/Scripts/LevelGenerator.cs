@@ -78,6 +78,8 @@ public class LevelGenerator : MonoBehaviour
     public int minItems, maxItems, minEnemies, maxEnemies;
     public int[] enemyPool;
     public int[] enemyWeightPool;
+    [SerializeField]
+    private bool giveStarterItem;
 
     [Header("Minimap")]
     public GameObject tilemapGrid;
@@ -86,6 +88,8 @@ public class LevelGenerator : MonoBehaviour
     public Tile[] minimapWallTiles, minimapCornerTiles, minimapCorridorTiles;
 
     public GameObject mapPickup;
+
+    private LevelDecorator decorator;
 
     // Start is called before the first frame update
     void Start()
@@ -136,6 +140,8 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+
+        decorator = GetComponent<LevelDecorator>();
 
         GenerateLevel(LevelLayoutType.BASIC);
         //DrawCorridor(rooms[0], rooms[1]);
@@ -269,9 +275,9 @@ public class LevelGenerator : MonoBehaviour
         for(int i = 0; i < amount; i++)
         {
             int roll = Random.Range(0, weightTotal);
-            int roomID = Random.Range(1, rooms.Count - 1);
+            int roomID = Random.Range(1, rooms.Count);
 
-            float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
+            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x);
             float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
             ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
@@ -322,7 +328,7 @@ public class LevelGenerator : MonoBehaviour
         {
             int roomID = Random.Range(1, rooms.Count - 1);
 
-            float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
+            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x);
             float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
             ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
@@ -331,6 +337,15 @@ public class LevelGenerator : MonoBehaviour
 
         dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
         dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
+
+        if(giveStarterItem)
+        {
+            float posX = Random.Range(rooms[0].minCorner.x, rooms[0].maxCorner.x);
+            float posY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
+
+            ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
+            itemDrop.SetItem(new ItemInstance(dropTable.starterItems[Random.Range(0, dropTable.starterItems.Count)], 1));
+        }
     }
 
     private void PopulateWithEnemies()
@@ -471,6 +486,8 @@ public class LevelGenerator : MonoBehaviour
                     var xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 1, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 2, 0), groundTileBase);
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y - 1 + 0.5f, 0));
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y - 2 + 0.5f, 0));
                     break;
                 case 1:
                     Debug.Log("Right");
@@ -482,6 +499,8 @@ public class LevelGenerator : MonoBehaviour
                     var yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
                     ground.SetTile(new Vector3Int(startCorner.x - 1, startCorner.y + yTemp, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x - 2, startCorner.y + yTemp, 0), groundTileBase);
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x - 1 + 0.5f, startCorner.y + yTemp + 0.5f, 0));
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x - 2 + 0.5f, startCorner.y + yTemp + 0.5f, 0));
                     break;
                 case 2:
                     Debug.Log("Down");
@@ -493,6 +512,8 @@ public class LevelGenerator : MonoBehaviour
                     xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize + 1, 0), groundTileBase);
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y + ySize + 0.5f, 0));
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y + ySize + 1 + 0.5f, 0));
                     break;
                 case 3:
                     Debug.Log("Left");
@@ -504,6 +525,8 @@ public class LevelGenerator : MonoBehaviour
                     yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
                     ground.SetTile(new Vector3Int(startCorner.x + xSize, startCorner.y + yTemp, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xSize + 1, startCorner.y + yTemp, 0), groundTileBase);
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xSize + 0.5f, startCorner.y + yTemp + 0.5f, 0));
+                    decorator.PlaceTallVegetation(new Vector3(startCorner.x + xSize + 1 + 0.5f, startCorner.y + yTemp + 0.5f, 0));
                     break;
             }
             cluster.Add(rooms[lastRoom + i]);

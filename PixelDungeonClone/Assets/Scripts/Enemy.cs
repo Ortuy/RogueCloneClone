@@ -101,9 +101,14 @@ public class Enemy : Entity
         behaviourState = AIState.SLEEPING;
         sleepFX.Play();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sortingOrder = -Mathf.FloorToInt(transform.position.y + 0.5f);
+        spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
+    }
+
+    public void SetSortingOrder()
+    {
+        GetComponent<SpriteRenderer>().sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
     }
 
     public void DoTurn()

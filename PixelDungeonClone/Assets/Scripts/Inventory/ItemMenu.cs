@@ -27,7 +27,6 @@ public class ItemMenu : MonoBehaviour
 
     public void ExitUI()
     {
-        Debug.Log("dsafghjkl");
         gameObject.SetActive(false);
         //mouseBlocked = false;
     }
@@ -72,6 +71,7 @@ public class ItemMenu : MonoBehaviour
 
             //TurnManager.instance.SwitchTurn(TurnState.ENEMY);
             UIManager.instance.ToggleInventory();
+            UIManager.instance.inventoryButton.interactable = false;
             gameObject.SetActive(false);
         }
     }

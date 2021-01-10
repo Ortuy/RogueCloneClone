@@ -10,13 +10,19 @@ public class Vegetation : MonoBehaviour
     private bool rustled = true;
 
     [SerializeField]
+    private bool hidingSpot;
+
+    [SerializeField]
     private ParticleSystem burstFX;
+
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
-        
+        audioSource = GetComponent<AudioSource>();
+
         var modifier = -3 * Mathf.FloorToInt(transform.position.y + 0.5f);
 
         //if(Physics2D.OverlapCircle(new Vector2()))
@@ -46,21 +52,30 @@ public class Vegetation : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {        
         if(!rustled)
-        {
-            Debug.Log(collision.name);
-            Debug.Log(animator);
+        {            
             animator.SetTrigger("Rustle");
+            audioSource.Play();
             burstFX.Play();
             rustled = true;
+
+            if(collision.CompareTag("Player") && hidingSpot)
+            {
+                if(!Player.stats.invisible && !TurnManager.instance.EnemiesAlerted())
+                {
+                    Player.stats.invisible = true;
+                }
+            }
         }
     }
-    /**
+    
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!rustled)
+        if (collision.CompareTag("Player") && hidingSpot)
         {
-            animator.SetTrigger("Rustle");
-            rustled = true;
+            if (!Player.stats.HasStatus(1))
+            {
+                Player.stats.invisible = false;
+            }
         }
-    }**/
+    }
 }

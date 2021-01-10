@@ -84,6 +84,7 @@ GameObject:
   - component: {fileID: 6458202566825076963}
   - component: {fileID: 6458202566825076964}
   - component: {fileID: 3133017942964729868}
+  - component: {fileID: -8213780174558252877}
   m_Layer: 10
   m_Name: mapPickup
   m_TagString: Map
@@ -143,7 +144,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1352112453
-  m_SortingLayer: -5
+  m_SortingLayer: -4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: cff5af4ec1574af47bc3c00cb38dd612, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -193,3 +194,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &-8213780174558252877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6458202566825076960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Floor Map
+  objectDesc: A piece of parchment with the layout of the nearby area hastily scibbled
+    down. Due to some fortunate circumstance it got left here, all for you to take.
+    Despite the ever-shifting walls of The Dungeon, the map seems to be accurate.

@@ -10,4 +10,5 @@ public class ItemDropTable : ScriptableObject
     public int[] itemWeightPool;
 
     public List<Item> guaranteedItems;
+    public List<Item> starterItems;
 }

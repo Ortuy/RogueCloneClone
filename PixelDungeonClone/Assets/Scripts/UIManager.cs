@@ -57,6 +57,17 @@ public class UIManager : MonoBehaviour
 
     private AudioLowPassFilter[] ambiance;
 
+    [SerializeField]
+    private GameObject examinePopup;
+    [SerializeField]
+    private Text examineNametext, examineDescText;
+
+    public InteractibleObject usedInteractible;
+    [SerializeField]
+    private GameObject interactionMenu;
+    [SerializeField]
+    private Text interactionNametext, interactionDescText, interactionButtonText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -214,46 +225,7 @@ public class UIManager : MonoBehaviour
                 itemMenu.GetComponent<ItemMenu>().slotID = slotID;
                 itemMenuText.text = InventoryManager.instance.inventoryItems[slotID].itemName;
 
-                itemDescriptionText.text = InventoryManager.instance.inventoryItems[slotID].description;
-
-                if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.WEAPON)
-                {                   
-                    if (!InventoryManager.instance.inventoryItems[slotID].identified)
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + (InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin) + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " base damage. Probably.";
-                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is unidentified. It may hold secrets, pleasant and unpleasant alike.";
-                        
-                    }
-                    else if (InventoryManager.instance.inventoryItems[slotID].cursed)
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
-                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of gear is accursed with foul magic. Using it will bind it to your body.";
-                        
-                    }
-                    else
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " base damage.";
-                    }
-                }
-                else if (InventoryManager.instance.inventoryItems[slotID].type == ItemType.ARMOR)
-                {
-                    if (!InventoryManager.instance.inventoryItems[slotID].identified)
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].baseStatChangeMax + " points of damage per hit. Probably.";
-                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is unidentified. It may hold secrets, pleasant and unpleasant alike.";
-                        
-                    }
-                    else if (InventoryManager.instance.inventoryItems[slotID].cursed)
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
-                        itemDescriptionText.text = itemDescriptionText.text + "\nThis piece of armour is accursed with foul magic. Using it will bind it to your body.";
-                        
-                    }
-                    else
-                    {
-                        itemDescriptionText.text = itemDescriptionText.text + " " + InventoryManager.instance.inventoryItems[slotID].statChangeMin + "-" + InventoryManager.instance.inventoryItems[slotID].statChangeMax + " points of damage per hit.";
-                    }
-                }
+                itemDescriptionText.text = ParseItemDescription(InventoryManager.instance.inventoryItems[slotID].description, InventoryManager.instance.inventoryItems[slotID]);              
 
                 itemMenu.transform.position = InventoryManager.instance.inventorySlots[slotID].transform.position;
 
@@ -343,6 +315,7 @@ public class UIManager : MonoBehaviour
     public void RestartGame()
     {
         Destroy(Camera.main);
+        Time.timeScale = 1;
         SceneManager.LoadScene(0);
     }
 
@@ -403,5 +376,107 @@ public class UIManager : MonoBehaviour
     private void OnDestroy()
     {
         SceneManager.sceneLoaded -= OnLevelLoaded;
+    }
+
+    private string ParseItemDescription(string baseDesc, ItemInstance item)
+    {
+        string output = item.description;
+
+        if (item.type == ItemType.WEAPON)
+        {
+            if (!item.identified)
+            {
+                output = output + " " + (item.baseStatChangeMin) + "-" + item.baseStatChangeMax + " base damage. Probably.";
+                output = output + "\nThis piece of gear is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+
+            }
+            else if (item.cursed)
+            {
+                output = output + " " + item.statChangeMin + "-" + item.statChangeMax + " base damage.";
+                output = output + "\nThis piece of gear is accursed with foul magic. Using it will bind it to your body.";
+
+            }
+            else
+            {
+                output = output + " " + item.statChangeMin + "-" + item.statChangeMax + " base damage.";
+            }
+        }
+        else if (item.type == ItemType.ARMOR)
+        {
+            if (!item.identified)
+            {
+                output = output + " " + item.baseStatChangeMin + "-" + item.baseStatChangeMax + " points of damage per hit. Probably.";
+                output = output + "\nThis piece of armour is unidentified. It may hold secrets, pleasant and unpleasant alike.";
+
+            }
+            else if (item.cursed)
+            {
+                output = output + " " + item.statChangeMin + "-" + item.statChangeMax + " points of damage per hit.";
+                output = output + "\nThis piece of armour is accursed with foul magic. Using it will bind it to your body.";
+
+            }
+            else
+            {
+                output = output + " " + item.statChangeMin + "-" + item.statChangeMax + " points of damage per hit.";
+            }
+        }
+        else if(item.identified && item.cursed)
+        {
+            output = output + "\nThis item is accursed with foul magic. Using it will bind it to your body.";
+        }
+
+        return output;
+    }
+
+    public void ShowExaminePopup(Vector3 pos, string objectName, string objectDesc)
+    {
+        examinePopup.gameObject.SetActive(true);
+        examinePopup.transform.position = pos;
+        examineNametext.text = objectName;
+        examineDescText.text = objectDesc;
+        PlayButtonSound(false);
+        StartCoroutine(RefreshPopup((RectTransform)examinePopup.transform));
+    }
+
+    public void ShowItemExaminePopup(Vector3 pos, ItemInstance item)
+    {
+        examinePopup.gameObject.SetActive(true);
+        examinePopup.transform.position = pos;
+        examineNametext.text = item.itemName;
+        examineDescText.text = ParseItemDescription(item.description, item);
+        PlayButtonSound(true);
+        StartCoroutine(RefreshPopup((RectTransform)examinePopup.transform));
+    }
+
+    public void ToggleInteractionMenu()
+    {
+        if(interactionMenu.gameObject.activeInHierarchy)
+        {
+            interactionMenu.gameObject.SetActive(false);
+            MouseBlocker.mouseBlocked = false;
+        }
+        else
+        {
+            interactionMenu.gameObject.SetActive(true);
+            Debug.Log(usedInteractible);
+            interactionNametext.text = usedInteractible.interactionName;
+            interactionDescText.text = usedInteractible.interactionDescription;
+            interactionButtonText.text = usedInteractible.buttonText;
+            StartCoroutine(RefreshPopup((RectTransform)interactionMenu.transform));
+        }
+    }
+
+    public void DoInteraction()
+    {
+        usedInteractible.DoInteraction();
+        ToggleInteractionMenu();
+    }
+
+    IEnumerator RefreshPopup(RectTransform popup)
+    {
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(popup);
+        yield return null;
+        LayoutRebuilder.ForceRebuildLayoutImmediate(popup);
     }
 }

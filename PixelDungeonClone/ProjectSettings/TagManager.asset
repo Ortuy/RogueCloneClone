@@ -7,6 +7,10 @@ TagManager:
   - SpiritJar
   - Ground
   - Map
+  - Item
+  - Enemy
+  - Decor
+  - Interactible
   layers:
   - Default
   - TransparentFX

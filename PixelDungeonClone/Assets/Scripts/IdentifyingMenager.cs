@@ -194,7 +194,7 @@ public class IdentifyingMenager : MonoBehaviour
     {
         if (ring.effectID < 10 && rings[ring.effectID].identified)
         {
-            ring.itemName = potionEffectNames[ring.effectID];
+            ring.itemName = ringEffectNames[ring.effectID];
             ring.description = ring.description.Replace("You have no idea what spell does the jewelery hold.", ringEffectDescriptions[ring.effectID]);
         }
     }
