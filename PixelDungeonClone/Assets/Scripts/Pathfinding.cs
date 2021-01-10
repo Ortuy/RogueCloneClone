@@ -249,6 +249,19 @@ public class Pathfinding
         }
     }
 
+    public bool FindInteractibleOnTile(Vector2 target)
+    {
+        var temp = Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Decor"));
+        if (temp != null && temp.gameObject.CompareTag("Interactible"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public bool FindAnotherEnemyOnTile(Vector2 target, Enemy notTarget)
     {
         var temp = Physics2D.OverlapCircle(target, 0.5f, LayerMask.GetMask("Enemies"));

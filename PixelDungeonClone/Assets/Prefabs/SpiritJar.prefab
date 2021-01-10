@@ -114,9 +114,10 @@ GameObject:
   - component: {fileID: 1258276678666822260}
   - component: {fileID: 9023949704630750866}
   - component: {fileID: 3653977159978267609}
+  - component: {fileID: -7937825485403079184}
   m_Layer: 8
   m_Name: SpiritJar
-  m_TagString: SpiritJar
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +179,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1275179077
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 8af11ae58bf35d64cae177098e083c86, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -401,6 +402,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-7937825485403079184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1258276678666822265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Spirit-in-a-Jar
+  objectDesc: A forsaken, pained soul trapped in a clay vessel. The enormous pot
+    is engraved with curious symbols quite similar to the seals found on scrolls.
+    Their mind is gone beyond salvation and only destructive instincts remain.
 --- !u!1 &2138927176834918116
 GameObject:
   m_ObjectHideFlags: 0

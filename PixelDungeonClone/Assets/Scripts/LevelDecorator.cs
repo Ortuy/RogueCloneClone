@@ -499,7 +499,7 @@ public class LevelDecorator : MonoBehaviour
         }
     }
 
-    private void PlaceTallVegetation(Vector3 position)
+    public void PlaceTallVegetation(Vector3 position)
     {
         if (!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")))
         {

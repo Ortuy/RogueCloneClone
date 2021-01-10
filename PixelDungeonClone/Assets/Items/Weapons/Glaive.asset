@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65b26ba3e5a4f714dbdef37b2c75c316, type: 3}
+  m_Name: Glaive
+  m_EditorClassIdentifier: 
+  itemName: Glaive
+  description: 'A polearm befitted with a large blade. Its shape reminds you of an
+    upturned scythe, but the weapon is far more sophisticated than that. $nThis weapon
+    delivers light, precise blows. $nThis particular glaive deals '
+  itemImage: {fileID: 21300000, guid: 259535cc465efb046b1ab240c7a1d781, type: 3}
+  amount: 1
+  strengthRequired: 16
+  stackable: 0
+  requiresStrength: 1
+  type: 1
+  statChangeMin: 8
+  statChangeMax: 13
+  effectID: 1
+  identified: 1

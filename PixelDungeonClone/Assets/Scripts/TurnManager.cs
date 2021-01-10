@@ -59,7 +59,6 @@ public class TurnManager : MonoBehaviour
             }
             else if(Physics2D.OverlapCircle(Player.instance.transform.position, 10f, LayerMask.GetMask("Enemies")))
             {
-                Debug.Log("Enemy: " + currentActingEnemy);                         
 
                 if (currentActingEnemy >= enemies.Count)
                 {
@@ -67,7 +66,12 @@ public class TurnManager : MonoBehaviour
                 }
                 else
                 {
-                    
+                    /**
+                    if(enemies[currentActingEnemy].behaviourState == AIState.ALERTED)
+                    {
+                        Player.movement.StopMovement(false);
+                    }
+                    **/
                     Player.movement.StopMovement(false);
                     enemies[currentActingEnemy].turnCost--;
                     if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
@@ -116,6 +120,20 @@ public class TurnManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         SwitchTurn(TurnState.ENEMY);
         passing = false;
+    }
+
+    public bool EnemiesAlerted()
+    {
+        var temp = false;
+        for(int i =0; i < enemies.Count; i++)
+        {
+            if(enemies[i].behaviourState == AIState.ALERTED)
+            {
+                temp = true;
+                break;
+            }
+        }
+        return temp;
     }
 
     public void SwitchTurn()

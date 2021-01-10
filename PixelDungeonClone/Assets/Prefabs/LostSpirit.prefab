@@ -535,9 +535,10 @@ GameObject:
   - component: {fileID: 6310370882643204983}
   - component: {fileID: 4352611670390136164}
   - component: {fileID: -8050757657500372689}
+  - component: {fileID: 4807472050466262235}
   m_Layer: 8
   m_Name: LostSpirit
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -599,7 +600,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1275179077
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 504f6c3f40e15254d93494098feaa5ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -823,6 +824,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4807472050466262235
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6310370882643204986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Lost Spirit
+  objectDesc: A remnant of someone who ventured into The Dungeon, or perhaps someone
+    who used to dwell here. Their mind is gone beyond salvation and only destructive
+    instincts remain.
 --- !u!1 &8282832684678323908
 GameObject:
   m_ObjectHideFlags: 0

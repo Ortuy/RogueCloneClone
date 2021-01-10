@@ -6,18 +6,20 @@ using System.Linq;
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerActions : MonoBehaviour
 {
-    private bool attackQueued, pickUpQueued;
+    private bool attackQueued, pickUpQueued, interactionQueued;
 
     public bool throwQueued;
     public ItemInstance itemToThrow;
 
     private Enemy attackTarget;
+    private InteractibleObject interactionTarget;
 
     private Rigidbody2D body;
 
     public int turnCost;
     public GameObject popupText;
     private Animator animator;
+    public int attackExtraTurnCost = 0;
 
     private AudioSource audioSource;
     [SerializeField]
@@ -43,11 +45,28 @@ public class PlayerActions : MonoBehaviour
                 StartCoroutine(Attack(attackTarget, baseDamage, 1));            
             }         
         }
+        if(interactionTarget != null)
+        {
+            var distance = Vector2.Distance(transform.position, interactionTarget.transform.position);
+            if (distance <= 1.5f && interactionQueued && body.velocity == Vector2.zero && Player.stats.GetHealth() > 0)
+            {
+                StartCoroutine(StartInteraction());
+                interactionQueued = false;                
+            }
+        }
         //Queued item pickups
         if(pickUpQueued)
         {
             PickUpItem();
         }
+    }
+
+    IEnumerator StartInteraction()
+    {
+        Debug.Log(interactionTarget);
+        yield return new WaitForSeconds(0.2f);
+        
+        interactionTarget.StartInteraction();
     }
 
     public void ThrowItem(Vector2 destination)
@@ -57,6 +76,7 @@ public class PlayerActions : MonoBehaviour
         thrown.SetItem(itemToThrow);
         thrown.SetThrown(destination);
         PlaySound(itemThrowSound);
+        UIManager.instance.inventoryButton.interactable = true;
         throwQueued = false;
     }
 
@@ -67,6 +87,7 @@ public class PlayerActions : MonoBehaviour
         thrown.SetItem(itemToThrow);
         thrown.SetThrown(destination);
         PlaySound(itemThrowSound);
+        UIManager.instance.inventoryButton.interactable = true;
     }
 
     IEnumerator Attack(Enemy target, int damage, int cost)
@@ -122,10 +143,12 @@ public class PlayerActions : MonoBehaviour
             }
         }
 
+        Player.stats.invisible = false;
+
         attackQueued = false;
         attackTarget = null;
         Player.instance.actionState = ActionState.WAITING;
-        turnCost = cost;
+        turnCost = cost + attackExtraTurnCost;
         TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 
@@ -141,6 +164,13 @@ public class PlayerActions : MonoBehaviour
             attackQueued = false;
             attackTarget = null;
         }
+    }
+
+    public void QueueInteraction(InteractibleObject interactible)
+    {
+        interactionQueued = true;
+        attackQueued = false;
+        interactionTarget = interactible;
     }
 
     public void QueueItemPickup()

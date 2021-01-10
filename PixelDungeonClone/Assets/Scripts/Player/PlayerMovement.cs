@@ -43,12 +43,18 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
         path = null;
+        spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
     }
     
     // Update is called once per frame
     void Update()
     {
         //DoPlayerTurn();
+    }
+
+    public void SetSortingOrder()
+    {
+        GetComponent<SpriteRenderer>().sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
     }
 
     public void DoPlayerTurn()
@@ -72,7 +78,11 @@ public class PlayerMovement : MonoBehaviour
 
     public void PlayFootstep()
     {
-        var rand = Random.Range(0, footsteps.Length);
+        var rand = Random.Range(0, 4);
+        if(GameManager.instance.currentFloor > 5)
+        {
+            rand += 4;
+        }
         PlaySound(footsteps[rand]);
     }
 

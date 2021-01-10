@@ -133,9 +133,10 @@ GameObject:
   - component: {fileID: 706842450304035949}
   - component: {fileID: 4098686708134104274}
   - component: {fileID: 7543982739193839754}
+  - component: {fileID: -4045813593283561309}
   m_Layer: 8
   m_Name: SwampCreature
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -197,7 +198,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1275179077
-  m_SortingLayer: -4
+  m_SortingLayer: -5
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: feb8ee75664db7a47944fbefa371922c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -424,6 +425,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-4045813593283561309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706842450304035936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Swamp Creature
+  objectDesc: A common denizen of The Burrow, elevated from its frogly existence
+    by the forces of The Dungeon. It will do its best to drive you out of here.
 --- !u!1 &706842450666955536
 GameObject:
   m_ObjectHideFlags: 0

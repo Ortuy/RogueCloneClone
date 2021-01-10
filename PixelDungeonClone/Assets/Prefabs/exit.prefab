@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6334375169962080849}
   - component: {fileID: 5713198309748566241}
   - component: {fileID: -7858445154196327096}
+  - component: {fileID: -8168884636461169380}
   m_Layer: 13
   m_Name: exit
-  m_TagString: Untagged
+  m_TagString: Interactible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,6 +114,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b30cc8e22ba1d4c4bafb118ef3df23b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  interactionName: Gaping Hole
+  interactionDescription: Before you lies a passage into the unknown. The Dungeon
+    beckons you. $nYou feel you won't be able to return after taking the steps. $nDo
+    you still want to descend the ladder?
+  buttonText: Descend
   mapIcon: {fileID: 4874307713998725943}
 --- !u!82 &-7858445154196327096
 AudioSource:
@@ -210,6 +216,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-8168884636461169380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6334375169962080854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Gaping Hole
+  objectDesc: A breach in the ground, with a ladder leading deeper into the unknown.
 --- !u!1 &7020899948836586924
 GameObject:
   m_ObjectHideFlags: 0
