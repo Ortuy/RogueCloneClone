@@ -222,8 +222,6 @@ public class LevelGenerator : MonoBehaviour
 
         width = maxCorner.x - minCorner.x + 1;
         height = maxCorner.y - minCorner.y + 1;
-        Debug.Log(minCorner.x + " " + minCorner.y);
-        Debug.Log(maxCorner.x + " " + maxCorner.y);
         pathfinding = new Pathfinding(width, height, new Vector3(minCorner.x, minCorner.y), ground);
 
         float currentMaxDistance = 0;
@@ -238,8 +236,6 @@ public class LevelGenerator : MonoBehaviour
                 currentCandidateRoom = i;
             }
         }
-
-        Debug.LogWarning("Exit in room " + currentCandidateRoom);
 
         int rX = Random.Range(rooms[currentCandidateRoom].minCorner.x + 1, rooms[currentCandidateRoom].maxCorner.x);
         int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y + 1, rooms[currentCandidateRoom].maxCorner.y);
@@ -476,8 +472,7 @@ public class LevelGenerator : MonoBehaviour
 
             switch (side)
             {
-                case 0:
-                    Debug.Log("Up");                  
+                case 0:               
                     int oldSize = xSize;
                     startCorner = new Vector2Int(startCorner.x, startCorner.y + 2 + ySize);
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
@@ -490,7 +485,6 @@ public class LevelGenerator : MonoBehaviour
                     decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y - 2 + 0.5f, 0));
                     break;
                 case 1:
-                    Debug.Log("Right");
                     startCorner = new Vector2Int(startCorner.x + 2 + xSize, startCorner.y);
                     oldSize = ySize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
@@ -503,7 +497,6 @@ public class LevelGenerator : MonoBehaviour
                     decorator.PlaceTallVegetation(new Vector3(startCorner.x - 2 + 0.5f, startCorner.y + yTemp + 0.5f, 0));
                     break;
                 case 2:
-                    Debug.Log("Down");
                     oldSize = xSize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
@@ -516,7 +509,6 @@ public class LevelGenerator : MonoBehaviour
                     decorator.PlaceTallVegetation(new Vector3(startCorner.x + xTemp + 0.5f, startCorner.y + ySize + 1 + 0.5f, 0));
                     break;
                 case 3:
-                    Debug.Log("Left");
                     oldSize = ySize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);

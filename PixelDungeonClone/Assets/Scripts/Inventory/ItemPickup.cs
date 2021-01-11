@@ -21,6 +21,8 @@ public class ItemPickup : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip dropSound, breakSound;
 
+    private SpriteRenderer spriteRenderer;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,7 +30,9 @@ public class ItemPickup : MonoBehaviour
         {
             itemInside = new ItemInstance(itemPrefab, amount);
         }
-        GetComponent<SpriteRenderer>().sprite = itemInside.itemImage;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = itemInside.itemImage;
+        spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         if (itemInside.stackable)
         {
             itemInside.amount = amount;
@@ -62,8 +66,9 @@ public class ItemPickup : MonoBehaviour
         animator.Play("Item");
         thrown = false;
         rigidBody.velocity = Vector3.zero;
+        spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
 
-        if(itemInside.type == ItemType.POTION)
+        if (itemInside.type == ItemType.POTION)
         {
             IdentifyingMenager.instance.IdentifyItem(itemInside);
             switch(itemInside.effectID)
@@ -129,16 +134,36 @@ public class ItemPickup : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player") || collision.CompareTag("Enemy"))
+        {
+            spriteRenderer.sortingOrder--;
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
         {
             UIManager.instance.pickUpButton.gameObject.SetActive(false);
+            spriteRenderer.sortingOrder++;
+        }
+        if (collision.CompareTag("Enemy"))
+        {
+            spriteRenderer.sortingOrder++;
         }
     }
 
     public void PlaySound(AudioClip clip)
     {
+        audioSource.clip = clip;
+        audioSource.Play();
+    }
+
+    public void PlaySoundOnInit(AudioClip clip)
+    {
+        audioSource = GetComponent<AudioSource>();
         audioSource.clip = clip;
         audioSource.Play();
     }

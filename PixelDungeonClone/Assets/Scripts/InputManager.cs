@@ -158,7 +158,7 @@ public class InputManager : MonoBehaviour
                     examinedEnemy = objects[i].gameObject;
                 }
             }
-            else if(objects[i].gameObject.CompareTag("Item"))
+            else if(objects[i].gameObject.CompareTag("Item") || objects[i].gameObject.CompareTag("Gold"))
             {
                 isItem = true;
                 if (examinedItem == null)
@@ -184,22 +184,31 @@ public class InputManager : MonoBehaviour
         }
         else if (isItem)
         {
-            Debug.Log("Item!");
-            var item = examinedItem.GetComponent<ItemPickup>().itemInside;
-            if (item.type == ItemType.POTION)
+            if(examinedItem.CompareTag("Gold"))
             {
-                IdentifyingMenager.instance.CheckIfPotionIdentified(item);
-            }
-            else if (item.type == ItemType.SCROLL)
-            {
-                IdentifyingMenager.instance.CheckIfScrollIdentified(item);
-            }
-            else if (item.type == ItemType.RING)
-            {
-                IdentifyingMenager.instance.CheckIfRingIdentified(item);
-            }
+                var goldObject = examinedItem.GetComponent<DecorativeObject>();
 
-            UIManager.instance.ShowItemExaminePopup(Input.mousePosition, item);
+                UIManager.instance.ShowExaminePopup(Input.mousePosition, goldObject.objectName, goldObject.objectDesc.Replace("$num", goldObject.GetComponent<GoldPickup>().amount.ToString()));
+            }
+            else
+            {
+                Debug.Log("Item!");
+                var item = examinedItem.GetComponent<ItemPickup>().itemInside;
+                if (item.type == ItemType.POTION)
+                {
+                    IdentifyingMenager.instance.CheckIfPotionIdentified(item);
+                }
+                else if (item.type == ItemType.SCROLL)
+                {
+                    IdentifyingMenager.instance.CheckIfScrollIdentified(item);
+                }
+                else if (item.type == ItemType.RING)
+                {
+                    IdentifyingMenager.instance.CheckIfRingIdentified(item);
+                }
+
+                UIManager.instance.ShowItemExaminePopup(Input.mousePosition, item);
+            }            
         }
         else if (isDecor)
         {

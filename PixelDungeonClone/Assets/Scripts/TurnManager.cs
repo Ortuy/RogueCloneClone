@@ -65,14 +65,13 @@ public class TurnManager : MonoBehaviour
                     SwitchTurn();
                 }
                 else
-                {
-                    /**
+                {                  
                     if(enemies[currentActingEnemy].behaviourState == AIState.ALERTED)
                     {
                         Player.movement.StopMovement(false);
                     }
-                    **/
-                    Player.movement.StopMovement(false);
+                    
+                    //Player.movement.StopMovement(false);
                     enemies[currentActingEnemy].turnCost--;
                     if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
                     {
@@ -127,7 +126,7 @@ public class TurnManager : MonoBehaviour
         var temp = false;
         for(int i =0; i < enemies.Count; i++)
         {
-            if(enemies[i].behaviourState == AIState.ALERTED)
+            if(enemies[i].gameObject.activeInHierarchy && enemies[i].behaviourState == AIState.ALERTED)
             {
                 temp = true;
                 break;

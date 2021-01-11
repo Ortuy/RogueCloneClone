@@ -26,6 +26,7 @@ public class InventoryManager : MonoBehaviour
     public Gas[] potionGases;
 
     public ItemPickup itemTemplate;
+    public GoldPickup goldTemplate;
 
     public Color cursedColor, unknownColor, upgradeColor;
 

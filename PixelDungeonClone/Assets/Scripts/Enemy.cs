@@ -91,6 +91,15 @@ public class Enemy : Entity
     [SerializeField]
     private Item[] drops;
 
+    [SerializeField]
+    private bool dropsGold;
+
+    [SerializeField]
+    private int minGoldDrop, maxGoldDrop;
+
+    [SerializeField]
+    private bool spawnSpirit;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -145,6 +154,7 @@ public class Enemy : Entity
                 Debug.Log("Wake up!");
                 sleepFX.Stop();
                 alertFX.Play();
+                Player.movement.StopMovement();
                 behaviourState = AIState.ALERTED;
                 PlaySound(alertSound);
             }
@@ -163,6 +173,7 @@ public class Enemy : Entity
                 Debug.Log("I see you!");
                 sleepFX.Stop();
                 alertFX.Play();
+                Player.movement.StopMovement();
                 behaviourState = AIState.ALERTED;
                 PlaySound(alertSound);
             }
@@ -254,6 +265,7 @@ public class Enemy : Entity
             Debug.Log("Passing");
             if(Random.Range(0, 6) == 0)
             {
+                Player.movement.StopMovement();
                 behaviourState = AIState.ALERTED;
             }
             TurnManager.instance.PassToNextEnemy();
@@ -525,8 +537,18 @@ public class Enemy : Entity
             {
                 ItemPickup temp = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
                 temp.SetItem(new ItemInstance(drops[i], 1));
+                temp.PlaySoundOnInit(temp.dropSound);
                 break;
             }
+        }
+
+        if (dropsGold)
+        {
+            var goldAmount = Random.Range(minGoldDrop, maxGoldDrop + 1);
+
+            GoldPickup gold = Instantiate(InventoryManager.instance.goldTemplate, transform.position, Quaternion.identity);
+            gold.amount = goldAmount;
+            gold.PlaySoundOnInit(gold.dropSound);
         }
 
         int xpModifier = 0;
@@ -572,7 +594,7 @@ public class Enemy : Entity
 
         ResetState();
 
-        if(gameObject.CompareTag("SpiritJar"))
+        if(spawnSpirit)
         {
             FindObjectOfType<SpawnManager>().SpawnEnemy(3, transform.position);
         }

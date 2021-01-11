@@ -64,7 +64,6 @@ public class IdentifyingMenager : MonoBehaviour
         for (int i = 0; i < scrolls.Length; i++)
         {
             scrolls[i].effectID = i;
-            Debug.Log(scrolls[i].name + " " + scrollEffectNames[i] + " " + scrolls[i].identified);
         }
         scrolls[0].identified = true;
     }
@@ -103,7 +102,6 @@ public class IdentifyingMenager : MonoBehaviour
         for (int i = 0; i < potions.Length; i++)
         {
             potions[i].effectID = i;
-            Debug.Log(potions[i].name + " " + potionEffectNames[i] + " " + potions[i].identified);
         }
         potions[0].identified = true;
     }
@@ -142,7 +140,6 @@ public class IdentifyingMenager : MonoBehaviour
         for (int i = 0; i < rings.Length; i++)
         {
             rings[i].effectID = i;
-            Debug.Log(rings[i].name + " " + ringEffectNames[i] + " " + rings[i].identified);
         }
         //potions[0].identified = true;
     }
