@@ -23,7 +23,7 @@ public class LoadObject : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else if(scene.buildIndex != 6)
+        else if(scene.buildIndex != 7)
         {
             StartCoroutine(MovePlayerToStartPosition());
         }

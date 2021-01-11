@@ -740,6 +740,9 @@ MonoBehaviour:
   - {x: 0, y: 14}
   drops:
   - {fileID: 11400000, guid: 64202dba121d7b747b1a35dd5f810ff9, type: 2}
+  dropsGold: 1
+  minGoldDrop: 10
+  maxGoldDrop: 25
 --- !u!50 &8032959415794150052
 Rigidbody2D:
   serializedVersion: 4

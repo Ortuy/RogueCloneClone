@@ -469,7 +469,6 @@ public class LevelDecorator : MonoBehaviour
                     {
                         if(Random.Range(0, 5) == 0)
                         {
-                            Debug.Log("Tall Veg");
                             if(tallVegetation != null)
                             {
                                 PlaceTallVegetation(new Vector3(x + 0.5f, y + 0.5f, 0));
@@ -479,7 +478,6 @@ public class LevelDecorator : MonoBehaviour
 
                     if (Random.Range(0, 9) == 0)
                     {
-                        Debug.Log("Small Veg");
                         if(smallVegetation != null)
                         {
                             PlaceSmallVegetation(new Vector3(x + 0.5f, y + 0.5f, 0));

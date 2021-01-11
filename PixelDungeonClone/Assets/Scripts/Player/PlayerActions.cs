@@ -23,7 +23,7 @@ public class PlayerActions : MonoBehaviour
 
     private AudioSource audioSource;
     [SerializeField]
-    private AudioClip itemDropSound, itemThrowSound, itemPickupSound, mapSound;
+    private AudioClip itemDropSound, itemThrowSound, itemPickupSound, mapSound, goldPickupSound;
 
     // Start is called before the first frame update
     void Start()
@@ -207,6 +207,18 @@ public class PlayerActions : MonoBehaviour
                 InventoryManager.instance.AddItem(itemPickup.itemInside, out bool itemDelivered);
                 if (itemDelivered)
                 {
+                    if(itemPickup.itemInside.type == ItemType.POTION)
+                    {
+                        IdentifyingMenager.instance.CheckIfPotionIdentified(itemPickup.itemInside);
+                    }
+                    else if (itemPickup.itemInside.type == ItemType.SCROLL)
+                    {
+                        IdentifyingMenager.instance.CheckIfScrollIdentified(itemPickup.itemInside);
+                    }
+                    else if (itemPickup.itemInside.type == ItemType.RING)
+                    {
+                        IdentifyingMenager.instance.CheckIfRingIdentified(itemPickup.itemInside);
+                    }
                     ShowItemText(itemPickup.itemInside.itemName);
                     Destroy(itemPickup.gameObject);
                     PlaySound(itemPickupSound);
@@ -219,6 +231,9 @@ public class PlayerActions : MonoBehaviour
             if (goldPickup != null)
             {
                 InventoryManager.instance.AddGold(goldPickup.amount);
+
+                ShowItemText("+" + goldPickup.amount);
+                PlaySound(goldPickupSound);
 
                 Destroy(goldPickup.gameObject);
             }
@@ -233,7 +248,7 @@ public class PlayerActions : MonoBehaviour
             else
             {
                 UIManager.instance.pickUpButton.gameObject.SetActive(true);
-                UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
+                UIManager.instance.itemPickupImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
             }
         }        
     }

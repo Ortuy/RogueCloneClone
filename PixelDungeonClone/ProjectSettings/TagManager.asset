@@ -11,6 +11,7 @@ TagManager:
   - Enemy
   - Decor
   - Interactible
+  - Gold
   layers:
   - Default
   - TransparentFX

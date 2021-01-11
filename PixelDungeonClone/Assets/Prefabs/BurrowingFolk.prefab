@@ -432,6 +432,9 @@ MonoBehaviour:
   attackTarget: {fileID: 0}
   dropPercentRanges: []
   drops: []
+  dropsGold: 1
+  minGoldDrop: 10
+  maxGoldDrop: 25
 --- !u!50 &6977649515691734084
 Rigidbody2D:
   serializedVersion: 4

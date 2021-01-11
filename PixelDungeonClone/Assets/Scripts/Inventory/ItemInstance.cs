@@ -74,11 +74,8 @@ public class ItemInstance
 
     public void LevelUp(int levelAmount)
     {
-        Debug.LogWarning("OLDLevel: " + level + " Stats: " + statChangeMin + "-" + statChangeMax);
-        Debug.LogWarning(levelFactor);
         level += levelAmount;
         statChangeMin += levelAmount * levelFactor;
         statChangeMax += levelAmount * levelFactor;
-        Debug.LogWarning("Level: " + level + " Stats: " + statChangeMin + "-" + statChangeMax);
     }
 }

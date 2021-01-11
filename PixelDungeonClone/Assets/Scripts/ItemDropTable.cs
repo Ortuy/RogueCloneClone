@@ -11,4 +11,6 @@ public class ItemDropTable : ScriptableObject
 
     public List<Item> guaranteedItems;
     public List<Item> starterItems;
+
+    public int minGold, maxGold;
 }

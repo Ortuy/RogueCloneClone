@@ -25,9 +25,6 @@ public class Grid<TGridObject>
         cellSize = gridCellSize;
         originPos = origin;
 
-        Debug.Log(originPos);
-        Debug.Log(origin);
-
         gridArray = new TGridObject[width, height];
         debugTextArray = new TextMesh[width, height];
 

@@ -153,8 +153,8 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    
-                    transform.position = targetPos;
+
+                    SnapToGrid();
                     if (pathChangeQueued)
                     {
                         path = Pathfinding.instance.FindPath(transform.position, GridTester.GetMouseWorldPosition());
@@ -199,12 +199,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void StopMovement()
     {
-        path = null;
-        currentPathIndex = 0;
-        body.velocity = Vector2.zero;
-        //animator.SetBool("Moving", false);
-        //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
-        animator.speed = 0;
+        StopMovement(true);
     }
 
     public void StopMovement(bool abandonPath)
@@ -217,5 +212,13 @@ public class PlayerMovement : MonoBehaviour
         //animator.SetBool("Moving", false);
         //spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         body.velocity = Vector2.zero;
+        SnapToGrid();
+    }
+
+    public void SnapToGrid()
+    {
+        var x = Mathf.FloorToInt(transform.position.x) + 0.5f;
+        var y = Mathf.FloorToInt(transform.position.y) + 0.5f;
+        transform.position = new Vector3(x, y, 0);
     }
 }

@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
         actions = GetComponent<PlayerActions>();
         stats = GetComponent<PlayerStatistics>();
 
+        Debug.LogWarning("AAAAAAA");
         transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
         movement.SetSortingOrder();
     }
