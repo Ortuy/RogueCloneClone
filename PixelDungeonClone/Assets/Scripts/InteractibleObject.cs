@@ -1,14 +1,78 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class InteractibleObject : MonoBehaviour
 {
     public string interactionName, interactionDescription, buttonText;
+    public GameObject choiceMenu;
+    public List<Text> choiceTexts = new List<Text>();
+    public List<Button> choiceButtons;
 
     protected void SetTileUnwalkable()
     {
         Pathfinding.instance.GetGrid().GetGridObject(transform.position).SetWalkability(false);
+    }
+
+    protected void SetTileWalkable()
+    {
+        Pathfinding.instance.GetGrid().GetGridObject(transform.position).SetWalkability(true);
+    }
+
+    protected void InitChoiceButtons()
+    {
+        /**
+        for(int i = 0; i < choiceButtons.Count; i++)
+        {
+            Debug.Log(i);
+            choiceButtons[i].onClick.AddListener(() => DoChoiceInteraction(i));
+        }**/
+
+        choiceButtons[0].onClick.AddListener(() => DoChoiceInteraction(0));
+        choiceButtons[1].onClick.AddListener(() => DoChoiceInteraction(1));
+        choiceButtons[2].onClick.AddListener(() => DoChoiceInteraction(2));
+        choiceButtons[3].onClick.AddListener(() => DoChoiceInteraction(3));
+        choiceButtons[4].onClick.AddListener(() => DoChoiceInteraction(4));
+        choiceButtons[5].onClick.AddListener(() => DoChoiceInteraction(5));
+        choiceButtons[6].onClick.AddListener(() => DoChoiceInteraction(6));
+        choiceButtons[7].onClick.AddListener(() => DoChoiceInteraction(7));
+        choiceButtons[8].onClick.AddListener(() => DoChoiceInteraction(8));
+        choiceButtons[9].onClick.AddListener(() => DoChoiceInteraction(9));
+    }
+
+    protected void ShowChoiceMenu(List<string> buttonTexts)
+    {
+        if(choiceMenu != null)
+        {
+            if(choiceMenu.activeInHierarchy)
+            {
+                choiceMenu.SetActive(false);
+            }
+            else
+            {
+                choiceMenu.SetActive(true);
+                for (int i = 0; i < choiceButtons.Count; i++)
+                {
+                    if(i < buttonTexts.Count)
+                    {
+                        choiceButtons[i].gameObject.SetActive(true);
+                        choiceTexts[i].text = buttonTexts[i];
+                    }
+                    else
+                    {
+                        choiceButtons[i].gameObject.SetActive(false);
+                    }
+                }
+                UIManager.instance.RefreshPopupRect((RectTransform)choiceMenu.transform);
+            }
+        }        
+    }
+
+    public virtual void DoChoiceInteraction(int choiceID)
+    {
+
     }
 
     public virtual void StartInteraction()

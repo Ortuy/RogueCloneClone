@@ -35,6 +35,8 @@ public class InventoryManager : MonoBehaviour
 
     public int[] ringEquipped;
 
+    public bool discardComplete;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -129,6 +131,22 @@ public class InventoryManager : MonoBehaviour
                 success = false;
             }
         }       
+    }
+
+    public int findItemSlot(string itemName)
+    {
+        int temp = -1;
+
+        for (int i = 0; i < inventoryItems.Length; i++)
+        {
+            if (inventoryItems[i] != null && inventoryItems[i].itemName == itemName)
+            {
+                temp = i;
+                break;
+            }
+        }
+
+        return temp;
     }
 
     public void SubtractItem(ItemInstance itemToSubtract)
@@ -302,21 +320,7 @@ public class InventoryManager : MonoBehaviour
                 if(equipment.Count > 0)
                 {
                     var rand = Random.Range(0, equipment.Count);
-                    var previouslyCursed = equipment[rand].cursed;
-
-                    equipment[rand].cursed = true;
-
-                    if(equipment[rand].type == ItemType.RING && !previouslyCursed)
-                    {
-                        for(int i = 2; i < 4; i++)
-                        {
-                            if(inventoryItems[i] == equipment[rand])
-                            {
-                                UpdateItemModifiers(i);
-                                UpdateItemModifiers(i);
-                            }
-                        }
-                    }
+                    CurseItem(equipment[rand]);
                 }
                 for (int i = 0; i < 4; i++)
                 {
@@ -387,6 +391,76 @@ public class InventoryManager : MonoBehaviour
         
     }
 
+    public void CurseItem(ItemInstance itemToCurse)
+    {
+        var previouslyCursed = itemToCurse.cursed;
+        itemToCurse.cursed = true;
+
+        if (itemToCurse.type == ItemType.RING && !previouslyCursed)
+        {
+            for (int i = 2; i < 4; i++)
+            {
+                if (inventoryItems[i] == itemToCurse)
+                {
+                    UpdateItemModifiers(i);
+                    UpdateItemModifiers(i);
+                }
+            }
+        }
+    }
+
+    public void UpdateEquipmentSlots()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            if(inventoryItems[i] != null)
+            {
+                inventorySlots[i].UpdateItem(inventoryItems[i]);
+            }
+            
+        }
+    }
+
+    public void DiscardItems(ItemType requiredType)
+    {
+        StartCoroutine(PickThreeItems(requiredType));
+    }
+
+    IEnumerator PickThreeItems(ItemType requiredType)
+    {
+        string s = "";
+        if(requiredType == ItemType.POTION)
+        {
+            s = "potion";
+        }
+        else if(requiredType == ItemType.SCROLL)
+        {
+            s = "seal";
+        }
+
+        UIManager.instance.commandText.text = "Pick three " + s + "s";
+        UIManager.instance.inventoryButton.interactable = false;
+
+        var counter = 3;
+
+        while(counter > 0)
+        {
+            waitingForSelection = true;
+            yield return StartCoroutine(WaitForSelection());
+
+            if(inventoryItems[selectedSlotID].type == requiredType)
+            {
+                SubtractItem(selectedSlotID);               
+                counter--;
+            }
+        }
+
+        UIManager.instance.inventoryButton.interactable = true;
+        UIManager.instance.commandText.text = "Inventory";
+        UIManager.instance.ToggleInventory();
+        discardComplete = true;
+    }
+
     IEnumerator IdentifyItem()
     {
         UIManager.instance.commandText.text = "Identify an item";
@@ -442,11 +516,32 @@ public class InventoryManager : MonoBehaviour
             inventoryItems[selectedSlotID].LevelUp(0 - inventoryItems[selectedSlotID].level);
             UpdateItemModifiers(selectedSlotID);
         }
-        inventoryItems[selectedSlotID].cursed = false;
-        inventorySlots[selectedSlotID].UpdateItem(inventoryItems[selectedSlotID]);
+
+        CleanseItem(selectedSlotID);
+
         UIManager.instance.inventoryButton.interactable = true;
         UIManager.instance.commandText.text = "Inventory";
         Player.movement.PlaySound(scrollSound);
+    }
+
+    public void CleanseItem(int slotID)
+    {
+        if (inventoryItems[slotID].type == ItemType.RING && slotID < 4)
+        {
+            UnequipRing(slotID);
+        }
+        inventoryItems[slotID].cursed = false;
+        
+        if (inventoryItems[slotID].type == ItemType.RING && slotID < 4)
+        {
+            EquipRing(slotID);
+        }
+
+        if(inventoryItems[slotID].requiresStrength)
+        {
+            inventoryItems[slotID].LevelUp(-inventoryItems[slotID].level);
+        }
+        inventorySlots[slotID].UpdateItem(inventoryItems[slotID]);
     }
 
     IEnumerator TransmuteItem()

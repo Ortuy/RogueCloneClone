@@ -70,16 +70,27 @@ public class LevelGenerator : MonoBehaviour
     public Tile[] wallBottomTiles, wallTopTiles;
     public Tile checkerboardTile;
 
+    [Header("Special Rooms")]
+    [SerializeField]
+    private SpecialRoomData specialRoomData;
+    [SerializeField]
+    private int specialRoomMinAmount, specialRoomMaxAmount;
+    [SerializeField]
+    private int specialRoomMinDistance, specialRoomMaxDistance;
+    private int spRoomAmount;
+
     [Header("Room Content")]
     [SerializeField]
-    private ItemDropTable dropTable;
-    //public Item[] itemPool;
-    //public int[] itemWeightPool;
+    private ItemDropTable dropTable;   
     public int minItems, maxItems, minEnemies, maxEnemies;
     public int[] enemyPool;
     public int[] enemyWeightPool;
     [SerializeField]
     private bool giveStarterItem;
+    [SerializeField]
+    private Chest chestTemplate;
+
+    private List<Item> keysToGenerate = new List<Item>(); 
 
     [Header("Minimap")]
     public GameObject tilemapGrid;
@@ -90,6 +101,9 @@ public class LevelGenerator : MonoBehaviour
     public GameObject mapPickup;
 
     private LevelDecorator decorator;
+
+    private int itemWeightTotal;
+    private List<Item> itemWeightedList;
 
     // Start is called before the first frame update
     void Start()
@@ -114,6 +128,8 @@ public class LevelGenerator : MonoBehaviour
         rooms = new List<Room>();
         corridors = new List<Corridor>();
         roomClusters = new List<List<Room>>();
+
+        SetUpWeightedItemPool();
 
         if(InventoryManager.instance != null)
         {
@@ -191,6 +207,8 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
+        DrawSpecialRooms();
+
         minCorner = Vector2Int.zero;
         maxCorner = Vector2Int.zero;
 
@@ -227,7 +245,7 @@ public class LevelGenerator : MonoBehaviour
         float currentMaxDistance = 0;
         int currentCandidateRoom = 1;
 
-        for (int i = 1; i < rooms.Count; i++)
+        for (int i = 1; i < rooms.Count - spRoomAmount; i++)
         {
             float distance = Vector2Int.Distance(rooms[0].centerPoint, rooms[i].centerPoint);
             if (distance > currentMaxDistance)
@@ -249,72 +267,374 @@ public class LevelGenerator : MonoBehaviour
         DrawMinimap();
     }
 
-    private void PopulateWithItems()
+    private void DrawSpecialRooms()
     {
-        int amount = Random.Range(minItems, maxItems + 1);
-
-        int weightTotal = 0;
-        for(int i = 0; i < dropTable.itemWeightPool.Length; i++)
+        //Drawing special rooms
+        spRoomAmount = Random.Range(specialRoomMinAmount, specialRoomMaxAmount + 1);
+        if (GameManager.instance != null && GameManager.instance.guaranteedSpecialRoom != -1)
         {
-            weightTotal += dropTable.itemWeightPool[i];
-        }
-
-        List<Item> weightedPool = new List<Item>();
-        for(int i = 0; i < dropTable.itemPool.Length; i++)
-        {
-            for(int j = 0; j < dropTable.itemWeightPool[i]; j++)
+            if (spRoomAmount == 0)
             {
-                weightedPool.Add(dropTable.itemPool[i]);
+                spRoomAmount = 1;
             }
         }
 
+        var spRoomIDs = new List<int>();
+
+        for (int i = 0; i < spRoomAmount; i++)
+        {
+            spRoomIDs.Add(Random.Range(0, 9));
+        }
+
+        if (GameManager.instance != null && GameManager.instance.guaranteedSpecialRoom != -1)
+        {
+            spRoomIDs[0] = GameManager.instance.guaranteedSpecialRoom;
+        }
+
+        var candidateClusters = roomClusters;
+
+        for (int i = 0; i < spRoomAmount; i++)
+        {
+            int randomCluster = Random.Range(1, candidateClusters.Count);
+            bool roomPlaceFound = false;
+
+            var clust = candidateClusters[randomCluster];
+
+            var count = 500;
+
+            while (!roomPlaceFound || count > 0)
+            {
+                count--;
+                var dirSphere = Random.onUnitSphere;
+                var direction = new Vector2(dirSphere.x, dirSphere.y).normalized;
+
+                var distance = Random.Range(specialRoomMinDistance, specialRoomMaxDistance + 1);
+                var startPoint = new Vector2Int(Mathf.RoundToInt(clust[clust.Count - 1].centerPoint.x + (direction.x * distance)), Mathf.RoundToInt(clust[clust.Count - 1].centerPoint.y + (direction.y * distance)));
+
+                var roomX = Random.Range(5, maxRoomSize + 1);
+                var roomY = Random.Range(5, maxRoomSize + 1);
+
+                Debug.Log("Trying...");
+
+                Debug.DrawLine(new Vector2(startPoint.x - 1, startPoint.y - 1), new Vector2(startPoint.x + roomX + 1, startPoint.y - 1), Color.yellow, 500);
+                Debug.DrawLine(new Vector2(startPoint.x + roomX + 1, startPoint.y - 1), new Vector2(startPoint.x + roomX + 1, startPoint.y + roomY + 1), Color.yellow, 500);
+                Debug.DrawLine(new Vector2(startPoint.x + roomX + 1, startPoint.y + roomY + 1), new Vector2(startPoint.x - 1, startPoint.y + roomY + 1), Color.yellow, 500);
+                Debug.DrawLine(new Vector2(startPoint.x - 1, startPoint.y - 1), new Vector2(startPoint.x - 1, startPoint.y + roomY + 1), Color.yellow, 500);
+
+                bool test;
+                bool above = false;
+
+                if (spRoomIDs[i] == 5)
+                {
+                    if (clust[clust.Count - 1].centerPoint.y > startPoint.y)
+                    {
+                        test = CheckForGround(new Vector2Int(startPoint.x - 1, startPoint.y - 6), new Vector2Int(startPoint.x + roomX + 1, startPoint.y + roomY + 1));
+                        above = false;
+                    }
+                    else
+                    {
+                        test = CheckForGround(new Vector2Int(startPoint.x - 1, startPoint.y - 1), new Vector2Int(startPoint.x + roomX + 1, startPoint.y + roomY + 6));
+                        above = true;
+                    }
+                }
+                else
+                {
+                    test = CheckForGround(new Vector2Int(startPoint.x - 1, startPoint.y - 1), new Vector2Int(startPoint.x + roomX + 1, startPoint.y + roomY + 1));
+                }
+
+                Debug.Log(test);
+
+                if (!test)
+                {
+                    DrawRoom(startPoint, roomX, roomY);
+                    var currentRoom = rooms[rooms.Count - 1];
+
+                    switch (spRoomIDs[i])
+                    {
+                        case 0:
+                            int gold = Random.Range(specialRoomData.minGold, specialRoomData.maxGold + 1);
+                            int baseGold = gold;
+
+                            while (gold > 0)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y + 1, startPoint.y + roomY);
+                                var gPickup = Instantiate(InventoryManager.instance.goldTemplate, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
+                                var gAmount = Random.Range(Mathf.RoundToInt(baseGold / 16), Mathf.RoundToInt(baseGold / 3) + 1);
+                                gPickup.amount = gAmount;
+                                gold -= gAmount;
+                            }
+
+                            break;
+                        case 1:
+                            int amount = Random.Range(3, 5);
+                            for (int j = 0; j < amount; j++)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y + 1, startPoint.y + roomY);
+                                GenerateRandomItem(new Vector3(posX + 0.5f, posY + 0.5f, 0), false, true);
+                            }
+                            break;
+                        case 2:
+                            amount = Random.Range(2, 5);
+                            for (int j = 0; j < amount; j++)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y + 1, startPoint.y + roomY);
+                                ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
+
+                                ItemInstance itemInstance;
+
+                                if (Random.Range(0, 2) == 0)
+                                {
+                                    itemInstance = new ItemInstance(IdentifyingMenager.instance.weapons[Random.Range(0, IdentifyingMenager.instance.weapons.Length)], 1);
+                                }
+                                else
+                                {
+                                    itemInstance = new ItemInstance(IdentifyingMenager.instance.armour[Random.Range(0, IdentifyingMenager.instance.armour.Length)], 1);
+                                }
+                                itemInstance.identified = false;
+                                if (Random.Range(0, 6) == 0)
+                                {
+                                    itemInstance.cursed = true;
+                                    itemInstance.LevelUp(Random.Range(-2, 0));
+                                }
+                                else
+                                {
+                                    if (Random.Range(0, 6) == 0) itemInstance.LevelUp(1);
+
+                                    if (Random.Range(0, 6) == 0) itemInstance.LevelUp(1);
+
+                                    if (Random.Range(0, 6) == 0) itemInstance.LevelUp(1);
+
+                                    if (Random.Range(0, 6) == 0) itemInstance.LevelUp(1);
+                                }
+                                itemDrop.SetItem(itemInstance);
+                            }
+                            break;
+                        case 3:
+                            amount = Random.Range(2, 4);
+                            for (int j = 0; j < amount; j++)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y + 1, startPoint.y + roomY);
+                                ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
+
+                                ItemInstance itemInstance = new ItemInstance(IdentifyingMenager.instance.potions[Random.Range(0, IdentifyingMenager.instance.potions.Length)], 1);
+
+                                itemDrop.SetItem(itemInstance);
+                            }
+
+                            Instantiate(specialRoomData.roomContents[0], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
+                            break;
+                        case 4:
+                            amount = Random.Range(2, 4);
+                            for (int j = 0; j < amount; j++)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y + 1, startPoint.y + roomY);
+                                ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f, 0), Quaternion.identity);
+
+                                ItemInstance itemInstance = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(0, IdentifyingMenager.instance.scrolls.Length)], 1);
+
+                                itemDrop.SetItem(itemInstance);
+                            }
+
+                            Instantiate(specialRoomData.roomContents[1], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
+                            break;
+                        case 5:
+                            amount = Random.Range(2, 4);
+
+                            for (int j = 0; j < amount; j++)
+                            {
+                                var posX = Random.Range(startPoint.x, startPoint.x + roomX);
+                                var posY = Random.Range(startPoint.y, startPoint.y + roomY);
+                                SpawnManager.instance.SpawnEnemy(Random.Range(0, 5), new Vector2(posX + 0.5f, posY + 0.5f));
+                            }
+
+                            if(above)
+                            {
+                                ground.SetTile(new Vector3Int(rooms[rooms.Count - 1].centerPoint.x, startPoint.y + roomY, 0), groundTileBase);
+                                ground.SetTile(new Vector3Int(rooms[rooms.Count - 1].centerPoint.x, startPoint.y + roomY + 1, 0), groundTileBase);
+
+                                for (int x = startPoint.x; x < currentRoom.maxCorner.x + 1; x++)
+                                {
+                                    for (int y = startPoint.y + roomY + 2; y < currentRoom.maxCorner.y + 5; y++)
+                                    {
+                                        ground.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                                    }
+                                }
+
+                                rooms.RemoveAt(rooms.Count - 1);
+                                rooms.Add(new Room(startPoint, new Vector2Int(currentRoom.maxCorner.x, currentRoom.maxCorner.y + 4)));
+
+                                Chest chest = Instantiate(chestTemplate, new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, startPoint.y + roomY + 3.5f), Quaternion.identity);
+                                chest.chestItem = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 1);
+
+                                GenerateRandomItem(chest.transform.position + Vector3.left + Vector3.left, false, true);
+                                GenerateRandomItem(chest.transform.position + Vector3.right + Vector3.right, false, true);
+                            }
+                            else
+                            {
+                                ground.SetTile(new Vector3Int(rooms[rooms.Count - 1].centerPoint.x, startPoint.y - 1, 0), groundTileBase);
+                                ground.SetTile(new Vector3Int(rooms[rooms.Count - 1].centerPoint.x, startPoint.y - 2, 0), groundTileBase);
+
+                                for (int x = startPoint.x; x < currentRoom.maxCorner.x + 1; x++)
+                                {
+                                    for (int y = startPoint.y - 5; y < startPoint.y - 2; y++)
+                                    {
+                                        ground.SetTile(new Vector3Int(x, y, 0), groundTileBase);
+                                    }
+                                }
+
+                                rooms.RemoveAt(rooms.Count - 1);
+                                rooms.Add(new Room(new Vector2Int(currentRoom.minCorner.x, currentRoom.minCorner.y - 5), currentRoom.maxCorner));
+
+                                Chest chest = Instantiate(chestTemplate, new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, startPoint.y - 3.5f), Quaternion.identity);
+                                chest.chestItem = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 1);
+
+                                GenerateRandomItem(chest.transform.position + Vector3.left + Vector3.left, false, true);
+                                GenerateRandomItem(chest.transform.position + Vector3.right + Vector3.right, false, true);
+                            }
+
+                            break;
+                        case 6:
+                            Instantiate(specialRoomData.roomContents[2], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
+                            break;
+                        case 7:
+                            Instantiate(specialRoomData.roomContents[3], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
+                            break;
+                        case 8:
+                            Instantiate(specialRoomData.roomContents[4], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
+                            break;
+                    }
+
+                    
+                    DrawLockedCorridor(currentRoom, clust[clust.Count - 1]);
+                    candidateClusters.RemoveAt(randomCluster);
+                    break;
+                }
+            }
+        }
+    }
+
+    //GROAN
+    private bool CheckForGround(Vector2Int pointA, Vector2Int pointB)
+    {
+        Vector2Int minPoint = new Vector2Int(Mathf.Min(pointA.x, pointB.x), Mathf.Min(pointA.y, pointB.y));
+        Vector2Int maxPoint = new Vector2Int(Mathf.Max(pointA.x, pointB.x), Mathf.Max(pointA.y, pointB.y));
+
+        var output = false;
+        for(int x = minPoint.x; x <= maxPoint.x; x++)
+        {
+            for (int y = minPoint.y; y <= maxPoint.y; y++)
+            {
+                if(ground.GetTile(new Vector3Int(x, y, 0)))
+                {
+                    output = true;
+                    break;
+                }
+            }
+        }
+        return output;
+    }
+
+    private void SetUpWeightedItemPool()
+    {
+        itemWeightTotal = 0;
+        for (int i = 0; i < dropTable.itemWeightPool.Length; i++)
+        {
+            itemWeightTotal += dropTable.itemWeightPool[i];
+        }
+
+        itemWeightedList = new List<Item>();
+        for (int i = 0; i < dropTable.itemPool.Length; i++)
+        {
+            for (int j = 0; j < dropTable.itemWeightPool[i]; j++)
+            {
+                itemWeightedList.Add(dropTable.itemPool[i]);
+            }
+        }
+    }
+
+    private void GenerateRandomItem(Vector3 position, bool canBeNoChest, bool canBeChest)
+    {       
+        int roll = Random.Range(0, itemWeightTotal);
+
+        var itemToDrop = new ItemInstance(itemWeightedList[roll], 1);
+        if (itemToDrop.type == ItemType.POTION)
+        {
+            itemToDrop = new ItemInstance(IdentifyingMenager.instance.potions[Random.Range(0, IdentifyingMenager.instance.potions.Length)], 0);
+        }
+        else if (itemToDrop.type == ItemType.SCROLL)
+        {
+            itemToDrop = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(0, IdentifyingMenager.instance.scrolls.Length)], 0);
+        }
+        else if (itemToDrop.type == ItemType.RING && itemToDrop.effectID != 10)
+        {
+            itemToDrop = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 0);
+            if (Random.Range(0, 4) == 0 && itemToDrop.effectID != 9)
+            {
+                itemToDrop.cursed = true;
+            }
+            if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+            if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+        }
+        else if (itemToDrop.type == ItemType.ARMOR || itemToDrop.type == ItemType.WEAPON)
+        {
+            itemToDrop.identified = false;
+            if (Random.Range(0, 4) == 0)
+            {
+                itemToDrop.cursed = true;
+                itemToDrop.LevelUp(Random.Range(-3, 0));
+            }
+            else
+            {
+                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+
+                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
+            }
+        }
+
+        var objectAbove = Physics2D.OverlapPoint(new Vector3(position.x, position.y + 1f), LayerMask.GetMask("Decor"));
+        var objectHere = Physics2D.OverlapPoint(position, LayerMask.GetMask("Decor"));
+        if (canBeChest
+            && ((objectAbove != null && !objectAbove.CompareTag("Interactible")) || objectAbove == null)
+            && ((objectHere != null && !objectHere.CompareTag("Interactible")) || objectHere == null))
+        {
+            Chest chest = Instantiate(chestTemplate, position, Quaternion.identity);
+            chest.chestItem = new ItemInstance(itemToDrop, 1);
+        }
+        else if(canBeNoChest)
+        {
+            ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, position, Quaternion.identity);
+            itemDrop.SetItem(new ItemInstance(itemToDrop, 1));
+        }
+    }
+
+    private void PopulateWithItems()
+    {
+        int amount = Random.Range(minItems, maxItems + 1);       
+
         for(int i = 0; i < amount; i++)
         {
-            int roll = Random.Range(0, weightTotal);
-            int roomID = Random.Range(1, rooms.Count);
+            
+            int roomID = Random.Range(1, rooms.Count - spRoomAmount);
 
             float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x);
             float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
-            ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
-            var itemToDrop = new ItemInstance(weightedPool[roll], 1);
-            if(itemToDrop.type == ItemType.POTION)
+            bool chest = false;
+            if(Random.Range(0, 6) == 0)
             {
-                itemToDrop = new ItemInstance(IdentifyingMenager.instance.potions[Random.Range(0, IdentifyingMenager.instance.potions.Length)], 0);
+                chest = true;
             }
-            else if(itemToDrop.type == ItemType.SCROLL)
-            {
-                itemToDrop = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(0, IdentifyingMenager.instance.scrolls.Length)], 0);
-            }
-            else if (itemToDrop.type == ItemType.RING && itemToDrop.effectID != 10)
-            {
-                itemToDrop = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 0);
-                if (Random.Range(0, 4) == 0 && itemToDrop.effectID != 9)
-                {
-                    itemToDrop.cursed = true;
-                }
-                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
 
-                if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
-            }
-            else if(itemToDrop.type == ItemType.ARMOR || itemToDrop.type == ItemType.WEAPON)
-            {
-                itemToDrop.identified = false;
-                if(Random.Range(0, 4) == 0)
-                {
-                    itemToDrop.cursed = true;
-                    itemToDrop.LevelUp(Random.Range(-3, 0));
-                }
-                else
-                {
-                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
-
-                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
-
-                    if (Random.Range(0, 6) == 0) itemToDrop.LevelUp(1);
-                }
-            }
-            itemDrop.SetItem(new ItemInstance(itemToDrop, 1));
+            GenerateRandomItem(new Vector3(posX + 0.5f, posY + 0.5f, 0), true, chest);
+            
         }
 
         dropTable.guaranteedItems.Add(IdentifyingMenager.instance.potions[Random.Range(0, 2)]);
@@ -322,7 +642,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < dropTable.guaranteedItems.Count; i++)
         {
-            int roomID = Random.Range(1, rooms.Count - 1);
+            int roomID = Random.Range(1, rooms.Count - 1 - spRoomAmount);
 
             float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x);
             float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
@@ -334,7 +654,18 @@ public class LevelGenerator : MonoBehaviour
         dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
         dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
 
-        if(giveStarterItem)
+        for (int i = 0; i < keysToGenerate.Count; i++)
+        {
+            int roomID = Random.Range(1, rooms.Count - 1 - spRoomAmount);
+
+            float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x);
+            float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
+
+            ItemPickup itemDrop = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
+            itemDrop.SetItem(new ItemInstance(keysToGenerate[i], 1));
+        }
+
+        if (giveStarterItem)
         {
             float posX = Random.Range(rooms[0].minCorner.x, rooms[0].maxCorner.x);
             float posY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
@@ -366,7 +697,7 @@ public class LevelGenerator : MonoBehaviour
         for (int i = 0; i < amount; i++)
         {
             int roll = Random.Range(0, weightTotal);
-            int roomID = Random.Range(1, rooms.Count - 1);
+            int roomID = Random.Range(1, rooms.Count - spRoomAmount);
 
             float posX = Random.Range(rooms[roomID].minCorner.x, rooms[roomID].maxCorner.x + 1);
             float posY = Random.Range(rooms[roomID].minCorner.y, rooms[roomID].maxCorner.y + 1);
@@ -567,7 +898,7 @@ public class LevelGenerator : MonoBehaviour
 
         corridors.Add(corridor);
 
-        
+
 
         //This line may make something crash and burn :)
         Vector2Int direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
@@ -589,7 +920,7 @@ public class LevelGenerator : MonoBehaviour
 
         while (!roomReached)
         {
-            if(moveX)
+            if (moveX)
             {
                 currentX += direction.x;
                 distanceX--;
@@ -607,20 +938,142 @@ public class LevelGenerator : MonoBehaviour
                 moveX = !moveX;
             }
 
-            if(distanceX == 0)
+            if (distanceX == 0)
             {
                 moveX = false;
-                if(distanceY == 0)
+                if (distanceY == 0)
                 {
                     roomReached = true;
                 }
             }
-            if(distanceY == 0)
+            if (distanceY == 0)
             {
                 moveX = true;
             }
             safeguard--;
-            if(safeguard == 0)
+            if (safeguard == 0)
+            {
+                Debug.LogError("Corridor fuckup (room0 - " + room0.centerPoint + " ,room1 - " + room1.centerPoint + ")");
+                Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
+                break;
+            }
+        }
+    }
+
+    private void DrawLockedCorridor(Room room0, Room room1)
+    {
+        var gateAvaliable = true;
+        //Basic algorithm
+        //TODO a better one
+        bool roomReached = false;
+
+        //Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
+
+        //Technically there should be +1/-1 here, but it shouldn't matter
+        int distanceX = room1.centerPoint.x - room0.centerPoint.x;
+        int distanceY = room1.centerPoint.y - room0.centerPoint.y;
+
+        float dirY = Mathf.Sign(distanceY);
+
+        
+
+        //This line may make something crash and burn :)
+        Vector2Int direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
+
+        distanceX = Mathf.Abs(distanceX);
+        distanceY = Mathf.Abs(distanceY);
+
+        int startDistanceX = distanceX;
+        int startDistanceY = distanceY;
+
+        bool moveX = true;
+
+        int currentX = room0.centerPoint.x;
+        int currentY = room0.centerPoint.y;
+        
+        for(int i = 0; i < room0.ySize; i++)
+        {
+            currentY += Mathf.FloorToInt(dirY);
+            if (gateAvaliable && !ground.GetTile(new Vector3Int(currentX - 1, currentY, 0)) && !ground.GetTile(new Vector3Int(currentX + 1, currentY, 0)))
+            {
+                gateAvaliable = false;
+                Instantiate(specialRoomData.gates[0], new Vector3(currentX + 0.5f, currentY + 0.5f, 0), Quaternion.identity);
+                keysToGenerate.Add(specialRoomData.keys[0]);
+            }
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+        }
+        for(int i = 0; i < 2; i++)
+        {
+            currentX += direction.x;
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+        }
+
+        var temp = new Vector3Int(currentX, currentY, 0);
+        distanceX = room1.centerPoint.x - temp.x;
+        distanceY = room1.centerPoint.y - temp.y;
+
+        direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
+
+        distanceX = Mathf.Abs(distanceX);
+        distanceY = Mathf.Abs(distanceY);
+
+        currentX = temp.x;
+        currentY = temp.y;
+
+        var min = new Vector2Int(Mathf.Min(room0.centerPoint.x, room1.centerPoint.x, temp.x), Mathf.Min(room0.centerPoint.y, room1.centerPoint.y, temp.y));
+
+        var max = new Vector2Int(Mathf.Max(room0.centerPoint.x, room1.centerPoint.x, temp.x), Mathf.Max(room0.centerPoint.y, room1.centerPoint.y, temp.y));
+
+        Corridor corridor = new Corridor(min, max);
+
+        corridors.Add(corridor);
+
+        int safeguard = 100;
+
+        while (!roomReached)
+        {
+            if (moveX)
+            {
+                currentX += direction.x;
+                distanceX--;
+            }
+            else
+            {
+                currentY += direction.y;
+                distanceY--;
+                /**
+                if (gateAvaliable && (distanceX < startDistanceX - (room0.xSize / 2) + 2 || distanceY < startDistanceY - (room0.ySize / 2) + 2) 
+                    && !ground.GetTile(new Vector3Int(currentX - 1, currentY, 0)) && !ground.GetTile(new Vector3Int(currentX + 1, currentY, 0)))
+                {
+                    gateAvaliable = false;
+                    Debug.Log("AAAAAAAAAAAA");
+                    Instantiate(specialRoomData.gates[0], new Vector3(currentX + 0.5f, currentY + 0.5f, 0), Quaternion.identity);
+                    keysToGenerate.Add(specialRoomData.keys[0]);                   
+                }      
+                **/
+            }
+
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+
+            if (Random.Range(0, 6) == 0)
+            {
+                moveX = !moveX;
+            }
+
+            if (distanceX == 0)
+            {
+                moveX = false;
+                if (distanceY == 0)
+                {
+                    roomReached = true;
+                }
+            }
+            if (distanceY == 0)
+            {
+                moveX = true;
+            }
+            safeguard--;
+            if (safeguard == 0)
             {
                 Debug.LogError("Corridor fuckup (room0 - " + room0.centerPoint + " ,room1 - " + room1.centerPoint + ")");
                 Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);

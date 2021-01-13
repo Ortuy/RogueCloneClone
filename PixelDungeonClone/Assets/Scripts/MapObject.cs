@@ -41,7 +41,7 @@ public class MapObject : MonoBehaviour
         var temp = Physics2D.OverlapAreaAll(minCorner, maxCorner, LayerMask.GetMask("Items"));
         for(int i = 0; i < temp.Length; i++)
         {
-            if(!temp[i].CompareTag("Map"))
+            if(!temp[i].CompareTag("Map") && !temp[i].CompareTag("Gold"))
             {
                 var item = temp[i].GetComponent<ItemPickup>().mapImage;
                 if (hideObjects)

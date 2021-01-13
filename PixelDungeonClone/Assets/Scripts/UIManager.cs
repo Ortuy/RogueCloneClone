@@ -67,6 +67,7 @@ public class UIManager : MonoBehaviour
     private GameObject interactionMenu;
     [SerializeField]
     private Text interactionNametext, interactionDescText, interactionButtonText;
+    public Button interactionButton;
 
     // Start is called before the first frame update
     void Start()
@@ -458,6 +459,7 @@ public class UIManager : MonoBehaviour
         else
         {
             interactionMenu.gameObject.SetActive(true);
+            interactionButton.interactable = true;
             Debug.Log(usedInteractible);
             interactionNametext.text = usedInteractible.interactionName;
             interactionDescText.text = usedInteractible.interactionDescription;
@@ -478,5 +480,10 @@ public class UIManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(popup);
         yield return null;
         LayoutRebuilder.ForceRebuildLayoutImmediate(popup);
+    }
+
+    public void RefreshPopupRect(RectTransform popup)
+    {
+        StartCoroutine(RefreshPopup(popup));
     }
 }

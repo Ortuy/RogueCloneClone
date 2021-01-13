@@ -6453,14 +6453,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d74480aa199e1f49a6216442f4bc64f, type: 2}
   - {fileID: 11400000, guid: e2d5b242cb4aae847b7665a164140e59, type: 2}
   checkerboardTile: {fileID: 11400000, guid: 8dc1785c04a41e8439a7a72fd508eae4, type: 2}
+  specialRoomData: {fileID: 11400000, guid: c490c7fae7fa7cd41951b390d78323da, type: 2}
+  specialRoomMinAmount: 0
+  specialRoomMaxAmount: 2
+  specialRoomMinDistance: 8
+  specialRoomMaxDistance: 24
   dropTable: {fileID: 11400000, guid: 2f05a8a2608184e40b6429a932967676, type: 2}
   minItems: 3
-  maxItems: 7
+  maxItems: 6
   minEnemies: 6
   maxEnemies: 8
   enemyPool: 0000000001000000
   enemyWeightPool: 0400000001000000
   giveStarterItem: 1
+  chestTemplate: {fileID: 6062814185071893882, guid: 0bf27ab8d8c3ca649b0e5461f07880b7,
+    type: 3}
   tilemapGrid: {fileID: 961442377}
   minimapCamera: {fileID: 397437647}
   minimapTilemapBase: {fileID: 8082954075096133201, guid: f3819d4167ab41945b72efd8eb6ac96e,

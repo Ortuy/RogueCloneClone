@@ -37,9 +37,10 @@ public class Grid<TGridObject>
                 gridArray[x, y] = createGridObject(this, x, y);
             }
         }
-
+        /**
         for (int x = 0; x < gridArray.GetLength(0); x++)
         {
+            
             for(int y = 0; y < gridArray.GetLength(1); y++)
             {
                 //debugTextArray[x, y] = CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + cellOffset, 5, Color.cyan, TextAnchor.MiddleCenter, TextAlignment.Center, 0);
@@ -50,6 +51,7 @@ public class Grid<TGridObject>
         }
         Debug.DrawLine(GetWorldPosition(0, height), GetWorldPosition(width, height), Color.white, 100f);
         Debug.DrawLine(GetWorldPosition(width, 0), GetWorldPosition(width, height), Color.white, 100f);
+        **/
     }
 
     public void SetCellMessage(Vector2 worldPos, string message)

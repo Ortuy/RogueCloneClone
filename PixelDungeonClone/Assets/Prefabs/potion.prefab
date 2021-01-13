@@ -142,7 +142,7 @@ SpriteRenderer:
   m_SortingLayerID: -1144420689
   m_SortingLayer: -1
   m_SortingOrder: 10
-  m_Sprite: {fileID: -6125389956313058150, guid: 87c5fee941182af4081b3babfda35d26,
+  m_Sprite: {fileID: 3468244779728606172, guid: dd96d0a1c077df84a902314c247fa571,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -189,7 +189,7 @@ Transform:
   m_Children:
   - {fileID: 388757782}
   - {fileID: 1367026959366236693}
-  - {fileID: 7129797475543193085}
+  - {fileID: 1506523903488152093}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -770,7 +770,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 19b1a360fcc4e3b458d3199431293b70, type: 3}
---- !u!4 &7129797475543193085 stripped
+--- !u!4 &1506523903488152093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8510148004516283664, guid: 19b1a360fcc4e3b458d3199431293b70,
     type: 3}

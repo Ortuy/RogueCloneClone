@@ -279,14 +279,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9d74480aa199e1f49a6216442f4bc64f, type: 2}
   - {fileID: 11400000, guid: e2d5b242cb4aae847b7665a164140e59, type: 2}
   checkerboardTile: {fileID: 11400000, guid: 8dc1785c04a41e8439a7a72fd508eae4, type: 2}
+  specialRoomData: {fileID: 11400000, guid: c490c7fae7fa7cd41951b390d78323da, type: 2}
+  specialRoomMinAmount: 0
+  specialRoomMaxAmount: 2
+  specialRoomMinDistance: 8
+  specialRoomMaxDistance: 24
   dropTable: {fileID: 11400000, guid: 2f05a8a2608184e40b6429a932967676, type: 2}
-  minItems: 4
-  maxItems: 8
+  minItems: 3
+  maxItems: 6
   minEnemies: 7
   maxEnemies: 10
   enemyPool: 00000000010000000200000003000000
   enemyWeightPool: 02000000020000000200000001000000
   giveStarterItem: 0
+  chestTemplate: {fileID: 6062814185071893882, guid: 0bf27ab8d8c3ca649b0e5461f07880b7,
+    type: 3}
   tilemapGrid: {fileID: 828294029}
   minimapCamera: {fileID: 1772494291}
   minimapTilemapBase: {fileID: 8082954075096133201, guid: f3819d4167ab41945b72efd8eb6ac96e,
@@ -544,7 +551,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &511596212
 PrefabInstance:
@@ -601,7 +608,7 @@ PrefabInstance:
     - target: {fileID: 2042729413475272051, guid: af36e20add783374f8dc553ff6ac1edf,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2042729413475272051, guid: af36e20add783374f8dc553ff6ac1edf,
         type: 3}
@@ -5836,7 +5843,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &828294029
 GameObject:
