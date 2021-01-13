@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4cba8e7694310e4fb50006689a34055, type: 3}
+  m_Name: SpecialRoomDataChasm
+  m_EditorClassIdentifier: 
+  gates:
+  - {fileID: 592290198733155103, guid: 927e28961099246439ff626b7ed89c8a, type: 3}
+  keys:
+  - {fileID: 11400000, guid: ea43f925eff413a479d9d5b937c0d1ce, type: 2}
+  roomContents:
+  - {fileID: 4601721859472741852, guid: eeaa63b4dc4de1d47bd7a33b0b492bbe, type: 3}
+  - {fileID: 2642400911106558599, guid: 8ce1e3d1f7795b74ebe4e2f7fe50982b, type: 3}
+  - {fileID: 5823713679009511530, guid: 3a69903aaa80b584187bac256bf87915, type: 3}
+  - {fileID: 2351439653553691287, guid: fa6bef3738476134ab593c21a28e94ba, type: 3}
+  - {fileID: 1363749335995110993, guid: 707abd189dffa7a42a8f1f3513d9144b, type: 3}
+  minGold: 175
+  maxGold: 250

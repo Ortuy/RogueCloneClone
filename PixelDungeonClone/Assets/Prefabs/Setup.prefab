@@ -153,6 +153,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1911f4b121654b2498f4863a422d29ef, type: 2}
   - {fileID: 11400000, guid: 135efcec2d2163244a3254a6d6334338, type: 2}
   - {fileID: 11400000, guid: 3621be67456005645a18e7319693d054, type: 2}
+  - {fileID: 11400000, guid: 1024c1501f857d64a9dc5d2665926d3c, type: 2}
+  - {fileID: 11400000, guid: 83a3a36c6dac021418b51d3ee925cdbb, type: 2}
+  - {fileID: 11400000, guid: e172fe0a01b8ba543acb18125091e2cc, type: 2}
+  - {fileID: 11400000, guid: 8961649237ed285439bbf6a11b0efe54, type: 2}
+  - {fileID: 11400000, guid: e73aa9dcbe1491349ac7e360359f55e6, type: 2}
+  - {fileID: 11400000, guid: 718a532e38f942948a1681aeb6ba6273, type: 2}
+  - {fileID: 11400000, guid: cffa54c268d9c764b9b4276728abfdc5, type: 2}
+  - {fileID: 11400000, guid: 760d07bb4b3b98b42ba89e5ce886209d, type: 2}
   armour:
   - {fileID: 11400000, guid: 3d41994a85087de4cb2121e3c07576a5, type: 2}
   - {fileID: 11400000, guid: aa448557eccaa2043bf1fcd8989370f5, type: 2}
@@ -9174,7 +9182,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 12087
+    m_Bits: 44855
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -11111,6 +11119,7 @@ MonoBehaviour:
   selectedSlotID: 0
   waitingForSelection: 0
   ringEquipped: 
+  discardComplete: 0
 --- !u!1 &923525943531650745
 GameObject:
   m_ObjectHideFlags: 0
@@ -11532,6 +11541,7 @@ MonoBehaviour:
   interactionNametext: {fileID: 6629799183091896384}
   interactionDescText: {fileID: 8291507614167460227}
   interactionButtonText: {fileID: 3023574151607217110}
+  interactionButton: {fileID: 3382612026877393603}
 --- !u!82 &1893560510
 AudioSource:
   m_ObjectHideFlags: 0
@@ -11643,6 +11653,8 @@ MonoBehaviour:
   seed: 0
   currentFloor: 1
   mapRevealed: 0
+  guaranteedSpecialRoom: -1
+  altarDrop: {fileID: 11400000, guid: 3a375580285caac4ba98ed78e116ff48, type: 2}
 --- !u!1 &923525943706998946
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class ItemTester : MonoBehaviour
     IEnumerator WaitAndDoStuff()
     {
         yield return null;
-        //item0.itemInside.LevelUp(3);
+        item0.itemInside.LevelUp(3);
         item1.itemInside.LevelUp(-2);
         item1.itemInside.cursed = true;
         item2.itemInside.identified = false;

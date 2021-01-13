@@ -17,6 +17,12 @@ TextureImporter:
   - first:
       213: -4660674356202767288
     second: chasm_decor_objects_4
+  - first:
+      213: 5821642002077506621
+    second: chasm_decor_objects_5
+  - first:
+      213: 2119953138967570491
+    second: chasm_decor_objects_6
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -213,6 +219,48 @@ TextureImporter:
       bones: []
       spriteID: 84cf2c8cd55f15fb0800000000000000
       internalID: -4660674356202767288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chasm_decor_objects_5
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 252
+        width: 256
+        height: 336
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d3cd2577e80aac050800000000000000
+      internalID: 5821642002077506621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: chasm_decor_objects_6
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 315
+        width: 102
+        height: 132
+      alignment: 9
+      pivot: {x: 0.5, y: 0.7364007}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b38e2acd5269b6d10800000000000000
+      internalID: 2119953138967570491
       vertices: []
       indices: 
       edges: []

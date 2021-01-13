@@ -99,6 +99,8 @@ public class Enemy : Entity
 
     [SerializeField]
     private bool spawnSpirit;
+    public bool isByAltar;
+    public AltarArea nearbyAltarArea;
 
     // Start is called before the first frame update
     void Start()
@@ -540,6 +542,14 @@ public class Enemy : Entity
                 temp.PlaySoundOnInit(temp.dropSound);
                 break;
             }
+        }
+
+        if(isByAltar)
+        {
+            ItemPickup temp = Instantiate(InventoryManager.instance.itemTemplate, transform.position, Quaternion.identity);
+            temp.SetItem(new ItemInstance(GameManager.instance.altarDrop, 1));
+            temp.PlaySoundOnInit(temp.dropSound);
+            nearbyAltarArea.EndAltarEffect();
         }
 
         if (dropsGold)

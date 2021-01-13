@@ -119,6 +119,9 @@ MonoBehaviour:
     beckons you. $nYou feel you won't be able to return after taking the steps. $nDo
     you still want to descend the ladder?
   buttonText: Descend
+  choiceMenu: {fileID: 0}
+  choiceTexts: []
+  choiceButtons: []
   mapIcon: {fileID: 4874307713998725943}
 --- !u!82 &-7858445154196327096
 AudioSource:
