@@ -23,27 +23,5 @@ public class Item : ScriptableObject
     public int statChangeMin, statChangeMax;
     public int effectID;
     public bool identified;
-
-    /**
-    public Item(Item baseItem, int newAmount)
-    {
-        itemName = baseItem.itemName;
-        description = baseItem.description;
-        itemImage = baseItem.itemImage;
-        amount = newAmount;
-        strengthRequired = baseItem.strengthRequired;
-        stackable = baseItem.stackable;
-        requiresStrength = baseItem.requiresStrength;
-        statChangeMin = baseItem.statChangeMin;
-        statChangeMax = baseItem.statChangeMax;
-        effectID = baseItem.effectID;
-        identified = baseItem.identified;
-        type = baseItem.type;
-    }
-
-    public Item()
-    {
-
-    }
-    **/
+    public int goldPrice;
 }

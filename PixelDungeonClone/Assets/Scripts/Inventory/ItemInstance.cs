@@ -27,6 +27,7 @@ public class ItemInstance
     public bool pickedUpOnce;
 
     public int levelFactor;
+    public int goldPrice;
 
     public ItemInstance(Item baseItem, int newAmount)
     {
@@ -46,6 +47,7 @@ public class ItemInstance
         type = baseItem.type;
         level = 0;
         cursed = false;
+        goldPrice = baseItem.goldPrice;
         levelFactor = 1 + Mathf.RoundToInt((statChangeMin + statChangeMax) / 20);
         pickedUpOnce = false;
     }
@@ -70,11 +72,13 @@ public class ItemInstance
         cursed = baseItemInstance.cursed;
         pickedUpOnce = baseItemInstance.pickedUpOnce;
         levelFactor = baseItemInstance.levelFactor;
+        goldPrice = baseItemInstance.goldPrice;
     }
 
     public void LevelUp(int levelAmount)
     {
         level += levelAmount;
+        goldPrice += 100 * levelFactor;
         statChangeMin += levelAmount * levelFactor;
         statChangeMax += levelAmount * levelFactor;
     }

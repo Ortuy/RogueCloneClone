@@ -99,9 +99,9 @@ public class Entity : MonoBehaviour
         statusEffects.RemoveAt(effectID);
     }
 
-    public virtual void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
+    public virtual void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged)
     {
-
+        dodged = false;
     }
 
     public virtual void TakeTrueDamage(int damage)

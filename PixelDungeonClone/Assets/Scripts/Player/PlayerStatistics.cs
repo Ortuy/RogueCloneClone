@@ -185,7 +185,7 @@ public class PlayerStatistics : Entity
         UIManager.instance.playerHealthBar.value = value;
     }
 
-    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos)
+    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged)
     {
         
         //Evasion chance
@@ -194,9 +194,11 @@ public class PlayerStatistics : Entity
         if (evasionRoll <= evasionPercent)
         {
             ShowDamageText("Miss!");
+            dodged = true;
         }
         else
         {
+            dodged = false;
             var hitDirection = (attackerPos - transform.position).normalized;
             Debug.DrawRay(transform.position, hitDirection, Color.yellow, 1000);
             var angle = Mathf.Atan2(hitDirection.y, hitDirection.x) * Mathf.Rad2Deg;

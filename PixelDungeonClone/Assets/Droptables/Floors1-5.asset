@@ -14,28 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   potionBase: {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
   itemPool:
-  - {fileID: 11400000, guid: 0c5ae139e1e283f4ebf10c2e61efef3b, type: 2}
-  - {fileID: 11400000, guid: 1911f4b121654b2498f4863a422d29ef, type: 2}
-  - {fileID: 11400000, guid: 135efcec2d2163244a3254a6d6334338, type: 2}
-  - {fileID: 11400000, guid: 3621be67456005645a18e7319693d054, type: 2}
+  - {fileID: 11400000, guid: 4425ee75d97a6874eb2ebb471cc62c06, type: 2}
+  - {fileID: 11400000, guid: 54e2c74d9ed4aa949abb6c2e5a850f74, type: 2}
+  - {fileID: 11400000, guid: 64202dba121d7b747b1a35dd5f810ff9, type: 2}
+  - {fileID: 11400000, guid: c2026b1b1b5954b4c9e994eccdbe3a85, type: 2}
   - {fileID: 11400000, guid: 3d41994a85087de4cb2121e3c07576a5, type: 2}
   - {fileID: 11400000, guid: aa448557eccaa2043bf1fcd8989370f5, type: 2}
   - {fileID: 11400000, guid: 9fdd64760cc30c94fbb4aaa0f9ce7e7e, type: 2}
   - {fileID: 11400000, guid: 86cf1d909cb97cb4c8783af343a86716, type: 2}
-  - {fileID: 11400000, guid: a32a5c8fb6c6a3c42b96b885125856ae, type: 2}
-  - {fileID: 11400000, guid: 4e2d30f76a5b50241b2c1fa5ffc0ca89, type: 2}
-  - {fileID: 11400000, guid: c2026b1b1b5954b4c9e994eccdbe3a85, type: 2}
-  - {fileID: 11400000, guid: 64202dba121d7b747b1a35dd5f810ff9, type: 2}
-  - {fileID: 11400000, guid: 3a375580285caac4ba98ed78e116ff48, type: 2}
+  - {fileID: 11400000, guid: 0c5ae139e1e283f4ebf10c2e61efef3b, type: 2}
   - {fileID: 11400000, guid: 1024c1501f857d64a9dc5d2665926d3c, type: 2}
-  - {fileID: 11400000, guid: 83a3a36c6dac021418b51d3ee925cdbb, type: 2}
-  - {fileID: 11400000, guid: e172fe0a01b8ba543acb18125091e2cc, type: 2}
-  - {fileID: 11400000, guid: 8961649237ed285439bbf6a11b0efe54, type: 2}
   - {fileID: 11400000, guid: e73aa9dcbe1491349ac7e360359f55e6, type: 2}
+  - {fileID: 11400000, guid: 1911f4b121654b2498f4863a422d29ef, type: 2}
+  - {fileID: 11400000, guid: 83a3a36c6dac021418b51d3ee925cdbb, type: 2}
   - {fileID: 11400000, guid: 718a532e38f942948a1681aeb6ba6273, type: 2}
+  - {fileID: 11400000, guid: 135efcec2d2163244a3254a6d6334338, type: 2}
+  - {fileID: 11400000, guid: e172fe0a01b8ba543acb18125091e2cc, type: 2}
   - {fileID: 11400000, guid: cffa54c268d9c764b9b4276728abfdc5, type: 2}
+  - {fileID: 11400000, guid: 3621be67456005645a18e7319693d054, type: 2}
+  - {fileID: 11400000, guid: 8961649237ed285439bbf6a11b0efe54, type: 2}
   - {fileID: 11400000, guid: 760d07bb4b3b98b42ba89e5ce886209d, type: 2}
-  itemWeightPool: 020000000300000001000000010000000700000004000000020000000100000032000000320000000800000010000000010000000200000003000000010000000100000002000000030000000100000001000000
+  itemWeightPool: 7701000077010000640000002600000018000000100000000a00000003000000090000000900000009000000060000000600000006000000040000000400000004000000010000000100000001000000
   guaranteedItems:
   - {fileID: 11400000, guid: 87184e2c8734cc04db1fc0d8fc1d4963, type: 2}
   starterItems:

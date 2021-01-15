@@ -10,7 +10,8 @@ public class TurnManager : MonoBehaviour
 
     public TurnState turnState = TurnState.PLAYER;
 
-    public List<Enemy> enemies;
+    //public List<Enemy> enemies;
+    public List<Enemy> nearbyEnemies;
 
     private int currentActingEnemy;
 
@@ -19,6 +20,7 @@ public class TurnManager : MonoBehaviour
     public int playerExtraTurns;
 
     public List<Gas> gases;
+    private bool doEnemyTurns;
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +32,11 @@ public class TurnManager : MonoBehaviour
         else
         {
             instance = this;
-        }      
+        }
+        StartCoroutine(SearchForEnemiesNearPlayer());
+        StartCoroutine(ManageTurns());
     }
-
+    /**
     // Update is called once per frame
     void Update()
     {
@@ -57,60 +61,164 @@ public class TurnManager : MonoBehaviour
                     StartCoroutine(FreezePlayer());
                 }                                
             }
-            else if(Physics2D.OverlapCircle(Player.instance.transform.position, 10f, LayerMask.GetMask("Enemies")))
+            else if(doEnemyTurns)
             {
-
-                if (currentActingEnemy >= enemies.Count)
+                if (currentActingEnemy == 0)
                 {
-                    SwitchTurn();
+                    Player.movement.StopMovement(false);
+                }
+
+                nearbyEnemies[currentActingEnemy].turnCost--;
+                //Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && 
+                if (Player.stats.GetHealth() > 0 && nearbyEnemies[currentActingEnemy].turnCost <= 0)
+                {
+                    nearbyEnemies[currentActingEnemy].DoTurn();
+                    //PassToNextEnemy();
                 }
                 else
-                {                  
+                {
+                    PassToNextEnemy();
+                }
+
+                /**
+                else
+                {    
+                    /**
                     if(enemies[currentActingEnemy].behaviourState == AIState.ALERTED)
                     {
                         Player.movement.StopMovement(false);
                     }
+                    **          
+
                     
-                    //Player.movement.StopMovement(false);
                     enemies[currentActingEnemy].turnCost--;
-                    if (Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
+                    //Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && 
+                    if (Player.stats.GetHealth() > 0 && enemies[currentActingEnemy].turnCost <= 0)
                     {
-                        enemies[currentActingEnemy].DoTurn();
+                        //enemies[currentActingEnemy].DoTurn();
+                        PassToNextEnemy();                       
                     }
                     else
                     {
                         PassToNextEnemy();
                     }
                 }
+                **//**
             }
             else
             {
                 SwitchTurn();
             }
         }       
+    }**/
+
+    IEnumerator ManageTurns()
+    {
+        while(true)
+        {
+            yield return null;
+            if (Pathfinding.instance != null)
+            {
+                if (turnState == TurnState.PLAYER)
+                {
+                    if (!playerFrozen)
+                    {
+                        Player.actions.turnCost--;
+                        if (Player.actions.turnCost <= 0)
+                        {
+                            Player.instance.DoPlayerTurn();
+                        }
+                        else
+                        {
+                            SwitchTurn(TurnState.ENEMY);
+                        }
+                    }
+                    else if (!passing)
+                    {
+                        StartCoroutine(FreezePlayer());
+                    }
+                }
+                else if (doEnemyTurns && nearbyEnemies.Count > 0)
+                {
+                    if (currentActingEnemy == 0)
+                    {
+                        Player.movement.StopMovement(false);
+                    }
+
+                    nearbyEnemies[currentActingEnemy].turnCost--;
+                    //Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) <= 7 && 
+                    if (Player.stats.GetHealth() > 0 && nearbyEnemies[currentActingEnemy].turnCost <= 0)
+                    {
+                        //nearbyEnemies[currentActingEnemy].DoTurn();
+
+                        yield return nearbyEnemies[currentActingEnemy].StartCoroutine(nearbyEnemies[currentActingEnemy].DoTurn());
+                        
+                        PassToNextEnemy();
+                    }
+                    else
+                    {
+                        PassToNextEnemy();
+                    }
+                }
+                else
+                {
+                    SwitchTurn();
+                }
+            }
+        }        
+    }
+
+    IEnumerator SearchForEnemiesNearPlayer()
+    {
+        while(true)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+            var temp = Physics2D.OverlapCircleAll(Player.instance.transform.position, 7f, LayerMask.GetMask("Enemies"));
+
+            if (temp.Length > 0)
+            {
+                doEnemyTurns = true;
+                nearbyEnemies.Clear();
+                foreach (Collider2D collider in temp)
+                {
+                    nearbyEnemies.Add(collider.GetComponent<Enemy>());
+                }
+            }
+            else
+            {
+                doEnemyTurns = false;
+            }
+            
+        }        
     }
 
     public void PassToNextEnemy()
     {
-        if(Vector2.Distance(Player.instance.transform.position, enemies[currentActingEnemy].transform.position) < 10f)
+        
+        if(Vector2.Distance(Player.instance.transform.position, nearbyEnemies[currentActingEnemy].transform.position) < 7f)
         {
-            if(enemies[currentActingEnemy].statusEffects.Count > 0)
+            if(nearbyEnemies[currentActingEnemy].statusEffects.Count > 0)
             {
-                enemies[currentActingEnemy].TickStatusEffects();
+                nearbyEnemies[currentActingEnemy].TickStatusEffects();
             }           
 
             if(gases.Count > 0)
             {
-                var gasNearEnemy = Physics2D.OverlapCircle(enemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
+                var gasNearEnemy = Physics2D.OverlapCircle(nearbyEnemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
 
                 if (gasNearEnemy != null)
                 {
-                    gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(enemies[currentActingEnemy]);
+                    gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(nearbyEnemies[currentActingEnemy]);
                 }
             }           
         }
 
         currentActingEnemy++;
+        if (currentActingEnemy >= nearbyEnemies.Count)
+        {
+            SwitchTurn();
+        }
     }
 
     IEnumerator FreezePlayer()
@@ -124,9 +232,9 @@ public class TurnManager : MonoBehaviour
     public bool EnemiesAlerted()
     {
         var temp = false;
-        for(int i =0; i < enemies.Count; i++)
+        for(int i =0; i < nearbyEnemies.Count; i++)
         {
-            if(enemies[i].gameObject.activeInHierarchy && enemies[i].behaviourState == AIState.ALERTED)
+            if(nearbyEnemies[i].gameObject.activeInHierarchy && nearbyEnemies[i].behaviourState == AIState.ALERTED)
             {
                 temp = true;
                 break;
@@ -141,17 +249,20 @@ public class TurnManager : MonoBehaviour
         {
             Player.stats.TickStatusEffects();
 
-            var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
-
-            if (gasNearPlayer != null)
+            if(gases.Count > 0)
             {
-                gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
-            }
+                var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
 
-            for (int i = 0; i < gases.Count; i++)
-            {
-                gases[i].TickGas();
-            }
+                if (gasNearPlayer != null)
+                {
+                    gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
+                }
+
+                for (int i = 0; i < gases.Count; i++)
+                {
+                    gases[i].TickGas();
+                }
+            }            
         }
         if(playerExtraTurns == 0)
         {
@@ -170,16 +281,19 @@ public class TurnManager : MonoBehaviour
         {
             Player.stats.TickStatusEffects();
 
-            var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
-
-            if(gasNearPlayer != null)
+            if (gases.Count > 0)
             {
-                gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
-            }
+                var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
 
-            for (int i = 0; i < gases.Count; i++)
-            {
-                gases[i].TickGas();
+                if (gasNearPlayer != null)
+                {
+                    gasNearPlayer.GetComponent<GasTile>().parentGas.DoGasEffect(Player.stats);
+                }
+
+                for (int i = 0; i < gases.Count; i++)
+                {
+                    gases[i].TickGas();
+                }
             }
         }
         if (playerExtraTurns == 0)

@@ -50,10 +50,39 @@ public class Chest : InteractibleObject
         open = true;
         animator.SetBool("Open", open);
         decorativeObject.objectDesc = openDescription;
+        /**
+        var below = Physics2D.OverlapPoint(new Vector2(transform.position.x, transform.position.y - 1f), LayerMask.GetMask("Decor"));
+        var left = Physics2D.OverlapPoint(new Vector2(transform.position.x - 1, transform.position.y), LayerMask.GetMask("Decor"));
+        var above = Physics2D.OverlapPoint(new Vector2(transform.position.x, transform.position.y + 1f), LayerMask.GetMask("Decor"));
 
-        var pickup = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(transform.position.x, transform.position.y - 1f, 0), Quaternion.identity);
-        pickup.SetItem(chestItem);
-        pickup.PlaySoundOnInit(InventoryManager.instance.itemDropSound);
+        
+        if ((below != null && !below.CompareTag("Interactible")) || below == null)
+        {
+            var pickup = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(transform.position.x, transform.position.y - 1f, 0), Quaternion.identity);
+            pickup.SetItem(chestItem);
+            pickup.PlaySoundOnInit(InventoryManager.instance.itemDropSound);
+        }
+        else if ((left != null && !left.CompareTag("Interactible")) || left == null)
+        {
+            var pickup = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(transform.position.x - 1f, transform.position.y, 0), Quaternion.identity);
+            pickup.SetItem(chestItem);
+            pickup.PlaySoundOnInit(InventoryManager.instance.itemDropSound);
+        }
+        else if ((above != null && !above.CompareTag("Interactible")) || above == null)
+        {
+            var pickup = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(transform.position.x, transform.position.y + 1f, 0), Quaternion.identity);
+            pickup.SetItem(chestItem);
+            pickup.PlaySoundOnInit(InventoryManager.instance.itemDropSound);
+        }
+        else
+        {
+            var pickup = Instantiate(InventoryManager.instance.itemTemplate, new Vector3(transform.position.x + 1f, transform.position.y, 0), Quaternion.identity);
+            pickup.SetItem(chestItem);
+            pickup.PlaySoundOnInit(InventoryManager.instance.itemDropSound);
+        }
+        **/
+        InventoryManager.instance.AddItem(chestItem);
+        Player.actions.ShowItemText(chestItem.itemName);
 
         TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
