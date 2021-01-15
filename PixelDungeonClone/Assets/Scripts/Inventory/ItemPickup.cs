@@ -21,6 +21,7 @@ public class ItemPickup : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip dropSound, breakSound;
 
+    [SerializeField]
     private SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update
@@ -30,7 +31,7 @@ public class ItemPickup : MonoBehaviour
         {
             itemInside = new ItemInstance(itemPrefab, amount);
         }
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        //spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sprite = itemInside.itemImage;
         spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
         if (itemInside.stackable)

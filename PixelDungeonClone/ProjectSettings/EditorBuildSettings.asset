@@ -27,6 +27,18 @@ EditorBuildSettings:
     path: Assets/Scenes/Floor6.unity
     guid: eedaa276afdf28f43895259e7503274e
   - enabled: 1
+    path: Assets/Scenes/Floor7.unity
+    guid: 6c29d4097b721124d8104d8dec918410
+  - enabled: 1
+    path: Assets/Scenes/Floor8.unity
+    guid: eea15bac4872d6246acdd4b9a1912d84
+  - enabled: 1
+    path: Assets/Scenes/Floor9.unity
+    guid: b1f303290de020444a0b814f441a30d1
+  - enabled: 1
+    path: Assets/Scenes/Floor10.unity
+    guid: 14090c1bbd4ee3a43b749fe5f7069144
+  - enabled: 1
     path: Assets/Scenes/EndOfGame.unity
     guid: 54d200b3b7acbe841bab538b3cc736e6
   m_configObjects: {}

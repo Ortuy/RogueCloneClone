@@ -125,7 +125,7 @@ public class PlayerActions : MonoBehaviour
             bonus += tempbonus;
         }
 
-        target.TakeDamage(damage + Player.stats.dmgModifier + bonus, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position);
+        target.TakeDamage(damage + Player.stats.dmgModifier + bonus, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position, out bool dodged);
 
         //Ends all invisibility effects
         for(int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
@@ -253,7 +253,7 @@ public class PlayerActions : MonoBehaviour
         }        
     }
 
-    protected void ShowItemText(string text)
+    public void ShowItemText(string text)
     {
         var popup = Instantiate(popupText, transform.position, Quaternion.identity).GetComponent<TextMesh>();
         popup.text = text;

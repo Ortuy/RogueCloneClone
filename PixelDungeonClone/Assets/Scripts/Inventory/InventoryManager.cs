@@ -375,7 +375,7 @@ public class InventoryManager : MonoBehaviour
                 break;
             case 8:
                 var generator = FindObjectOfType<LevelGenerator>();
-                int roomID = Random.Range(0, generator.rooms.Count);
+                int roomID = Random.Range(0, generator.rooms.Count - generator.spRoomAmount);
 
                 int posX = Random.Range(generator.rooms[roomID].minCorner.x, generator.rooms[roomID].maxCorner.x + 1);
                 int posY = Random.Range(generator.rooms[roomID].minCorner.y, generator.rooms[roomID].maxCorner.y + 1);
@@ -612,7 +612,7 @@ public class InventoryManager : MonoBehaviour
             }
             else if (inventoryItems[slotID].type == ItemType.TORCH)
             {
-                Player.stats.AddStatusEffect(new TorchEffect(1, 96, Player.stats));
+                Player.stats.AddStatusEffect(new TorchEffect(2, 128, Player.stats));
                 SubtractItem(slotID);
                 Player.movement.PlaySound(torchSound);
                 potionUseFX[11].Play();
@@ -637,15 +637,15 @@ public class InventoryManager : MonoBehaviour
                 {
                     if (inventoryItems[3].cursed)
                     {
-                        foodmodifier -= 24 * inventoryItems[3].baseStatChangeMax;
+                        foodmodifier -= 32 * inventoryItems[3].baseStatChangeMax;
                     }
                     else
                     {
-                        foodmodifier += 24 * inventoryItems[3].baseStatChangeMax;
+                        foodmodifier += 32 * inventoryItems[3].baseStatChangeMax;
                     }
                 }
 
-                Player.stats.foodPoints += 192 + foodmodifier;
+                Player.stats.foodPoints += 256 + foodmodifier;
                 Player.actions.turnCost = 3;
                 SubtractItem(slotID);
                 UIManager.instance.ToggleInventory();

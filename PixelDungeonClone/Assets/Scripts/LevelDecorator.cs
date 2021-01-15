@@ -34,6 +34,10 @@ public class LevelDecorator : MonoBehaviour
     public GameObject tallVegetation;
     public GameObject smallVegetation;
 
+    public Tilemap tiledFloor;
+    public Tile[] tiledFloorTiles;
+    public Tile[] tiledFloorEdgeTiles;
+
     [Header("Other")]
     public Vector2Int minCorner;
     public Vector2Int maxCorner;
@@ -424,7 +428,7 @@ public class LevelDecorator : MonoBehaviour
                         Instantiate(extraLight, new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
                     }
                 }
-                else if(ground.GetTile(new Vector3Int(x, y, 0)) && Random.Range(0, 5) == 0 && floorDecorTiles.Length != 0)
+                else if(ground.GetTile(new Vector3Int(x, y, 0)) && Random.Range(0, 5) == 0 && floorDecorTiles.Length != 0 && !tiledFloor.GetTile(new Vector3Int(x, y, 0)))
                 {
                     floorDecor.SetTile(new Vector3Int(x, y, 0), floorDecorTiles[Random.Range(0, floorDecorTiles.Length)]);
                 }
@@ -461,11 +465,35 @@ public class LevelDecorator : MonoBehaviour
     {
         for(int i = 0; i < generator.rooms.Count; i++)
         {
+            if(generator.rooms[i].hasTiledFloor)
+            {
+                for (int x = generator.rooms[i].minCorner.x; x <= generator.rooms[i].maxCorner.x; x++)
+                {
+                    for (int y = generator.rooms[i].minCorner.y; y <= generator.rooms[i].maxCorner.y; y++)
+                    {
+                        if (x == generator.rooms[i].minCorner.x || x == generator.rooms[i].maxCorner.x || y == generator.rooms[i].minCorner.y || y == generator.rooms[i].maxCorner.y)
+                        {
+                            if (Random.Range(0, 3) == 0)
+                            {
+                                tiledFloor.SetTile(new Vector3Int(x, y, 0), tiledFloorEdgeTiles[Random.Range(0, tiledFloorEdgeTiles.Length)]);
+                                floorDecor.SetTile(new Vector3Int(x, y, 0), null);
+                            }
+                        }
+                        
+                        else
+                        {
+                            tiledFloor.SetTile(new Vector3Int(x, y, 0), tiledFloorTiles[Random.Range(0, tiledFloorTiles.Length)]);
+                            floorDecor.SetTile(new Vector3Int(x, y, 0), null);
+                        }
+                    }
+                }
+            }
+
             for(int x = generator.rooms[i].minCorner.x; x <= generator.rooms[i].maxCorner.x; x++)
             {
                 for (int y = generator.rooms[i].minCorner.y; y <= generator.rooms[i].maxCorner.y; y++)
                 {
-                    if(x == minCorner.x || x == maxCorner.x || y == minCorner.y || y == maxCorner.y)
+                    if(x == generator.rooms[i].minCorner.x || x == generator.rooms[i].maxCorner.x || y == generator.rooms[i].minCorner.y || y == generator.rooms[i].maxCorner.y)
                     {
                         if(Random.Range(0, 5) == 0)
                         {
@@ -491,7 +519,7 @@ public class LevelDecorator : MonoBehaviour
 
     private void PlaceSmallVegetation(Vector3 position)
     {        
-        if(!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")) && generator.ground.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0)))
+        if(!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")) && generator.ground.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0)) && !tiledFloor.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0)))
         {
             Instantiate(smallVegetation, position, Quaternion.identity);
         }
@@ -499,7 +527,7 @@ public class LevelDecorator : MonoBehaviour
 
     public void PlaceTallVegetation(Vector3 position)
     {
-        if (!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")))
+        if (!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")) && !tiledFloor.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0)))
         {
             Instantiate(tallVegetation, position, Quaternion.identity);
             if (smallVegetation != null)

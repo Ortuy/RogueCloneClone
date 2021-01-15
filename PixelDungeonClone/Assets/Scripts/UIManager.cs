@@ -379,7 +379,7 @@ public class UIManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnLevelLoaded;
     }
 
-    private string ParseItemDescription(string baseDesc, ItemInstance item)
+    public string ParseItemDescription(string baseDesc, ItemInstance item)
     {
         string output = item.description;
 

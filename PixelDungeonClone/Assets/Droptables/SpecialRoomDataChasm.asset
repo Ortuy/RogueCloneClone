@@ -22,5 +22,22 @@ MonoBehaviour:
   - {fileID: 5823713679009511530, guid: 3a69903aaa80b584187bac256bf87915, type: 3}
   - {fileID: 2351439653553691287, guid: fa6bef3738476134ab593c21a28e94ba, type: 3}
   - {fileID: 1363749335995110993, guid: 707abd189dffa7a42a8f1f3513d9144b, type: 3}
+  shopWeapons:
+  - {fileID: 11400000, guid: 1911f4b121654b2498f4863a422d29ef, type: 2}
+  - {fileID: 11400000, guid: 83a3a36c6dac021418b51d3ee925cdbb, type: 2}
+  - {fileID: 11400000, guid: 718a532e38f942948a1681aeb6ba6273, type: 2}
+  - {fileID: 11400000, guid: 135efcec2d2163244a3254a6d6334338, type: 2}
+  - {fileID: 11400000, guid: e172fe0a01b8ba543acb18125091e2cc, type: 2}
+  - {fileID: 11400000, guid: cffa54c268d9c764b9b4276728abfdc5, type: 2}
+  shopArmour:
+  - {fileID: 11400000, guid: 3d41994a85087de4cb2121e3c07576a5, type: 2}
+  - {fileID: 11400000, guid: aa448557eccaa2043bf1fcd8989370f5, type: 2}
+  shopExtras:
+  - {fileID: 11400000, guid: 87184e2c8734cc04db1fc0d8fc1d4963, type: 2}
+  - {fileID: 11400000, guid: 64202dba121d7b747b1a35dd5f810ff9, type: 2}
+  shopMerchant: {fileID: 3053577908881324374, guid: 7014d919c73907a4286aec7bed8dcb8a,
+    type: 3}
+  shopItemTemplate: {fileID: 2648560530860707339, guid: c7573e295769fa4479f07dc97b8b4bf8,
+    type: 3}
   minGold: 175
   maxGold: 250

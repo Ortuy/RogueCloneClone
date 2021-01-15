@@ -18,7 +18,7 @@ MonoBehaviour:
   itemImage: {fileID: 21300000, guid: ced9f3b2e64b9ba4b8b9aad0dfddf15a, type: 3}
   amount: 1
   strengthRequired: 0
-  stackable: 0
+  stackable: 1
   requiresStrength: 0
   type: 0
   statChangeMin: 0

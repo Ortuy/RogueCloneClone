@@ -12,6 +12,7 @@ public class LevelGenerator : MonoBehaviour
         public Vector2Int minCorner, maxCorner;
         public int xSize, ySize;
         public Vector2Int centerPoint;
+        public bool hasTiledFloor;
 
         public Room(Vector2Int min, Vector2Int max)
         {
@@ -19,6 +20,17 @@ public class LevelGenerator : MonoBehaviour
             maxCorner = max;
             xSize = max.x - min.x + 1;
             ySize = max.y - min.y + 1;
+            hasTiledFloor = false;
+            centerPoint = new Vector2Int(Mathf.FloorToInt(min.x + (xSize / 2)), Mathf.FloorToInt(min.y + (ySize / 2)));
+        }
+
+        public Room(Vector2Int min, Vector2Int max, bool tiled)
+        {
+            minCorner = min;
+            maxCorner = max;
+            xSize = max.x - min.x + 1;
+            ySize = max.y - min.y + 1;
+            hasTiledFloor = tiled;
             centerPoint = new Vector2Int(Mathf.FloorToInt(min.x + (xSize / 2)), Mathf.FloorToInt(min.y + (ySize / 2)));
         }
     }
@@ -77,7 +89,7 @@ public class LevelGenerator : MonoBehaviour
     private int specialRoomMinAmount, specialRoomMaxAmount;
     [SerializeField]
     private int specialRoomMinDistance, specialRoomMaxDistance;
-    private int spRoomAmount;
+    public int spRoomAmount;
 
     [Header("Room Content")]
     [SerializeField]
@@ -90,7 +102,9 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField]
     private Chest chestTemplate;
 
-    private List<Item> keysToGenerate = new List<Item>(); 
+    private List<Item> keysToGenerate = new List<Item>();
+    public bool generateShop;
+    private ItemInstance[] shopInventory = new ItemInstance[13];
 
     [Header("Minimap")]
     public GameObject tilemapGrid;
@@ -175,6 +189,18 @@ public class LevelGenerator : MonoBehaviour
         Random.InitState(seed);
     }
 
+    public void ShuffleShopInventory()
+    {
+        for (int i = shopInventory.Length - 1; i > 0; i--)
+        {
+            int rand = Random.Range(0, i + 1);
+
+            ItemInstance temp = shopInventory[i];
+            shopInventory[i] = shopInventory[rand];
+            shopInventory[rand] = temp;
+        }
+    }
+
     public void GenerateLevel(LevelLayoutType levelLayoutType)
     {
         layoutType = levelLayoutType;
@@ -209,6 +235,12 @@ public class LevelGenerator : MonoBehaviour
 
         DrawSpecialRooms();
 
+        if(generateShop)
+        {
+            DrawShop();
+            spRoomAmount++;
+        }
+
         minCorner = Vector2Int.zero;
         maxCorner = Vector2Int.zero;
 
@@ -233,14 +265,11 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        DrawWalls();
+        DrawWalls();       
 
-        PopulateWithItems();
-        PopulateWithEnemies();
-
-        width = maxCorner.x - minCorner.x + 1;
-        height = maxCorner.y - minCorner.y + 1;
-        pathfinding = new Pathfinding(width, height, new Vector3(minCorner.x, minCorner.y), ground);
+        width = maxCorner.x - minCorner.x + 1 + 12;
+        height = maxCorner.y - minCorner.y + 1 + 12;
+        pathfinding = new Pathfinding(width, height, new Vector3(minCorner.x - 6, minCorner.y - 6), ground);
 
         float currentMaxDistance = 0;
         int currentCandidateRoom = 1;
@@ -259,6 +288,9 @@ public class LevelGenerator : MonoBehaviour
         int rY = Random.Range(rooms[currentCandidateRoom].minCorner.y + 1, rooms[currentCandidateRoom].maxCorner.y);
         Instantiate(exit, new Vector3(rX + 0.5f, rY + 0.5f), Quaternion.identity);
         checkerboard.SetTile(new Vector3Int(rX, rY, 0), null);
+
+        PopulateWithItems();
+        PopulateWithEnemies();
 
         rX = Random.Range(rooms[0].minCorner.x + 1, rooms[0].maxCorner.x);
         rY = Random.Range(rooms[0].minCorner.y + 1, rooms[0].maxCorner.y);
@@ -346,7 +378,12 @@ public class LevelGenerator : MonoBehaviour
 
                 if (!test)
                 {
-                    DrawRoom(startPoint, roomX, roomY);
+                    bool tiled = false;
+                    if(spRoomIDs[i] == 2 || spRoomIDs[i] == 3 || spRoomIDs[i] == 4)
+                    {
+                        tiled = true;
+                    }
+                    DrawRoom(startPoint, roomX, roomY, tiled);
                     var currentRoom = rooms[rooms.Count - 1];
 
                     switch (spRoomIDs[i])
@@ -449,7 +486,15 @@ public class LevelGenerator : MonoBehaviour
                             {
                                 var posX = Random.Range(startPoint.x, startPoint.x + roomX);
                                 var posY = Random.Range(startPoint.y, startPoint.y + roomY);
-                                SpawnManager.instance.SpawnEnemy(Random.Range(0, 5), new Vector2(posX + 0.5f, posY + 0.5f));
+                                if(GameManager.instance.currentFloor < 6)
+                                {
+                                    SpawnManager.instance.SpawnEnemy(Random.Range(4, 8), new Vector2(posX + 0.5f, posY + 0.5f));
+                                }
+                                else
+                                {
+                                    SpawnManager.instance.SpawnEnemy(Random.Range(7, 10), new Vector2(posX + 0.5f, posY + 0.5f));
+                                }
+                                
                             }
 
                             if(above)
@@ -514,6 +559,115 @@ public class LevelGenerator : MonoBehaviour
                     candidateClusters.RemoveAt(randomCluster);
                     break;
                 }
+            }
+        }
+    }
+
+    private void DrawShop()
+    {
+        bool roomPlaceFound = false;
+
+        var startRoom = rooms[0];
+
+        var count = 500;
+
+        while (!roomPlaceFound || count > 0)
+        {
+            count--;
+            var dirSphere = Random.onUnitSphere;
+            var direction = new Vector2(dirSphere.x, dirSphere.y).normalized;
+
+            var distance = Random.Range(specialRoomMinDistance/2, specialRoomMaxDistance + 1);
+            var startPoint = new Vector2Int(Mathf.RoundToInt(startRoom.centerPoint.x + (direction.x * distance)), Mathf.RoundToInt(startRoom.centerPoint.y + (direction.y * distance)));
+
+            var roomX = 7;
+            var roomY = 5;
+
+            Debug.Log("Trying Shop...");
+
+            Debug.DrawLine(new Vector2(startPoint.x - 1, startPoint.y - 1), new Vector2(startPoint.x + roomX + 1, startPoint.y - 1), Color.cyan, 500);
+            Debug.DrawLine(new Vector2(startPoint.x + roomX + 1, startPoint.y - 1), new Vector2(startPoint.x + roomX + 1, startPoint.y + roomY + 1), Color.cyan, 500);
+            Debug.DrawLine(new Vector2(startPoint.x + roomX + 1, startPoint.y + roomY + 1), new Vector2(startPoint.x - 1, startPoint.y + roomY + 1), Color.cyan, 500);
+            Debug.DrawLine(new Vector2(startPoint.x - 1, startPoint.y - 1), new Vector2(startPoint.x - 1, startPoint.y + roomY + 1), Color.cyan, 500);
+
+            bool test;
+
+            test = CheckForGround(new Vector2Int(startPoint.x - 1, startPoint.y - 1), new Vector2Int(startPoint.x + roomX + 1, startPoint.y + roomY + 1));
+
+            Debug.Log(test);
+
+            if (!test)
+            {
+                DrawRoom(startPoint, roomX, roomY, true);
+                var currentRoom = rooms[rooms.Count - 1];
+
+                
+                for(int i = 0; i < 4; i++)
+                {
+                    if(Random.Range(0, 2) == 0)
+                    {
+                        shopInventory[i] = new ItemInstance(IdentifyingMenager.instance.potions[0], 1);
+                    }
+                    else
+                    {
+                        shopInventory[i] = new ItemInstance(IdentifyingMenager.instance.potions[Random.Range(2, IdentifyingMenager.instance.potions.Length)], 1);
+                    }
+                }
+                for (int i = 0; i < 4; i++)
+                {
+                    if (Random.Range(0, 2) == 0)
+                    {
+                        shopInventory[i+4] = new ItemInstance(IdentifyingMenager.instance.scrolls[0], 1);
+                    }
+                    else
+                    {
+                        shopInventory[i+4] = new ItemInstance(IdentifyingMenager.instance.scrolls[Random.Range(2, IdentifyingMenager.instance.scrolls.Length)], 1);
+                    }
+                }
+                shopInventory[8] = new ItemInstance(IdentifyingMenager.instance.rings[Random.Range(0, IdentifyingMenager.instance.rings.Length)], 1);
+                shopInventory[9] = new ItemInstance(specialRoomData.shopExtras[0], 1);
+                shopInventory[10] = new ItemInstance(specialRoomData.shopExtras[1], 1);
+                shopInventory[11] = new ItemInstance(specialRoomData.shopWeapons[Random.Range(0, specialRoomData.shopWeapons.Length)], 1);
+                shopInventory[12] = new ItemInstance(specialRoomData.shopArmour[Random.Range(0, specialRoomData.shopArmour.Length)], 1);
+                ShuffleShopInventory();
+
+                
+                if(currentRoom.centerPoint.y <= startRoom.centerPoint.y)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.minCorner.x + 0.5f, currentRoom.minCorner.y + 2.5f + i), Quaternion.identity).shopItem = shopInventory[i];
+                    }
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.maxCorner.x + 0.5f, currentRoom.minCorner.y + 2.5f + i), Quaternion.identity).shopItem = shopInventory[i + 3];
+                    }
+                    for (int i = 0; i < 7; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.minCorner.x + 0.5f + i, currentRoom.minCorner.y + 1.5f), Quaternion.identity).shopItem = shopInventory[i + 6];
+                    }
+                    Instantiate(specialRoomData.shopMerchant, new Vector3(currentRoom.centerPoint.x + 0.5f, currentRoom.centerPoint.y + 1.5f), Quaternion.identity);
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.minCorner.x + 0.5f, currentRoom.minCorner.y + 1.5f + i), Quaternion.identity).shopItem = shopInventory[i];
+                    }
+                    for (int i = 0; i < 3; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.maxCorner.x + 0.5f, currentRoom.minCorner.y + 1.5f + i), Quaternion.identity).shopItem = shopInventory[i + 3];
+                    }
+                    for (int i = 0; i < 7; i++)
+                    {
+                        Instantiate(specialRoomData.shopItemTemplate, new Vector3(currentRoom.minCorner.x + 0.5f + i, currentRoom.maxCorner.y + 0.5f), Quaternion.identity).shopItem = shopInventory[i + 6];
+                    }
+                    Instantiate(specialRoomData.shopMerchant, new Vector3(currentRoom.centerPoint.x + 0.5f, currentRoom.centerPoint.y + 0.5f), Quaternion.identity);
+                }
+                
+
+                DrawShopCorridor(currentRoom, startRoom);
+                break;
             }
         }
     }
@@ -599,10 +753,11 @@ public class LevelGenerator : MonoBehaviour
             }
         }
 
-        var objectAbove = Physics2D.OverlapPoint(new Vector3(position.x, position.y + 1f), LayerMask.GetMask("Decor"));
+        //var objectAbove = Physics2D.OverlapPoint(new Vector3(position.x, position.y + 1f), LayerMask.GetMask("Decor"));
+        //var objectBelow = Physics2D.OverlapPoint(new Vector3(position.x, position.y - 1f), LayerMask.GetMask("Decor"));
         var objectHere = Physics2D.OverlapPoint(position, LayerMask.GetMask("Decor"));
         if (canBeChest
-            && ((objectAbove != null && !objectAbove.CompareTag("Interactible")) || objectAbove == null)
+            /**&& ((objectAbove != null && !objectAbove.CompareTag("Interactible")) || objectAbove == null)**/
             && ((objectHere != null && !objectHere.CompareTag("Interactible")) || objectHere == null))
         {
             Chest chest = Instantiate(chestTemplate, position, Quaternion.identity);
@@ -737,7 +892,7 @@ public class LevelGenerator : MonoBehaviour
         return 1 + roll0 + roll1 + roll2;
     }
 
-    private void DrawRoom(Vector2Int startCorner, int xSize, int ySize, out bool success)
+    private void DrawRoom(Vector2Int startCorner, int xSize, int ySize, bool tiled, out bool success)
     {
         success = true;
         for (int x = 0; x < xSize; x++)
@@ -761,11 +916,11 @@ public class LevelGenerator : MonoBehaviour
                     ground.SetTile(new Vector3Int(startCorner.x + x, startCorner.y + y, 0), groundTileBase);
                 }
             }
-            rooms.Add(new Room(startCorner, new Vector2Int(startCorner.x - 1 + xSize, startCorner.y - 1 + ySize)));
+            rooms.Add(new Room(startCorner, new Vector2Int(startCorner.x - 1 + xSize, startCorner.y - 1 + ySize), tiled));
         }       
     }
 
-    private void DrawRoom(Vector2Int startCorner, int xSize, int ySize)
+    private void DrawRoom(Vector2Int startCorner, int xSize, int ySize, bool tiled)
     {
         for (int x = 0; x < xSize; x++)
         {
@@ -774,7 +929,7 @@ public class LevelGenerator : MonoBehaviour
                 ground.SetTile(new Vector3Int(startCorner.x + x, startCorner.y + y, 0), groundTileBase);
             }
         }
-        rooms.Add(new Room(startCorner, new Vector2Int(startCorner.x - 1 + xSize, startCorner.y - 1 + ySize)));
+        rooms.Add(new Room(startCorner, new Vector2Int(startCorner.x - 1 + xSize, startCorner.y - 1 + ySize), tiled));
     }
 
     //Make sure that the initial cluster room always has space
@@ -784,7 +939,7 @@ public class LevelGenerator : MonoBehaviour
 
         int xSize = Random.Range(minRoomSize, maxRoomSize + 1);
         int ySize = Random.Range(minRoomSize, maxRoomSize + 1);
-        DrawRoom(startCorner, xSize, ySize);
+        DrawRoom(startCorner, xSize, ySize, false);
 
         int oldSide = Random.Range(0, 4);
 
@@ -808,7 +963,7 @@ public class LevelGenerator : MonoBehaviour
                     startCorner = new Vector2Int(startCorner.x, startCorner.y + 2 + ySize);
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
-                    DrawRoom(startCorner, xSize, ySize);
+                    DrawRoom(startCorner, xSize, ySize, false);
                     var xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 1, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y - 2, 0), groundTileBase);
@@ -820,7 +975,7 @@ public class LevelGenerator : MonoBehaviour
                     oldSize = ySize;
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
-                    DrawRoom(startCorner, xSize, ySize);
+                    DrawRoom(startCorner, xSize, ySize, false);
                     var yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
                     ground.SetTile(new Vector3Int(startCorner.x - 1, startCorner.y + yTemp, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x - 2, startCorner.y + yTemp, 0), groundTileBase);
@@ -832,7 +987,7 @@ public class LevelGenerator : MonoBehaviour
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
                     startCorner = new Vector2Int(startCorner.x, startCorner.y - 2 - ySize);                    
-                    DrawRoom(startCorner, xSize, ySize);
+                    DrawRoom(startCorner, xSize, ySize, false);
                     xTemp = Random.Range(0, Mathf.Min(oldSize, xSize));
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xTemp, startCorner.y + ySize + 1, 0), groundTileBase);
@@ -844,7 +999,7 @@ public class LevelGenerator : MonoBehaviour
                     xSize = Random.Range(minRoomSize, maxRoomSize + 1);
                     ySize = Random.Range(minRoomSize, maxRoomSize + 1);
                     startCorner = new Vector2Int(startCorner.x - 2 - xSize, startCorner.y);
-                    DrawRoom(startCorner, xSize, ySize);
+                    DrawRoom(startCorner, xSize, ySize, false);
                     yTemp = Random.Range(0, Mathf.Min(oldSize, ySize));
                     ground.SetTile(new Vector3Int(startCorner.x + xSize, startCorner.y + yTemp, 0), groundTileBase);
                     ground.SetTile(new Vector3Int(startCorner.x + xSize + 1, startCorner.y + yTemp, 0), groundTileBase);
@@ -1054,6 +1209,118 @@ public class LevelGenerator : MonoBehaviour
             }
 
             ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+
+            if (Random.Range(0, 6) == 0)
+            {
+                moveX = !moveX;
+            }
+
+            if (distanceX == 0)
+            {
+                moveX = false;
+                if (distanceY == 0)
+                {
+                    roomReached = true;
+                }
+            }
+            if (distanceY == 0)
+            {
+                moveX = true;
+            }
+            safeguard--;
+            if (safeguard == 0)
+            {
+                Debug.LogError("Corridor fuckup (room0 - " + room0.centerPoint + " ,room1 - " + room1.centerPoint + ")");
+                Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
+                break;
+            }
+        }
+    }
+
+    private void DrawShopCorridor(Room room0, Room room1)
+    {
+        //Basic algorithm
+        //TODO a better one
+        bool roomReached = false;
+
+        //Debug.DrawLine(new Vector3(room1.centerPoint.x, room1.centerPoint.y), new Vector3(room0.centerPoint.x, room0.centerPoint.y), Color.cyan, 1000);
+
+        //Technically there should be +1/-1 here, but it shouldn't matter
+        int distanceX = room1.centerPoint.x - room0.centerPoint.x;
+        int distanceY = room1.centerPoint.y - room0.centerPoint.y;
+
+        float dirY = Mathf.Sign(distanceY);
+
+
+
+        //This line may make something crash and burn :)
+        Vector2Int direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
+
+        distanceX = Mathf.Abs(distanceX);
+        distanceY = Mathf.Abs(distanceY);
+
+        int startDistanceX = distanceX;
+        int startDistanceY = distanceY;
+
+        bool moveX = true;
+
+        int currentX = room0.centerPoint.x;
+        int currentY = room0.centerPoint.y;
+
+        for (int i = 0; i < room0.ySize; i++)
+        {
+            currentY += Mathf.FloorToInt(dirY);            
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+            decorator.tiledFloor.SetTile(new Vector3Int(currentX, currentY, 0), decorator.tiledFloorTiles[Random.Range(0, decorator.tiledFloorTiles.Length)]);
+        }
+        for (int i = 0; i < 2; i++)
+        {
+            currentX += direction.x;
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+            decorator.tiledFloor.SetTile(new Vector3Int(currentX, currentY, 0), decorator.tiledFloorTiles[Random.Range(0, decorator.tiledFloorTiles.Length)]);
+        }
+
+        var temp = new Vector3Int(currentX, currentY, 0);
+        distanceX = room1.centerPoint.x - temp.x;
+        distanceY = room1.centerPoint.y - temp.y;
+
+        direction = new Vector2Int(Mathf.RoundToInt(Mathf.Sign(distanceX)), Mathf.RoundToInt(Mathf.Sign(distanceY)));
+
+        distanceX = Mathf.Abs(distanceX);
+        distanceY = Mathf.Abs(distanceY);
+
+        currentX = temp.x;
+        currentY = temp.y;
+
+        var min = new Vector2Int(Mathf.Min(room0.centerPoint.x, room1.centerPoint.x, temp.x), Mathf.Min(room0.centerPoint.y, room1.centerPoint.y, temp.y));
+
+        var max = new Vector2Int(Mathf.Max(room0.centerPoint.x, room1.centerPoint.x, temp.x), Mathf.Max(room0.centerPoint.y, room1.centerPoint.y, temp.y));
+
+        Corridor corridor = new Corridor(min, max);
+
+        corridors.Add(corridor);
+
+        int safeguard = 100;
+
+        while (!roomReached)
+        {
+            if (moveX)
+            {
+                currentX += direction.x;
+                distanceX--;
+            }
+            else
+            {
+                currentY += direction.y;
+                distanceY--;
+            }
+
+            ground.SetTile(new Vector3Int(currentX, currentY, 0), groundTileBase);
+            if(distanceX > room1.xSize / 2 || distanceY > room1.ySize / 2)
+            {
+                decorator.tiledFloor.SetTile(new Vector3Int(currentX, currentY, 0), decorator.tiledFloorTiles[Random.Range(0, decorator.tiledFloorTiles.Length)]);
+            }
+           
 
             if (Random.Range(0, 6) == 0)
             {

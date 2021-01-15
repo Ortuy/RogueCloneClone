@@ -395,8 +395,8 @@ MonoBehaviour:
   maxDmgBase: 6
   minDefence: 0
   maxDefence: 2
-  minBaseDamage: 4
-  maxBaseDamage: 6
+  minBaseDamage: 1
+  maxBaseDamage: 3
   immune: 0
   invisible: 0
   dmgModifier: 0
@@ -416,7 +416,12 @@ MonoBehaviour:
   behaviourState: 0
   awakeRange: 4
   alertRange: 7
+  attackRange: 1.5
+  dealsStatus: 1
+  statusID: 2
+  statusDuration: 2
   turnCost: 0
+  attackCost: 0
   hitPlayer: {fileID: 8697698308191073832}
   hitSound: {fileID: 8300000, guid: 73388d8b86b46754db99a6de37695c52, type: 3}
   trueDamageSound: {fileID: 8300000, guid: e22d55c828c8a394682f9356f80a6dee, type: 3}
@@ -435,6 +440,9 @@ MonoBehaviour:
   dropsGold: 1
   minGoldDrop: 10
   maxGoldDrop: 25
+  spawnSpirit: 0
+  isByAltar: 0
+  nearbyAltarArea: {fileID: 0}
 --- !u!50 &6977649515691734084
 Rigidbody2D:
   serializedVersion: 4

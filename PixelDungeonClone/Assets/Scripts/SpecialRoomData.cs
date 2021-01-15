@@ -9,5 +9,11 @@ public class SpecialRoomData : ScriptableObject
     public Item[] keys;
     public GameObject[] roomContents;
 
+    public Item[] shopWeapons;
+    public Item[] shopArmour;
+    public Item[] shopExtras;
+    public GameObject shopMerchant;
+    public ShopItem shopItemTemplate;
+
     public int minGold, maxGold;
 }

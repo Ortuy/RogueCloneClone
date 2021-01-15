@@ -26,3 +26,4 @@ MonoBehaviour:
   statChangeMax: 0
   effectID: 0
   identified: 1
+  goldPrice: 100
