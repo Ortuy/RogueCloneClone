@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
 
     public Button pickUpButton;
     public Image itemPickupImage;
-    public Button useButton, throwButton, dropButton, mapButton;
+    public Button useButton, throwButton, dropButton, mapButton, sellButton;
 
     public GameObject itemMenu;
     public Text itemMenuText, itemDescriptionText;
@@ -68,6 +68,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private Text interactionNametext, interactionDescText, interactionButtonText;
     public Button interactionButton;
+
+    [SerializeField]
+    private GameObject optionsPanel, controlsPanel;
 
     // Start is called before the first frame update
     void Start()
@@ -118,8 +121,40 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void ToggleOptions()
+    {
+        if(optionsPanel.activeInHierarchy)
+        {
+            optionsPanel.gameObject.SetActive(false);
+            TogglePauseMenu();
+        }
+        else
+        {
+            pauseMenu.gameObject.SetActive(false);
+            optionsPanel.gameObject.SetActive(true);
+        }
+    }
+
+    public void ToggleControls()
+    {
+        if (controlsPanel.activeInHierarchy)
+        {
+            controlsPanel.gameObject.SetActive(false);
+            TogglePauseMenu();
+        }
+        else
+        {
+            pauseMenu.gameObject.SetActive(false);
+            controlsPanel.gameObject.SetActive(true);
+        }
+    }
+
     public void PlaySound(AudioClip clip)
     {
+        if(audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
         audioSource.clip = clip;
         audioSource.Play();
     }
@@ -153,6 +188,7 @@ public class UIManager : MonoBehaviour
         if(inventory.activeInHierarchy)
         {
             inventory.SetActive(false);
+            InventoryManager.instance.sellMode = false;
             MouseBlocker.mouseBlocked = false;
         }
         else
@@ -211,19 +247,45 @@ public class UIManager : MonoBehaviour
             {
                 itemMenu.SetActive(true);
                 StartCoroutine(RefreshItemMenu());
-                if (slotID >= 4)
+                itemMenu.GetComponent<ItemMenu>().slotID = slotID;
+                if (InventoryManager.instance.sellMode)
+                {
+                    useButton.gameObject.SetActive(false);
+                    throwButton.gameObject.SetActive(false);
+                    dropButton.gameObject.SetActive(false);
+                    if(slotID >= 4)
+                    {
+                        sellButton.gameObject.SetActive(true);
+
+                        var price = InventoryManager.instance.inventoryItems[slotID].goldPrice / 5;
+                        if (!InventoryManager.instance.inventoryItems[slotID].identified)
+                        {
+                            price = Mathf.RoundToInt(price / 1.5f);
+                        }
+                        else if (InventoryManager.instance.inventoryItems[slotID].cursed)
+                        {
+                            price = Mathf.RoundToInt(price / 2f);
+                        }
+
+                        sellButton.GetComponentInChildren<Text>().text = "Sell For: " + price;
+                    }
+                    
+                }               
+                else if (slotID >= 4)
                 {
                     throwButton.gameObject.SetActive(true);
                     dropButton.gameObject.SetActive(true);
                     useButton.GetComponentInChildren<Text>().text = "Equip";
+                    sellButton.gameObject.SetActive(false);
                 }
                 else
                 {
                     throwButton.gameObject.SetActive(false);
                     dropButton.gameObject.SetActive(false);                   
                     useButton.GetComponentInChildren<Text>().text = "Unequip";
+                    sellButton.gameObject.SetActive(false);
                 }
-                itemMenu.GetComponent<ItemMenu>().slotID = slotID;
+                
                 itemMenuText.text = InventoryManager.instance.inventoryItems[slotID].itemName;
 
                 itemDescriptionText.text = ParseItemDescription(InventoryManager.instance.inventoryItems[slotID].description, InventoryManager.instance.inventoryItems[slotID]);              
@@ -327,9 +389,12 @@ public class UIManager : MonoBehaviour
 
     public void TogglePauseMenu()
     {
-        if (pauseMenu.activeInHierarchy)
+        if (pauseMenu.activeInHierarchy || controlsPanel.activeInHierarchy || optionsPanel.activeInHierarchy)
         {
             pauseMenu.SetActive(false);
+            controlsPanel.SetActive(false);
+            optionsPanel.SetActive(false);
+            MouseBlocker.mouseBlocked = false;
             UnmuffleAmbiance();
             Time.timeScale = 1;
         }
@@ -458,6 +523,7 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            PlayButtonSound(false);
             interactionMenu.gameObject.SetActive(true);
             interactionButton.interactable = true;
             Debug.Log(usedInteractible);

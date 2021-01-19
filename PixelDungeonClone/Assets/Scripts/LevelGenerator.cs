@@ -327,7 +327,7 @@ public class LevelGenerator : MonoBehaviour
 
         for (int i = 0; i < spRoomAmount; i++)
         {
-            int randomCluster = Random.Range(1, candidateClusters.Count);
+            int randomCluster = Random.Range(0, candidateClusters.Count);
             bool roomPlaceFound = false;
 
             var clust = candidateClusters[randomCluster];
@@ -480,7 +480,8 @@ public class LevelGenerator : MonoBehaviour
                             Instantiate(specialRoomData.roomContents[1], new Vector3(rooms[rooms.Count - 1].centerPoint.x + 0.5f, rooms[rooms.Count - 1].centerPoint.y + 0.5f), Quaternion.identity);
                             break;
                         case 5:
-                            amount = Random.Range(2, 4);
+                            //amount = Random.Range(1, 3);
+                            amount = 1;
 
                             for (int j = 0; j < amount; j++)
                             {
@@ -488,11 +489,11 @@ public class LevelGenerator : MonoBehaviour
                                 var posY = Random.Range(startPoint.y, startPoint.y + roomY);
                                 if(GameManager.instance.currentFloor < 6)
                                 {
-                                    SpawnManager.instance.SpawnEnemy(Random.Range(4, 8), new Vector2(posX + 0.5f, posY + 0.5f));
+                                    SpawnManager.instance.SpawnEnemy(Random.Range(4, 6), new Vector2(posX + 0.5f, posY + 0.5f));
                                 }
                                 else
                                 {
-                                    SpawnManager.instance.SpawnEnemy(Random.Range(7, 10), new Vector2(posX + 0.5f, posY + 0.5f));
+                                    SpawnManager.instance.SpawnEnemy(Random.Range(8, 10), new Vector2(posX + 0.5f, posY + 0.5f));
                                 }
                                 
                             }
@@ -561,6 +562,7 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+        GameManager.instance.guaranteedSpecialRoom = -1;
     }
 
     private void DrawShop()
@@ -792,8 +794,19 @@ public class LevelGenerator : MonoBehaviour
             
         }
 
-        dropTable.guaranteedItems.Add(IdentifyingMenager.instance.potions[Random.Range(0, 2)]);
-        dropTable.guaranteedItems.Add(IdentifyingMenager.instance.scrolls[Random.Range(0, 2)]);
+        bool giveExtras = false;
+        if (GameManager.instance.currentFloor % 2 == 1)
+        {
+            giveExtras = true;
+        }
+
+        if(giveExtras)
+        {
+            var extraPotion = (Random.Range(0, 3) == 0) ? 1 : 0;
+            var extraScroll = (Random.Range(0, 3) == 0) ? 1 : 0;
+            dropTable.guaranteedItems.Add(IdentifyingMenager.instance.potions[extraPotion]);
+            dropTable.guaranteedItems.Add(IdentifyingMenager.instance.scrolls[extraScroll]);
+        }        
 
         for (int i = 0; i < dropTable.guaranteedItems.Count; i++)
         {
@@ -806,8 +819,11 @@ public class LevelGenerator : MonoBehaviour
             itemDrop.SetItem(new ItemInstance(dropTable.guaranteedItems[i], 1));
         }
 
-        dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
-        dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
+        if (giveExtras)
+        {
+            dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
+            dropTable.guaranteedItems.RemoveAt(dropTable.guaranteedItems.Count - 1);
+        }            
 
         for (int i = 0; i < keysToGenerate.Count; i++)
         {
@@ -1185,6 +1201,11 @@ public class LevelGenerator : MonoBehaviour
 
         int safeguard = 100;
 
+        if(distanceX == 0)
+        {
+            moveX = false;
+        }
+
         while (!roomReached)
         {
             if (moveX)
@@ -1301,6 +1322,11 @@ public class LevelGenerator : MonoBehaviour
         corridors.Add(corridor);
 
         int safeguard = 100;
+
+        if (distanceX == 0)
+        {
+            moveX = false;
+        }
 
         while (!roomReached)
         {
@@ -1540,11 +1566,11 @@ public class LevelGenerator : MonoBehaviour
             minimapCamera.orthographicSize = (width + 2) / (2 * minimapCamera.aspect);
         }
 
-        int roomID = Random.Range(roomClusters[0].Count, rooms.Count - 1);
+        int roomID = Random.Range(roomClusters[0].Count, rooms.Count - spRoomAmount);
 
         float posX = Random.Range(rooms[roomID].minCorner.x + 1, rooms[roomID].maxCorner.x);
         float posY = Random.Range(rooms[roomID].minCorner.y + 1, rooms[roomID].maxCorner.y);
 
-        Instantiate(mapPickup, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity);
+        Instantiate(mapPickup, new Vector3(posX + 0.5f, posY + 0.5f), Quaternion.identity).transform.GetChild(2).GetComponent<SpriteRenderer>().sortingOrder = (-3 * Mathf.FloorToInt(posY + 1f)) + 1;
     }
 }

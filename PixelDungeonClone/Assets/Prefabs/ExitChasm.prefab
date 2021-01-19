@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6334375169962080849}
   - component: {fileID: 5713198309748566241}
   - component: {fileID: -7858445154196327096}
-  - component: {fileID: -8168884636461169380}
+  - component: {fileID: 3000855851343155933}
   m_Layer: 13
   m_Name: ExitChasm
   m_TagString: Interactible
@@ -132,7 +132,8 @@ AudioSource:
   m_GameObject: {fileID: 6334375169962080854}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 99dfe4da0975c7c4f9b9ae202e8a7730, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -219,7 +220,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &-8168884636461169380
+--- !u!114 &3000855851343155933
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -228,11 +229,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6334375169962080854}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Gaping Hole
-  objectDesc: A breach in the ground, with a ladder leading deeper into the unknown.
+  objectDesc: A deep, dark abyss leading into further depths of The Dungeon.
 --- !u!1 &7020899948836586924
 GameObject:
   m_ObjectHideFlags: 0

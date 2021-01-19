@@ -95,7 +95,8 @@ public class InputManager : MonoBehaviour
                 Pathfinding.instance.GetGrid().GetXY(mousePos, out int x, out int y);
                 clickFX.transform.position = new Vector2(Pathfinding.instance.GetGrid().GetWorldPosition(x, y).x + 0.5f, Pathfinding.instance.GetGrid().GetWorldPosition(x, y).y + 0.5f);
                 clickFX.Play();
-                Player.actions.QueueAttack(false);
+                //Player.actions.QueueAttack(false);
+                Player.actions.ClearQueuedActions();
                 Player.movement.QueueMovement(mousePos);
             }
 
@@ -188,7 +189,7 @@ public class InputManager : MonoBehaviour
             {
                 var goldObject = examinedItem.GetComponent<DecorativeObject>();
 
-                UIManager.instance.ShowExaminePopup(Input.mousePosition, goldObject.objectName, goldObject.objectDesc.Replace("$num", goldObject.GetComponent<GoldPickup>().amount.ToString()));
+                UIManager.instance.ShowExaminePopup(Input.mousePosition, goldObject.objectName, goldObject.objectDesc.Replace("$g", goldObject.GetComponent<GoldPickup>().amount.ToString()));
             }
             else
             {

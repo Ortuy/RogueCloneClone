@@ -1357,9 +1357,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4601721859472741853}
   - component: {fileID: 4601721859472741854}
-  - component: {fileID: 3779601546251810555}
-  - component: {fileID: 5470410412863943332}
   - component: {fileID: 2042439875023550908}
+  - component: {fileID: 7161652551225270607}
+  - component: {fileID: 869951612862080064}
+  - component: {fileID: 8598684311395576976}
   m_Layer: 13
   m_Name: AlchemyTableChasm
   m_TagString: Interactible
@@ -1395,7 +1396,7 @@ Animator:
   m_GameObject: {fileID: 4601721859472741852}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 62723a5bebdb1894089a89c38a6f6f19, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1404,7 +1405,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &3779601546251810555
+--- !u!58 &2042439875023550908
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4601721859472741852}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.2
+--- !u!114 &7161652551225270607
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1413,13 +1430,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4601721859472741852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c01610e107cc2b48b4a92ee5468990b, type: 3}
+  m_Script: {fileID: 11500000, guid: cbd8380a7fd8e7f41b1a21084a5e588e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactionName: Alchemical Device
-  interactionDescription: Some mysterious stranger left half-prepared mixtures behind.
-    You might be able to salvage something out of the mess. $nDo you want to mix
-    three potions to create one of your choice?
+  interactionDescription: Someone left behind a bizzare mixture of alchemical substances.
+    Perhaps you could salvage something out of this mess. $nDo you want to combine
+    three of your potions to create one of your choice?
   buttonText: Brew
   choiceMenu: {fileID: 3814817105185866167}
   choiceTexts:
@@ -1451,7 +1468,8 @@ MonoBehaviour:
   requiredType: 3
   useFX: {fileID: 0}
   normalFX: {fileID: 0}
---- !u!114 &5470410412863943332
+  useSound: {fileID: 8300000, guid: 491d81cb80d30134da09fdce4c5841cd, type: 3}
+--- !u!114 &869951612862080064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1460,27 +1478,135 @@ MonoBehaviour:
   m_GameObject: {fileID: 4601721859472741852}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Alchemical Device
   objectDesc: Fire crackles under curious concoctions. Who could have left them here?
---- !u!58 &2042439875023550908
-CircleCollider2D:
+--- !u!82 &8598684311395576976
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4601721859472741852}
   m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.2
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 26aedc856a1217b44bcb8ca64d4c3f89, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.8
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 40
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.25716552
+      value: 1.0028877
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.30412596
+      value: 0.5144348
+      inSlope: -6.4794216
+      outSlope: -6.4794216
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.16765486
+    - serializedVersion: 3
+      time: 0.42948
+      value: 0.16915894
+      inSlope: -1.0029086
+      outSlope: -1.0029086
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.37429035
+      outWeight: 0.31328952
+    - serializedVersion: 3
+      time: 0.6388977
+      value: 0.03262329
+      inSlope: -0.15631224
+      outSlope: -0.15631224
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003988
+      outSlope: -0.10003988
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5096923679151872142
 GameObject:
   m_ObjectHideFlags: 0

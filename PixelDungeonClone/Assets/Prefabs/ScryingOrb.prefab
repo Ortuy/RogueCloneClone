@@ -2313,6 +2313,7 @@ GameObject:
   - component: {fileID: 7892257261795369496}
   - component: {fileID: 774281760889751280}
   - component: {fileID: 1284736060081781533}
+  - component: {fileID: 9034216774575829853}
   m_Layer: 13
   m_Name: ScryingOrb
   m_TagString: Interactible
@@ -2424,6 +2425,7 @@ MonoBehaviour:
   - Wishing Well
   useFX: {fileID: 2821062520021087860}
   normalFX: {fileID: 2795576729933333798}
+  useSound: {fileID: 8300000, guid: 50dc6f4cbce3d094799dc5a5d1740ccb, type: 3}
 --- !u!114 &774281760889751280
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2433,11 +2435,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5823713679009511530}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Scrying Orb
-  objectDesc: A blue crystal floats in the air, giving mysterious premonitions.
+  objectDesc: A see-through stone levitates above the pylon, giving mysterious premonitions.
 --- !u!58 &1284736060081781533
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -2454,6 +2456,130 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!82 &9034216774575829853
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5823713679009511530}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 3bdc5c1d8e7d17b4d9b347d5119414a3, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.8
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 0
+  MinDistance: 1
+  MaxDistance: 40
+  Pan2D: 0
+  rolloffMode: 2
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.25716552
+      value: 1.0028877
+      inSlope: -10.0039835
+      outSlope: -10.0039835
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.30412596
+      value: 0.5144348
+      inSlope: -6.4794216
+      outSlope: -6.4794216
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.16765486
+    - serializedVersion: 3
+      time: 0.42948
+      value: 0.16915894
+      inSlope: -1.0029086
+      outSlope: -1.0029086
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.37429035
+      outWeight: 0.31328952
+    - serializedVersion: 3
+      time: 0.6388977
+      value: 0.03262329
+      inSlope: -0.15631224
+      outSlope: -0.15631224
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.10003988
+      outSlope: -0.10003988
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &5823713679154645991
 GameObject:
   m_ObjectHideFlags: 0

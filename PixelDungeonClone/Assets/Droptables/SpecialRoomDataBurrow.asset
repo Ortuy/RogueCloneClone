@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpecialRoomDataBurrow
   m_EditorClassIdentifier: 
   gates:
-  - {fileID: 592290198733155103, guid: 2fd9b1b67da448c45a963dbdee1e8ebd, type: 3}
+  - {fileID: 592290198733155103, guid: 0fc457deb1bfebc4a97e1cb2334ac656, type: 3}
   keys:
   - {fileID: 11400000, guid: ea43f925eff413a479d9d5b937c0d1ce, type: 2}
   roomContents:
@@ -22,5 +22,10 @@ MonoBehaviour:
   - {fileID: 5823713679009511530, guid: 59f409f23f478014da3e37d1829e5ca5, type: 3}
   - {fileID: 2351439653553691287, guid: fc8e756e897d5e241958a9d2fec5422e, type: 3}
   - {fileID: 1363749335995110993, guid: 73aa15c18eff4d44cbae198b157ae10a, type: 3}
+  shopWeapons: []
+  shopArmour: []
+  shopExtras: []
+  shopMerchant: {fileID: 0}
+  shopItemTemplate: {fileID: 0}
   minGold: 75
   maxGold: 150

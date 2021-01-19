@@ -9,7 +9,7 @@ public class GasTile : MonoBehaviour
 
     private void Start()
     {
-        parentGas = GetComponentInParent<Gas>();
+        //parentGas = GetComponentInParent<Gas>();
         gasFX = GetComponentInChildren<ParticleSystem>();
     }
 
@@ -20,21 +20,39 @@ public class GasTile : MonoBehaviour
         var down = new Vector3(transform.position.x, transform.position.y - 1);
         var left = new Vector3(transform.position.x - 1, transform.position.y);
 
+        Debug.Log(parentGas);
+
+        var tempGases = new List<GasTile>();
+
         if (Pathfinding.instance.GetGrid().GetGridObject(up) != null && Pathfinding.instance.GetGrid().GetGridObject(up).walkable && !Physics2D.OverlapCircle(up, 0.2f, LayerMask.GetMask("Gases")))
         {
-            parentGas.gasTiles.Add(Instantiate(parentGas.gasTileBase, up, Quaternion.identity, parentGas.transform));
+            tempGases.Add(Instantiate(parentGas.gasTileBase, up, Quaternion.identity, parentGas.transform));
+            tempGases[tempGases.Count - 1].parentGas = parentGas;
         }
         if (Pathfinding.instance.GetGrid().GetGridObject(right) != null && Pathfinding.instance.GetGrid().GetGridObject(right).walkable && !Physics2D.OverlapCircle(right, 0.2f, LayerMask.GetMask("Gases")))
         {
-            parentGas.gasTiles.Add(Instantiate(parentGas.gasTileBase, right, Quaternion.identity, parentGas.transform));
+            tempGases.Add(Instantiate(parentGas.gasTileBase, right, Quaternion.identity, parentGas.transform));
+            tempGases[tempGases.Count - 1].parentGas = parentGas;
         }
         if (Pathfinding.instance.GetGrid().GetGridObject(down) != null && Pathfinding.instance.GetGrid().GetGridObject(down).walkable && !Physics2D.OverlapCircle(down, 0.2f, LayerMask.GetMask("Gases")))
         {
-            parentGas.gasTiles.Add(Instantiate(parentGas.gasTileBase, down, Quaternion.identity, parentGas.transform));
+            tempGases.Add(Instantiate(parentGas.gasTileBase, down, Quaternion.identity, parentGas.transform));
+            tempGases[tempGases.Count - 1].parentGas = parentGas;
         }
         if (Pathfinding.instance.GetGrid().GetGridObject(left) != null && Pathfinding.instance.GetGrid().GetGridObject(left).walkable && !Physics2D.OverlapCircle(left, 0.2f, LayerMask.GetMask("Gases")))
         {
-            parentGas.gasTiles.Add(Instantiate(parentGas.gasTileBase, left, Quaternion.identity, parentGas.transform));
+            tempGases.Add(Instantiate(parentGas.gasTileBase, left, Quaternion.identity, parentGas.transform));
+            tempGases[tempGases.Count - 1].parentGas = parentGas;
+        }
+        StartCoroutine(AddNewGasTiles(tempGases));
+    }
+
+    IEnumerator AddNewGasTiles(List<GasTile> gasTiles)
+    {
+        yield return null;
+        foreach (GasTile tile in gasTiles)
+        {
+            parentGas.gasTiles.Add(tile);
         }
     }
 }

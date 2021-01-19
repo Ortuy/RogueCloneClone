@@ -19,6 +19,7 @@ public class Gas : MonoBehaviour
         {
             Instantiate(gasTileBase, transform.position, Quaternion.identity, transform)
         };
+        gasTiles[0].parentGas = this;
         TurnManager.instance.gases.Add(this);
     }
 

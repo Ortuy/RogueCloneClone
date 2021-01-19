@@ -694,7 +694,8 @@ AudioSource:
   m_GameObject: {fileID: 8038483350867982676}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 8300000, guid: 13f4e4979296dfc48a6527f708a93da0, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0.7
@@ -790,11 +791,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8038483350867982676}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Tall Grass
-  objectDesc: A patch of unusually tall vegetation. Perhaps it's a good hiding place.
+  objectDesc: An inseparable part of The Burrow's thicket.
 --- !u!1 &8038483351026649228
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,12 +9,13 @@ public class GoldPickup : MonoBehaviour
     private AudioSource audioSource;
     public AudioClip dropSound;
 
+    [SerializeField]
     private SpriteRenderer spriteRenderer;
 
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        //spriteRenderer = GetComponent<SpriteRenderer>();
         spriteRenderer.sortingOrder = (-3 * Mathf.FloorToInt(transform.position.y + 0.5f)) + 1;
     }
 

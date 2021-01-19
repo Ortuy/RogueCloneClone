@@ -444,7 +444,8 @@ AudioSource:
   m_GameObject: {fileID: 6857036484189831194}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -694,7 +695,7 @@ MonoBehaviour:
   health: 6
   maxHealth: 6
   evasion: 1
-  accuracy: 3
+  accuracy: 2
   minDefBase: 0
   maxDefBase: 0
   minDmgBase: 2
@@ -711,6 +712,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 2
   mapImage: {fileID: 1418525366759352552}
   actionState: 0
@@ -722,7 +724,12 @@ MonoBehaviour:
   behaviourState: 0
   awakeRange: 4
   alertRange: 7
+  attackRange: 1.5
+  dealsStatus: 0
+  statusID: 0
+  statusDuration: 0
   turnCost: 0
+  attackCost: 0
   hitPlayer: {fileID: 9089673552821782945}
   hitSound: {fileID: 8300000, guid: d6a2cd1b745bf9d419310a9b517f605f, type: 3}
   trueDamageSound: {fileID: 8300000, guid: 231eb25268ce6c540ac19d8ac5b86ce1, type: 3}
@@ -743,6 +750,9 @@ MonoBehaviour:
   dropsGold: 1
   minGoldDrop: 10
   maxGoldDrop: 25
+  spawnSpirit: 0
+  isByAltar: 0
+  nearbyAltarArea: {fileID: 0}
 --- !u!50 &8032959415794150052
 Rigidbody2D:
   serializedVersion: 4
@@ -792,7 +802,8 @@ AudioSource:
   m_GameObject: {fileID: 8032959415794150057}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -888,13 +899,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8032959415794150057}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Earthling
-  objectDesc: The Dungeon grants sentience to many beings, even the earth itself.
-    And this lump of mud, teeth and bones is one of her hideous children. It hungers
-    for your flesh.
+  objectDesc: 'The Dungeon grants sentience to many beings, even the earth herself. 
+    And this lump of mud, teeth and bones is one of her hideous children. $nIt hungers
+    for your flesh. '
 --- !u!1 &8032959416355505485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1211,11 @@ PrefabInstance:
       objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
         type: 3}
+      propertyPath: UVModule.sprites.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
       propertyPath: InitialModule.startColor.maxColor.r
       value: 0.5787836
       objectReference: {fileID: 0}
@@ -1227,6 +1243,74 @@ PrefabInstance:
         type: 3}
       propertyPath: InitialModule.startColor.minColor.b
       value: 0.3989409
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[0].sprite
+      value: 
+      objectReference: {fileID: 4947266080442883524, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[1].sprite
+      value: 
+      objectReference: {fileID: 977979839259455951, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[2].sprite
+      value: 
+      objectReference: {fileID: -3143124904154752733, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[3].sprite
+      value: 
+      objectReference: {fileID: -510904851632213353, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[4].sprite
+      value: 
+      objectReference: {fileID: -8672423622759855007, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[5].sprite
+      value: 
+      objectReference: {fileID: -4720470012108640364, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[6].sprite
+      value: 
+      objectReference: {fileID: -5123305176363729612, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.sprites.Array.data[7].sprite
+      value: 
+      objectReference: {fileID: -3428634325329574919, guid: fcac5dd5c30d3cc4da257c40c47e2cde,
+        type: 3}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.startFrame.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: UVModule.startFrame.scalar
+      value: 0.875
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: InitialModule.startSize.minScalar
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 5692507533984222520, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 5692507535330286620, guid: 031bc6a712891fb49b3f6d91ab1e53f1,
         type: 3}

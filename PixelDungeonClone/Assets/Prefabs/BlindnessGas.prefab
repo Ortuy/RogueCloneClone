@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnsLeft: 12
-  maxSpread: 3
+  maxSpread: 4
   gasTileBase: {fileID: 4738596369745143484, guid: 72838ed25a4bf364d9ed8f78ac6a1ce0,
     type: 3}
   gasTiles: []

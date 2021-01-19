@@ -175,12 +175,24 @@ public class PlayerStatistics : Entity
 
     public void Heal(int healedHP)
     {
-        CheckForWrathRingModifiers(health + healedHP, health);
-        health += healedHP;
+        if(healedHP + health > maxHealth)
+        {
+            healedHP += Mathf.RoundToInt(maxHealth) - (Mathf.RoundToInt(health) + healedHP);
+        }
+        
+        if(health < maxHealth)
+        {
+            CheckForWrathRingModifiers(health + healedHP, health);
+            ShowHealingText(healedHP.ToString());
+            health += healedHP;
+        }
+        //health += healedHP;        
+        
         if(health > maxHealth)
         {
             health = maxHealth;
         }
+        
         float value = (health / maxHealth);
         UIManager.instance.playerHealthBar.value = value;
     }
@@ -353,12 +365,14 @@ public class PlayerStatistics : Entity
         CheckForWrathRingModifiers(maxHealth, health);
         Debug.Log("Level up!!");
         maxHealth += 5;
+        ShowHealingText((maxHealth - health).ToString());
         health = maxHealth;
         evasion++;
         accuracy++;
         level++;
 
         float value = (health / maxHealth);
+        
         UIManager.instance.playerHealthBar.value = value;
         PlayHitSound(levelUpSound);
         InventoryManager.instance.potionUseFX[2].Play();

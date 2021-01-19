@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: QuartzRing
   m_EditorClassIdentifier: 
   itemName: Quartz Ring
-  description: An old ring beset with a milky gem. The crystal is surrounded by an
-    aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with a milky white gem. The crystal is heavy enough
+    to weigh your finger down. $nYou have no idea what spell the jewelry holds.
   itemImage: {fileID: 21300000, guid: d12018164a056794993d4644dd653d14, type: 3}
   amount: 1
   strengthRequired: 0

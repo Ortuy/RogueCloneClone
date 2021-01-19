@@ -174,28 +174,29 @@ public class TurnManager : MonoBehaviour
         {
             yield return new WaitForSeconds(0.5f);
 
-            var temp = Physics2D.OverlapCircleAll(Player.instance.transform.position, 7f, LayerMask.GetMask("Enemies"));
+            if(turnState == TurnState.PLAYER)
+            {
+                var temp = Physics2D.OverlapCircleAll(Player.instance.transform.position, 7f, LayerMask.GetMask("Enemies"));
 
-            if (temp.Length > 0)
-            {
-                doEnemyTurns = true;
-                nearbyEnemies.Clear();
-                foreach (Collider2D collider in temp)
+                if (temp.Length > 0)
                 {
-                    nearbyEnemies.Add(collider.GetComponent<Enemy>());
+                    doEnemyTurns = true;
+                    nearbyEnemies.Clear();
+                    foreach (Collider2D collider in temp)
+                    {
+                        nearbyEnemies.Add(collider.GetComponent<Enemy>());
+                    }
                 }
-            }
-            else
-            {
-                doEnemyTurns = false;
-            }
-            
+                else
+                {
+                    doEnemyTurns = false;
+                }
+            }          
         }        
     }
 
     public void PassToNextEnemy()
-    {
-        
+    {        
         if(Vector2.Distance(Player.instance.transform.position, nearbyEnemies[currentActingEnemy].transform.position) < 7f)
         {
             if(nearbyEnemies[currentActingEnemy].statusEffects.Count > 0)

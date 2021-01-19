@@ -254,7 +254,12 @@ MonoBehaviour:
   behaviourState: 0
   awakeRange: 4
   alertRange: 7
+  attackRange: 1.5
+  dealsStatus: 0
+  statusID: 0
+  statusDuration: 0
   turnCost: 0
+  attackCost: 0
   hitPlayer: {fileID: 175224508180116370}
   hitSound: {fileID: 8300000, guid: a48bf2f42930cd44fb7e98aa501f407c, type: 3}
   trueDamageSound: {fileID: 8300000, guid: 3d0bbe5f298d9114aa867a5b6de7e2cc, type: 3}
@@ -270,6 +275,8 @@ MonoBehaviour:
   minGoldDrop: 10
   maxGoldDrop: 50
   spawnSpirit: 1
+  isByAltar: 0
+  nearbyAltarArea: {fileID: 0}
 --- !u!50 &1258276678666822260
 Rigidbody2D:
   serializedVersion: 4
@@ -415,13 +422,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1258276678666822265}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Spirit-in-a-Jar
-  objectDesc: A forsaken, pained soul trapped in a clay vessel. The enormous pot
+  objectDesc: 'A forsaken, pained soul trapped in a clay vessel. The enormous pot
     is engraved with curious symbols quite similar to the seals found on scrolls.
-    Their mind is gone beyond salvation and only destructive instincts remain.
+    $nTheir mind is gone beyond salvation and only destructive instincts remain. '
 --- !u!1 &2138927176834918116
 GameObject:
   m_ObjectHideFlags: 0

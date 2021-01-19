@@ -40,7 +40,8 @@ AudioSource:
   m_GameObject: {fileID: 2236693626304760427}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -492,7 +493,8 @@ AudioSource:
   m_GameObject: {fileID: 6977649515691734089}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -588,13 +590,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6977649515691734089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Burrower
-  objectDesc: A senior denizen of The Burrow, who found a home among its putrid halls.
-    Unlike their greenish kin, they appear to be a part of a budding civilisation.
-    They will do their best to drive you out of here.
+  objectDesc: 'A senior denizen of The Burrow, who found a home among its putrid
+    halls. Unlike their greenish kin, they appear to be a part of a budding civilisation.
+    $nThey will do their best to drive you out of here. '
 --- !u!1 &7019803222688441079
 GameObject:
   m_ObjectHideFlags: 0

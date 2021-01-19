@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: OpalRing
   m_EditorClassIdentifier: 
   itemName: Opal Ring
-  description: An old ring beset with a pearly gem. The crystal is surrounded by
-    an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with a pearly gem. It appears unassuming until you
+    spot the reflections of light bursting with colour. $nYou have no idea what spell
+    the jewelry holds.
   itemImage: {fileID: 21300000, guid: 8283b07deb70d704ab72d539fb7669e7, type: 3}
   amount: 1
   strengthRequired: 0
