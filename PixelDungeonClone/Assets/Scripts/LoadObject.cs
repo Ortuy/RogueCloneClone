@@ -33,5 +33,6 @@ public class LoadObject : MonoBehaviour
     {
         yield return null;
         Player.instance.transform.position = FindObjectOfType<LevelGenerator>().playerStartPos;
+        Player.movement.SetSortingOrder();
     }
 }

@@ -176,7 +176,15 @@ public class PlayerMovement : MonoBehaviour
                                 else
                                 {
                                     UIManager.instance.pickUpButton.gameObject.SetActive(true);
-                                    UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
+                                    if(item.GetComponent<ItemPickup>() != null)
+                                    {
+                                        UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
+                                    }
+                                    else
+                                    {
+                                        UIManager.instance.itemPickupImage.sprite = item.GetComponentInChildren<SpriteRenderer>().sprite;
+                                    }
+
                                 }
                             }
                             

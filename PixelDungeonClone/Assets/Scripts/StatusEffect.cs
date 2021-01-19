@@ -353,11 +353,11 @@ public class HungerEffect : StatusEffect
 
     public override void OnEffectEnd()
     {
-        if (Player.stats.foodPoints > 128)
+        if (Player.stats.foodPoints > 160)
         {
             Player.stats.AddStatusEffect(new HungerEffect(0f, 7, Player.stats));
         }
-        else if(Player.stats.foodPoints == 128)
+        else if(Player.stats.foodPoints == 160)
         {
             Player.stats.AddStatusEffect(new HungerEffect(0f, 8, Player.stats));
         }
@@ -370,7 +370,7 @@ public class HungerEffect : StatusEffect
     public override void OnEffectTick()
     {
         Player.stats.foodPoints--;
-        if(Player.stats.foodPoints == 128 || Player.stats.foodPoints == 0)
+        if(Player.stats.foodPoints == 160 || Player.stats.foodPoints == 0)
         {            
             if(Player.stats.foodPoints == 0)
             {
@@ -381,11 +381,11 @@ public class HungerEffect : StatusEffect
                 Player.stats.EndStatusEffectOfType(7);
             }
         }
-        if(Player.stats.foodPoints > 128)
+        if(Player.stats.foodPoints > 160)
         {
             if (Random.Range(0, 5) == 0)
             {
-                Player.stats.Heal(1);
+                Player.stats.Heal(Mathf.RoundToInt(Player.stats.GetMaxHealth() / 30));
             }
             if(type == 8)
             {
@@ -427,7 +427,7 @@ public class StarvationEffect : StatusEffect
         {
             if(Random.Range(0, 5) == 0)
             {
-                Player.stats.TakeTrueDamage(1);
+                Player.stats.TakeTrueDamage(Mathf.RoundToInt(Player.stats.GetMaxHealth() / 30));
             }            
         }
     }

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: GarnetRing
   m_EditorClassIdentifier: 
   itemName: Garnet Ring
-  description: An old ring beset with a cluster of brown gems. The crystals are surrounded
-    by an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with a cluster of reddish brown gems, the color
+    of dried blood. $nYou have no idea what spell the jewelry holds.
   itemImage: {fileID: 21300000, guid: 874a94d61574eaf43a86edc9a042be15, type: 3}
   amount: 1
   strengthRequired: 0

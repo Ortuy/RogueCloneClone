@@ -80,6 +80,7 @@ public class PlayerActions : MonoBehaviour
         throwQueued = false;
     }
 
+    /**
     IEnumerator InstantiateThrownItem(Vector2 destination)
     {
         yield return null;
@@ -88,7 +89,7 @@ public class PlayerActions : MonoBehaviour
         thrown.SetThrown(destination);
         PlaySound(itemThrowSound);
         UIManager.instance.inventoryButton.interactable = true;
-    }
+    }**/
 
     IEnumerator Attack(Enemy target, int damage, int cost)
     {
@@ -173,6 +174,13 @@ public class PlayerActions : MonoBehaviour
         interactionTarget = interactible;
     }
 
+    public void ClearQueuedActions()
+    {
+        interactionQueued = false;
+        attackQueued = false;
+        attackTarget = null;
+    }
+
     public void QueueItemPickup()
     {
         pickUpQueued = true;
@@ -190,9 +198,16 @@ public class PlayerActions : MonoBehaviour
     {
         if (TurnManager.instance.turnState == TurnState.PLAYER)
         {
+
             var foundObject = Physics2D.OverlapCircle(transform.position, 0.2f, LayerMask.GetMask("Items"));
-            ItemPickup itemPickup = foundObject.GetComponent<ItemPickup>();
-            GoldPickup goldPickup = foundObject.GetComponent<GoldPickup>();
+            ItemPickup itemPickup = null;
+            GoldPickup goldPickup = null;
+            if (foundObject != null)
+            {
+                itemPickup = foundObject.GetComponent<ItemPickup>();
+                goldPickup = foundObject.GetComponent<GoldPickup>();
+            }
+            
 
             if(foundObject.CompareTag("Map"))
             {
@@ -248,7 +263,15 @@ public class PlayerActions : MonoBehaviour
             else
             {
                 UIManager.instance.pickUpButton.gameObject.SetActive(true);
-                UIManager.instance.itemPickupImage.sprite = item.GetComponent<SpriteRenderer>().sprite;
+                if(item.GetComponent<ItemPickup>() != null)
+                {
+                    UIManager.instance.itemPickupImage.sprite = item.GetComponent<ItemPickup>().itemInside.itemImage;
+                }
+                else
+                {
+                    UIManager.instance.itemPickupImage.sprite = item.GetComponentInChildren<SpriteRenderer>().sprite;
+                }
+                
             }
         }        
     }

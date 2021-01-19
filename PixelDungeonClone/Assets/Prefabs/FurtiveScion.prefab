@@ -40,7 +40,8 @@ AudioSource:
   m_GameObject: {fileID: 2236693626304760427}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -292,7 +293,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6977649515691734089}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.5, y: 6.5, z: 20}
+  m_LocalPosition: {x: 10.5, y: 6.5, z: 0}
   m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
   m_Children:
   - {fileID: 6977649514090765228}
@@ -344,7 +345,7 @@ SpriteRenderer:
   m_SortingLayer: -5
   m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 1d7fda50dbf2ff245b678faaae994dfe, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.38431373}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -405,6 +406,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 6
   mapImage: {fileID: 8266646461508428510}
   actionState: 0
@@ -425,8 +427,8 @@ MonoBehaviour:
   hitPlayer: {fileID: 8697698308191073832}
   hitSound: {fileID: 8300000, guid: 73388d8b86b46754db99a6de37695c52, type: 3}
   trueDamageSound: {fileID: 8300000, guid: e22d55c828c8a394682f9356f80a6dee, type: 3}
-  deathSound: {fileID: 8300000, guid: 616720dbf0ede4144921b73b9e2e4e5b, type: 3}
-  alertSound: {fileID: 8300000, guid: 35f659bb01fd346439e6976901f28b5d, type: 3}
+  deathSound: {fileID: 8300000, guid: 200ecd2e9d3d068448ef05bd077fa8dc, type: 3}
+  alertSound: {fileID: 8300000, guid: 3371a921773383e49a018337c0fc2833, type: 3}
   footsteps:
   - {fileID: 8300000, guid: d698597ee38e60142a5344f4b88c2525, type: 3}
   - {fileID: 8300000, guid: 5679f94d100565b4ea8782759c0b12a7, type: 3}
@@ -492,7 +494,8 @@ AudioSource:
   m_GameObject: {fileID: 6977649515691734089}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -588,13 +591,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 6977649515691734089}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: Burrower
-  objectDesc: A senior denizen of The Burrow, who found a home among its putrid halls.
-    Unlike their greenish kin, they appear to be a part of a budding civilisation.
-    They will do their best to drive you out of here.
+  objectName: Furtive Scion
+  objectDesc: 'A meek ancient, who got left behind in the mines. No one knows the
+    purpose of their excavation nor the reason for its ferocity. Just as no one knows
+    the circumstance of their disappearance. $nThis ancient is too far gone to answer
+    your questions. '
 --- !u!1 &7019803222688441079
 GameObject:
   m_ObjectHideFlags: 0
@@ -943,7 +947,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8113771183947056735}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
   m_Children: []
   m_Father: {fileID: 6977649515691734086}

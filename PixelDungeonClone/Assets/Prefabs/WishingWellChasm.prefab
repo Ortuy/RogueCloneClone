@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -8043446478927309692}
   - component: {fileID: 3391867070850956105}
   - component: {fileID: 1425424003941856217}
+  - component: {fileID: 2558545271068786208}
   m_Layer: 13
   m_Name: WishingWellChasm
   m_TagString: Interactible
@@ -78,12 +79,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1363749335995110993}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Wishing Well
-  objectDesc: A strange well overflowing with an even stranger liquid. You have no
-    clue what such a thing might be doing in a place like this.
+  objectDesc: An old well overflowing with a dark liquid. You have no idea what such
+    a thing might be doing here.
 --- !u!114 &3391867070850956105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +142,103 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!82 &2558545271068786208
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1363749335995110993}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: f0bdd3da8b116974c9a824433d345d00, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1363749337282342014
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,15 +1421,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54bea1993b950f44da5270daa284c6fe, type: 3}
---- !u!4 &5179526720068842565 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5692507535330286712, guid: 54bea1993b950f44da5270daa284c6fe,
-    type: 3}
-  m_PrefabInstance: {fileID: 657166475504674877}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &5179526720068842604 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5692507535330286673, guid: 54bea1993b950f44da5270daa284c6fe,
+    type: 3}
+  m_PrefabInstance: {fileID: 657166475504674877}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5179526720068842565 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5692507535330286712, guid: 54bea1993b950f44da5270daa284c6fe,
     type: 3}
   m_PrefabInstance: {fileID: 657166475504674877}
   m_PrefabAsset: {fileID: 0}

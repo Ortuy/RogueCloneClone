@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: EmeraldRing
   m_EditorClassIdentifier: 
   itemName: Emerald Ring
-  description: An old ring beset with a deep green gem. The crystal is surrounded
-    by an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with a deep green gem. The stone is masterfully
+    cut, displaying devilishly complex shapes. $nYou have no idea what spell the
+    jewelry holds.
   itemImage: {fileID: 21300000, guid: ca35151e4d25ffa43a1fdac3f42ec851, type: 3}
   amount: 1
   strengthRequired: 0

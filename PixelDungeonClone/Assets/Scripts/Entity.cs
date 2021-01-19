@@ -36,7 +36,7 @@ public class Entity : MonoBehaviour
 
     public int dmgModifier, evaModifier, defModifier, accModifier;
 
-    public GameObject damagePopupText;
+    public GameObject damagePopupText, healingPopupText;
 
     public bool HasStatus(int effectID)
     {
@@ -128,5 +128,11 @@ public class Entity : MonoBehaviour
     {
         var popup = Instantiate(damagePopupText, transform.position, Quaternion.identity).GetComponent<TextMesh>();
         popup.text = text;
+    }
+
+    protected void ShowHealingText(string text)
+    {
+        var popup = Instantiate(healingPopupText, transform.position, Quaternion.identity).GetComponent<TextMesh>();
+        popup.text = "+" + text;
     }
 }

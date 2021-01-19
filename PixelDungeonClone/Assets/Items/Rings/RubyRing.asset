@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RubyRing
   m_EditorClassIdentifier: 
   itemName: RubyRing
-  description: An old ring beset with a scarlet gem. The crystal is surrounded by
-    an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with a scarlet gem. Something dark pulses within,
+    like a beating heart. $nYou have no idea what spell the jewelry holds.
   itemImage: {fileID: 21300000, guid: 05ad43901790df245a571c3162771d69, type: 3}
   amount: 1
   strengthRequired: 0

@@ -93,10 +93,11 @@ public class ItemPickup : MonoBehaviour
                     TurnManager.instance.gases.Add(Instantiate(InventoryManager.instance.potionGases[5], transform.position, Quaternion.identity));
                     break;
             }
-            GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
-            PlaySound(breakSound);
-            SetItem(null);
-            Destroy(gameObject, 1f);
+            //GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+            //PlaySound(breakSound);
+            UIManager.instance.PlaySound(breakSound);
+            //SetItem(null);
+            Destroy(gameObject);
         }
         else
         {
@@ -108,7 +109,9 @@ public class ItemPickup : MonoBehaviour
     public void SetItem(ItemInstance item)
     {
         itemInside = item;
-        GetComponent<SpriteRenderer>().sprite = itemInside.itemImage;
+        Debug.Log(spriteRenderer);
+        Debug.Log(itemInside);
+        spriteRenderer.sprite = itemInside.itemImage;
         switch(item.type)
         {
             case ItemType.WEAPON:

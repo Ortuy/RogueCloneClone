@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Aquamarine Ring
   description: An old ring beset with a sea green gem. The crystal is surrounded
-    by an aura of magic. $nYou have no idea what spell does the jewelery hold.
+    by a barely perceptible aura of magic. $nYou have no idea what spell the jewelry
+    holds.
   itemImage: {fileID: 21300000, guid: 8f312fd3095389a4080f552bcc27c3f4, type: 3}
   amount: 1
   strengthRequired: 0

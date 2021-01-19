@@ -41,6 +41,9 @@ public class LevelDecorator : MonoBehaviour
     [Header("Other")]
     public Vector2Int minCorner;
     public Vector2Int maxCorner;
+
+    public OverlayPreset overlayPreset;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +51,7 @@ public class LevelDecorator : MonoBehaviour
         maxCorner = generator.maxCorner;
         if(drawOverlay)
         {
-            DrawOverlay();
+            DrawOverlayFromPreset();
         }
         if (drawDecor)
         {
@@ -60,12 +63,6 @@ public class LevelDecorator : MonoBehaviour
             SetUpParticles();
         }
         
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 
@@ -371,6 +368,194 @@ public class LevelDecorator : MonoBehaviour
         //PlaceRoot(new Vector2(0.5f,0.5f), new Vector2(3.5f, 4.5f), 1);
     }
 
+    private void DrawOverlayFromPreset()
+    {
+        var walls = generator.walls1;
+
+        for (int x = minCorner.x - 10; x <= maxCorner.x + 10; x++)
+        {
+            for (int y = minCorner.y - 10; y <= maxCorner.y + 10; y++)
+            {
+
+                List<bool> neighbours = new List<bool>();
+
+                for (int i = 0; i < overlayPreset.tiles.Length; i++)
+                {
+                    neighbours.Clear();
+                    neighbours.Add(walls.GetTile(new Vector3Int(x - 1, y + 1, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x, y + 1, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x + 1, y + 1, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x - 1, y, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x + 1, y, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x - 1, y - 1, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x, y - 1, 0)));
+                    neighbours.Add(walls.GetTile(new Vector3Int(x + 1, y - 1, 0)));
+
+                    bool tileMatch = true;
+                    if(walls.GetTile(new Vector3Int(x, y, 0)))
+                    {
+                        for (int j = 0; j < neighbours.Count; j++)
+                        {
+                            if (!neighbours[j] == overlayPreset.tiles[i].neededTiles[j])
+                            {
+                                tileMatch = false;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        tileMatch = false;
+                    }
+                    
+
+                    if(tileMatch)
+                    {
+                        var here = new Vector3Int(x, y, 0);
+                        switch(overlayPreset.tiles[i].result)
+                        {
+                            case 0:
+                                blackOverlay.SetTile(here, overlayTile);
+                                break;
+                            case 1:
+                                blackOverlay.SetTile(here, overlayTopTiles[Random.Range(0, overlayTopTiles.Length)]);
+                                break;
+                            case 2:
+                                blackOverlay.SetTile(here, overlayLeftTiles[Random.Range(0, overlayLeftTiles.Length)]);
+                                break;
+                            case 3:
+                                blackOverlay.SetTile(here, overlayBottomTiles[Random.Range(0, overlayBottomTiles.Length)]);
+                                break;
+                            case 4:
+                                blackOverlay.SetTile(here, overlayRightTiles[Random.Range(0, overlayRightTiles.Length)]);
+                                break;
+                            case 5:
+                                blackOverlay.SetTile(here, overlayCornerTL);
+                                break;
+                            case 6:
+                                blackOverlay.SetTile(here, overlayCornerBL);
+                                break;
+                            case 7:
+                                blackOverlay.SetTile(here, overlayCornerBR);
+                                break;
+                            case 8:
+                                blackOverlay.SetTile(here, overlayCornerTR);
+                                break;
+                            case 9:
+                                blackOverlay.SetTile(here, overlayWeirdCornerL);
+                                break;
+                            case 10:
+                                blackOverlay.SetTile(here, overlayWeirdCornerR);
+                                break;
+                            case 11:
+                                blackOverlay.SetTile(here, overlayInnerCornerBL);
+                                var difference0 = Random.Range(-1.2f, 1.2f);
+                                var difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x + 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 + 2f), 2, 0.8f);
+                                }
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x + 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 + 2f), 3, 0.6f);
+                                }
+                                break;
+                            case 12:
+                                blackOverlay.SetTile(here, overlayInnerCornerTL);
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x + 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 - 2f), 2, 0.8f);
+                                }
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x + 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x + 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 - 2f), 3, 0.6f);
+                                }
+                                break;
+                            case 13:
+                                blackOverlay.SetTile(here, overlayInnerCornerTR);
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x - 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 - 2f), 2, 0.8f);
+                                }
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y - 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x - 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 - 2f), 3, 0.6f);
+                                }
+                                break;
+                            case 14:
+                                blackOverlay.SetTile(here, overlayInnerCornerBR);
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x - 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 + 2f), 2, 0.8f);
+                                }
+                                difference0 = Random.Range(-1.2f, 1.2f);
+                                difference1 = Random.Range(-1.2f, 1.2f);
+                                if (walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 2 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 2 + difference1), 0))
+                                    && walls.GetTile(new Vector3Int(Mathf.RoundToInt(x - 3 + difference0), y, 0)) && walls.GetTile(new Vector3Int(x, Mathf.RoundToInt(y + 3 + difference1), 0)))
+                                {
+                                    PlaceRoot(new Vector2(x - 2f + difference0, y + 0.5f), new Vector2(x + 0.5f, y + difference1 + 2f), 3, 0.6f);
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int x = minCorner.x; x <= maxCorner.x; x++)
+        {
+            for (int y = minCorner.y; y <= maxCorner.y; y++)
+            {
+                //Placing roots...
+                if (!walls.GetTile(new Vector3Int(x, y, 0)))
+                {
+                    //Horizontal
+                    if (blackOverlay.GetTile(new Vector3Int(x - 1, y, 0)) && blackOverlay.GetTile(new Vector3Int(x + 1, y, 0)))
+                    {
+                        var difference0 = Random.Range(-1.2f, 1.2f);
+                        var difference1 = Random.Range(-1.2f, 1.2f);
+                        if (blackOverlay.GetTile(new Vector3Int(x - 1, Mathf.RoundToInt(y + difference0), 0)) && blackOverlay.GetTile(new Vector3Int(x + 1, Mathf.RoundToInt(y + difference1), 0))
+                            && blackOverlay.GetTile(new Vector3Int(x - 1, Mathf.RoundToInt(y + difference0 + (Mathf.Sign(difference0))), 0)) && blackOverlay.GetTile(new Vector3Int(x + 1, Mathf.RoundToInt(y + difference1 + (Mathf.Sign(difference1))), 0))
+                            && blackOverlay.GetTile(new Vector3Int(x - 1, Mathf.RoundToInt(y + difference0 - (Mathf.Sign(difference0))), 0)) && blackOverlay.GetTile(new Vector3Int(x + 1, Mathf.RoundToInt(y + difference1 - (Mathf.Sign(difference1))), 0)))
+                        {
+                            PlaceRoot(new Vector2(x - 1f, y + difference0 + 0.5f), new Vector2(x + 2f, y + difference1 + 0.5f), 2);
+                        }
+                    }
+                    //Vertical
+                    if (blackOverlay.GetTile(new Vector3Int(x, y - 1, 0)) && blackOverlay.GetTile(new Vector3Int(x, y - 1, 0)))
+                    {
+                        var difference0 = Random.Range(-1f, 1f);
+                        var difference1 = Random.Range(-1f, 1f);
+                        if (blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference0), y - 1, 0)) && blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference1), y + 1, 0))
+                            && blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference0 + (Mathf.Sign(difference0))), y - 1, 0)) && blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference1 + (Mathf.Sign(difference1))), y + 1, 0))
+                            && blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference0 - (Mathf.Sign(difference0))), y - 1, 0)) && blackOverlay.GetTile(new Vector3Int(Mathf.RoundToInt(x + difference1 - (Mathf.Sign(difference1))), y + 1, 0)))
+                        {
+                            PlaceRoot(new Vector2(x + difference0 + 0.5f, y - 1f), new Vector2(x + difference1 + 0.5f, y + 2f), 2);
+                        }
+                    }
+                }
+            }
+        }
+    }
     private void PlaceRoot(Vector2 origin, Vector2 destination, int unlikeliness)
     {
         if(Random.Range(0, unlikeliness) == 0)
@@ -465,7 +650,7 @@ public class LevelDecorator : MonoBehaviour
     {
         for(int i = 0; i < generator.rooms.Count; i++)
         {
-            if(generator.rooms[i].hasTiledFloor)
+            if(generator.rooms[i].hasTiledFloor && tiledFloor != null)
             {
                 for (int x = generator.rooms[i].minCorner.x; x <= generator.rooms[i].maxCorner.x; x++)
                 {
@@ -527,7 +712,7 @@ public class LevelDecorator : MonoBehaviour
 
     public void PlaceTallVegetation(Vector3 position)
     {
-        if (!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")) && !tiledFloor.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0)))
+        if (!Physics2D.OverlapCircle(position, 0.1f, LayerMask.GetMask("Decor")) && (tiledFloor == null || !tiledFloor.GetTile(new Vector3Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y), 0))))
         {
             Instantiate(tallVegetation, position, Quaternion.identity);
             if (smallVegetation != null)

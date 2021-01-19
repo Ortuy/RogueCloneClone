@@ -708,8 +708,9 @@ GameObject:
   - component: {fileID: 2642400911106558597}
   - component: {fileID: 2642400911106558598}
   - component: {fileID: 7594558931279525931}
-  - component: {fileID: 5144347196436373667}
-  - component: {fileID: 7319321882389068257}
+  - component: {fileID: 6021895254269588504}
+  - component: {fileID: 6676426272633334592}
+  - component: {fileID: 633310660}
   m_Layer: 13
   m_Name: InscribingTableChasm
   m_TagString: Interactible
@@ -771,7 +772,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
---- !u!114 &5144347196436373667
+--- !u!114 &6021895254269588504
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -780,29 +781,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2642400911106558599}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectName: Enchanted Parchment
-  objectDesc: The table is littered with scrolls inscribed with sigils, abandoned
-    halfway through the process.
---- !u!114 &7319321882389068257
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2642400911106558599}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c01610e107cc2b48b4a92ee5468990b, type: 3}
+  m_Script: {fileID: 11500000, guid: cbd8380a7fd8e7f41b1a21084a5e588e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactionName: Enchanted Parchment
-  interactionDescription: Various scrolls lay atop the table, unfinished and left
-    behind. It appears the scribe is no longer here and you are the only one to complete
-    their work. $nDo you want to combine three of your seals to create one of your
-    choice?
+  interactionDescription: Various scrolls, pens and inks litter the table. The scribe
+    is no longer here, as is anyone willing to finish their work. $nAnyone but you.
+    $Do you want to sacrifice three of your seals to create one of your choice?
   buttonText: Inscribe
   choiceMenu: {fileID: 2538159605637796628}
   choiceTexts:
@@ -830,10 +815,122 @@ MonoBehaviour:
   secondaryObjects:
   - {fileID: 2642400909471753997}
   animator: {fileID: 0}
-  usedDescription: You didn't leave even a scrap
+  usedDescription: You did not leave even a scrap.
   requiredType: 4
   useFX: {fileID: 0}
   normalFX: {fileID: 0}
+  useSound: {fileID: 8300000, guid: 54f040e38ffcb6f44b5c287b7d998526, type: 3}
+--- !u!114 &6676426272633334592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642400911106558599}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Enchanted Parchment
+  objectDesc: Pieces of scrolls abandoned halfway through their inscribing process.
+--- !u!82 &633310660
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2642400911106558599}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2773461104684703425
 GameObject:
   m_ObjectHideFlags: 0

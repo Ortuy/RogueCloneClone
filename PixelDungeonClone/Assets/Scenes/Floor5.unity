@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -233,7 +233,7 @@ MonoBehaviour:
     type: 3}
   smallVegetation: {fileID: 843835024984521177, guid: 85f55945d73583146a74a175c148911b,
     type: 3}
-  tiledFloor: {fileID: 0}
+  tiledFloor: {fileID: 1172032937}
   tiledFloorTiles:
   - {fileID: 11400000, guid: 1211e10b50940644aaec5d66bf392fa5, type: 2}
   - {fileID: 11400000, guid: 0a9381372d1080b4db17f6af4e7e021b, type: 2}
@@ -244,6 +244,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4d0702af6ad7d9249849651780f9823d, type: 2}
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
+  overlayPreset: {fileID: 11400000, guid: cd7f350f4e80c0c49b9196faf119ae64, type: 2}
 --- !u!114 &9677105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -998,6 +999,7 @@ MonoBehaviour:
   tiledFloorEdgeTiles: []
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
+  overlayPreset: {fileID: 0}
 --- !u!4 &423814806
 Transform:
   m_ObjectHideFlags: 0

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AncientRing
   m_EditorClassIdentifier: 
   itemName: Ancient Ring
-  description: An old ring beset with curious ornamentation. The decoration is surrounded
-    by an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: A ring adorned with curious ornamentation, left behind by a civilisation
+    long-gone. $nYou have no idea what spell the jewelry holds.
   itemImage: {fileID: 21300000, guid: e1a8290fb1549874caab44291ea1a067, type: 3}
   amount: 1
   strengthRequired: 0

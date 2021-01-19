@@ -75,7 +75,8 @@ AudioSource:
   m_GameObject: {fileID: 1620848678439250092}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -535,7 +536,7 @@ GameObject:
   - component: {fileID: 6310370882643204983}
   - component: {fileID: 4352611670390136164}
   - component: {fileID: -8050757657500372689}
-  - component: {fileID: 4807472050466262235}
+  - component: {fileID: 2500621783730000602}
   m_Layer: 8
   m_Name: LostSpiritChasm
   m_TagString: Enemy
@@ -748,7 +749,8 @@ AudioSource:
   m_GameObject: {fileID: 6310370882643204986}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -835,7 +837,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &4807472050466262235
+--- !u!114 &2500621783730000602
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -844,13 +846,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 6310370882643204986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Lost Spirit
-  objectDesc: A remnant of someone who ventured into The Dungeon, or perhaps someone
-    who used to dwell here. Their mind is gone beyond salvation and only destructive
-    instincts remain.
+  objectDesc: 'A remnant of someone who ventured into The Dungeon, or perhaps someone
+    who used to dwell here. $nTheir mind is gone beyond salvation and only destructive
+    instincts remain. '
 --- !u!1 &8282832684678323908
 GameObject:
   m_ObjectHideFlags: 0

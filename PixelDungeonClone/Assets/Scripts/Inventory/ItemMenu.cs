@@ -11,6 +11,9 @@ public class ItemMenu : MonoBehaviour
 
     public int slotID;
 
+    [SerializeField]
+    private AudioClip sellSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +46,31 @@ public class ItemMenu : MonoBehaviour
             gameObject.SetActive(false);
             Player.movement.PlaySound(InventoryManager.instance.itemDropSound);
         }        
+    }
+
+    public void SellItem()
+    {
+        if (TurnManager.instance.turnState == TurnState.PLAYER)
+        {
+            //Sells item
+            var price = InventoryManager.instance.inventoryItems[slotID].goldPrice / 5;
+            if(!InventoryManager.instance.inventoryItems[slotID].identified)
+            {
+                price = Mathf.RoundToInt(price / 1.5f);
+            }
+            else if(InventoryManager.instance.inventoryItems[slotID].cursed)
+            {
+                price = Mathf.RoundToInt(price / 2f);
+            }
+
+            Player.actions.PlaySound(sellSound);
+
+            InventoryManager.instance.AddGold(price);
+            InventoryManager.instance.SubtractItem(slotID);
+            TurnManager.instance.SwitchTurn(TurnState.ENEMY);
+            gameObject.SetActive(false);
+            
+        }
     }
 
     public void EquipItem()

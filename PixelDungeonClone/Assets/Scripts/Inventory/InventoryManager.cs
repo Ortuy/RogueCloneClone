@@ -36,6 +36,7 @@ public class InventoryManager : MonoBehaviour
     public int[] ringEquipped;
 
     public bool discardComplete;
+    public bool sellMode;
 
     // Start is called before the first frame update
     void Start()
@@ -426,6 +427,12 @@ public class InventoryManager : MonoBehaviour
         StartCoroutine(PickThreeItems(requiredType));
     }
 
+    public void SetAsShop()
+    {
+        UIManager.instance.commandText.text = "Sell Items";
+       sellMode = true;
+    }
+
     IEnumerator PickThreeItems(ItemType requiredType)
     {
         string s = "";
@@ -637,11 +644,11 @@ public class InventoryManager : MonoBehaviour
                 {
                     if (inventoryItems[3].cursed)
                     {
-                        foodmodifier -= 32 * inventoryItems[3].baseStatChangeMax;
+                        foodmodifier -= 24 * inventoryItems[3].baseStatChangeMax;
                     }
                     else
                     {
-                        foodmodifier += 32 * inventoryItems[3].baseStatChangeMax;
+                        foodmodifier += 24 * inventoryItems[3].baseStatChangeMax;
                     }
                 }
 

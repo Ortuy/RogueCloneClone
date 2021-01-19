@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: TopazRing
   m_EditorClassIdentifier: 
   itemName: Topaz Ring
-  description: An old ring beset with an orange gem. The crystal is surrounded by
-    an aura of magic. $nYou have no idea what spell does the jewelery hold.
+  description: An old ring beset with an orange gem. It looks almost like a honeycomb
+    and seems to glisten with light. $nYou have no idea what spell the jewelry holds.
   itemImage: {fileID: 21300000, guid: 8e14bc11e8150a144b317d2e343e1a03, type: 3}
   amount: 1
   strengthRequired: 0

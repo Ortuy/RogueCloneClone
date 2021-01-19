@@ -29,6 +29,12 @@ TextureImporter:
   - first:
       213: -5897398882713321894
     second: interactibles_chasm1_4
+  - first:
+      213: 9045914491509900709
+    second: interactibles_chasm1_4
+  - first:
+      213: -2234479169008680909
+    second: interactibles_chasm1_5
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -191,7 +197,7 @@ TextureImporter:
       name: interactibles_chasm1_3
       rect:
         serializedVersion: 2
-        x: 0
+        x: 2
         y: 0
         width: 256
         height: 512
@@ -223,8 +229,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5e361146fa382ea0800000000000000
-      internalID: -5897398882713321894
+      spriteID: 5a5810f7d4b898d70800000000000000
+      internalID: 9045914491509900709
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: interactibles_chasm1_5
+      rect:
+        serializedVersion: 2
+        x: 768
+        y: 0
+        width: 256
+        height: 512
+      alignment: 9
+      pivot: {x: 0.5, y: 0.25}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3304a39d8098df0e0800000000000000
+      internalID: -2234479169008680909
       vertices: []
       indices: 
       edges: []

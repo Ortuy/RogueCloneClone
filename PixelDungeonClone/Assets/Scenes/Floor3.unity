@@ -244,6 +244,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4d0702af6ad7d9249849651780f9823d, type: 2}
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
+  overlayPreset: {fileID: 11400000, guid: cd7f350f4e80c0c49b9196faf119ae64, type: 2}
 --- !u!114 &134259037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5993,6 +5994,7 @@ MonoBehaviour:
   tiledFloorEdgeTiles: []
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
+  overlayPreset: {fileID: 0}
 --- !u!4 &693156941
 Transform:
   m_ObjectHideFlags: 0

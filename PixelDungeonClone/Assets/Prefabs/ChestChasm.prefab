@@ -92,9 +92,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1982637807499914959}
   - component: {fileID: 1982637807499914956}
-  - component: {fileID: 6062814185071893882}
-  - component: {fileID: 7744600478947080565}
   - component: {fileID: 341820762662230326}
+  - component: {fileID: 5622740811710845035}
+  - component: {fileID: 1608427702642223987}
+  - component: {fileID: 4965120097924703690}
   m_Layer: 13
   m_Name: ChestChasm
   m_TagString: Interactible
@@ -140,44 +141,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &6062814185071893882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1982637807499914957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2024d46f8738ea4c8e5e87abc90a248, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactionName: 
-  interactionDescription: 
-  buttonText: 
-  choiceMenu: {fileID: 0}
-  choiceTexts: []
-  choiceButtons: []
-  secondaryObjects:
-  - {fileID: 1982637807351311938}
-  animator: {fileID: 0}
-  chestItemPrefab: {fileID: 11400000, guid: cffa54c268d9c764b9b4276728abfdc5, type: 2}
-  openDescription: An old crate once used for storage, now open and thoroughly plundered.
---- !u!114 &7744600478947080565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1982637807499914957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectName: Supply Crate
-  objectDesc: An old crate once used for storage, abandoned and covered in crystalline
-    growths. $nIt probably hides some valuables.
 --- !u!58 &341820762662230326
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -193,7 +156,142 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.2
+  m_Radius: 0.4
+--- !u!114 &5622740811710845035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982637807499914957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aaa0b62e8379e694091a4b951751eb64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionName: 
+  interactionDescription: 
+  buttonText: 
+  choiceMenu: {fileID: 0}
+  choiceTexts: []
+  choiceButtons: []
+  secondaryObjects:
+  - {fileID: 1982637807351311938}
+  animator: {fileID: 0}
+  chestItemPrefab: {fileID: 0}
+  openDescription: A wooden container, now thoroughly plundered.
+--- !u!114 &1608427702642223987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982637807499914957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectName: Supply Crate
+  objectDesc: A wooden container once used for storage by the miners. It has surrendered
+    to nature, reclaimed by crystalline growths. $It probably contains valuables.
+--- !u!82 &4965120097924703690
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1982637807499914957}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 22fea846db66193489255a1d1ea4e9d3, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.7
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4459316255861490468
 GameObject:
   m_ObjectHideFlags: 0

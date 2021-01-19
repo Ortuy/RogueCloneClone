@@ -57,12 +57,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6509882627392530488}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectName: Old Lantern
-  objectDesc: A tarnished bronze lantern left behind by those who used to mine here.
-    It floods its surrounding with ethereal red light.
+  objectDesc: It bathes its surroundings in ethereal red glow
 --- !u!1 &8473375291736799579
 GameObject:
   m_ObjectHideFlags: 0

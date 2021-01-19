@@ -262,6 +262,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 6
   mapImage: {fileID: 7394831104785676492}
   actionState: 0
@@ -282,13 +283,13 @@ MonoBehaviour:
   hitPlayer: {fileID: 7916671971505980364}
   hitSound: {fileID: 8300000, guid: 73388d8b86b46754db99a6de37695c52, type: 3}
   trueDamageSound: {fileID: 8300000, guid: e22d55c828c8a394682f9356f80a6dee, type: 3}
-  deathSound: {fileID: 8300000, guid: 616720dbf0ede4144921b73b9e2e4e5b, type: 3}
-  alertSound: {fileID: 8300000, guid: 35f659bb01fd346439e6976901f28b5d, type: 3}
+  deathSound: {fileID: 8300000, guid: 1acb125752db65147a334929806c0066, type: 3}
+  alertSound: {fileID: 8300000, guid: 7de0d0defd989e84b876958274b23674, type: 3}
   footsteps:
-  - {fileID: 8300000, guid: 5679f94d100565b4ea8782759c0b12a7, type: 3}
-  - {fileID: 8300000, guid: d698597ee38e60142a5344f4b88c2525, type: 3}
-  - {fileID: 8300000, guid: 62c01278b03e24f4ba13d9e2e874c1b7, type: 3}
-  - {fileID: 8300000, guid: b459f2cd6a741e44fb69a5e55ceb98cf, type: 3}
+  - {fileID: 8300000, guid: a62a285dcb4a958478f82bfacda14313, type: 3}
+  - {fileID: 8300000, guid: cd7ad359b629a8247a877a632776a050, type: 3}
+  - {fileID: 8300000, guid: 059a0263788a68049b0a8caeb931b546, type: 3}
+  - {fileID: 8300000, guid: fad541861e8d8114da2548ebe899c904, type: 3}
   path: []
   movementSpeed: 5
   attackTarget: {fileID: 0}
@@ -349,7 +350,8 @@ AudioSource:
   m_GameObject: {fileID: 706842450304035936}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -445,12 +447,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 706842450304035936}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac69d248d2deacf41bbd6ab6e138d11a, type: 3}
+  m_Script: {fileID: 11500000, guid: 53a38a3c5ca367747a59f53a1b4f1d07, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectName: Swamp Creature
-  objectDesc: A common denizen of The Burrow, elevated from its frogly existence
-    by the forces of The Dungeon. It will do its best to drive you out of here.
+  objectName: Fallen Adventurer
+  objectDesc: "Undead remains of an unfortunate explorer. No plate or blade, no spellbound
+    ring, no magical scroll or potion could\u2019ve helped them. $nThey are blinded
+    by pain and rage. "
 --- !u!1 &706842450666955536
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,7 +915,8 @@ AudioSource:
   m_GameObject: {fileID: 8297003396078621387}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
