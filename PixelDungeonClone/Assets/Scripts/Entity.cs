@@ -90,21 +90,21 @@ public class Entity : MonoBehaviour
         }
     }
 
-    public virtual void EndStatusEffect(int effectID)
+    public virtual void EndStatusEffect(int effectIndex)
     {
-        statusEffects[effectID].OnEffectEnd();
+        statusEffects[effectIndex].OnEffectEnd();
         //var temp = statusEffects[effectID].iconDisplay;
         //UIManager.instance.statusDisplay.Remove(temp.GetComponent<Image>());
         //Destroy(temp);
-        statusEffects.RemoveAt(effectID);
+        statusEffects.RemoveAt(effectIndex);
     }
 
-    public virtual void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged)
+    public virtual void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged, string cause)
     {
         dodged = false;
     }
 
-    public virtual void TakeTrueDamage(int damage)
+    public virtual void TakeTrueDamage(int damage, int cause)
     {
 
     }

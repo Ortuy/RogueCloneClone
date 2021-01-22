@@ -33,9 +33,9 @@ public class SpawnManager : MonoBehaviour
         {
             tempEnemy.transform.position = postion;
             tempEnemy.gameObject.SetActive(true);
+            tempEnemy.SetSortingOrder();
+            TurnManager.instance.enemies.Add(tempEnemy);
         }
-        //TurnManager.instance.enemies.Add(tempEnemy);
-        tempEnemy.SetSortingOrder();
         return tempEnemy;
     }
 

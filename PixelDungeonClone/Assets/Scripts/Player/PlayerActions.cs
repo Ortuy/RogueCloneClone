@@ -126,7 +126,7 @@ public class PlayerActions : MonoBehaviour
             bonus += tempbonus;
         }
 
-        target.TakeDamage(damage + Player.stats.dmgModifier + bonus, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position, out bool dodged);
+        target.TakeDamage(damage + Player.stats.dmgModifier + bonus, Player.stats.GetAccuracy() + Player.stats.accModifier, transform.position, out bool dodged, "");
 
         //Ends all invisibility effects
         for(int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)

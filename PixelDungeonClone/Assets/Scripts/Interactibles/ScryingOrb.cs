@@ -61,6 +61,7 @@ public class ScryingOrb : InteractibleObject
 
     public override void DoChoiceInteraction(int choiceID)
     {
+        choiceID += choiceID >= 6 ? 1 : 0;
         Debug.Log(choiceID);
         GameManager.instance.guaranteedSpecialRoom = choiceID;
         ShowChoiceMenu(roomChoices);
@@ -73,7 +74,7 @@ public class ScryingOrb : InteractibleObject
         animator.SetBool("Used", true);
         used = true;
         decorativeObject.objectDesc = usedDescription;
-        Player.stats.TakeTrueDamage(Mathf.FloorToInt(Player.stats.GetMaxHealth() * 0.3f));
+        Player.stats.TakeTrueDamage(Mathf.FloorToInt(Player.stats.GetMaxHealth() * 0.3f), 3);
         TurnManager.instance.SwitchTurn(TurnState.ENEMY);
     }
 }

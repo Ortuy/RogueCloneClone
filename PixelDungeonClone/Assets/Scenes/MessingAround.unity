@@ -157,100 +157,97 @@ MonoBehaviour:
   drawDecor: 1
   blackOverlay: {fileID: 515778208}
   overlayBottomTiles:
-  - {fileID: 11400000, guid: dbe15978c939c7545a9cfb4c4ec52608, type: 2}
-  - {fileID: 11400000, guid: 4b7903c2a297ba2488b9fb44c5c2817f, type: 2}
-  - {fileID: 11400000, guid: 2def90b53d8252a4ba6b2be1b663ff7a, type: 2}
-  - {fileID: 11400000, guid: 6d90fda9009b6834a843deed07ed0dcf, type: 2}
+  - {fileID: 11400000, guid: 1a06780a2dfa60040b2d720e82b74774, type: 2}
+  - {fileID: 11400000, guid: b058328ec1071bf4fabf1f16ff7e26cd, type: 2}
+  - {fileID: 11400000, guid: abd5d3cbaf1885a469214f058cb4376c, type: 2}
+  - {fileID: 11400000, guid: 200c088dededaeb4e936034fcc7bc5c7, type: 2}
   overlayTopTiles:
-  - {fileID: 11400000, guid: 2f675e8a1da288046a7022f046fba2c7, type: 2}
-  - {fileID: 11400000, guid: 372c23d30d642714b819cf0fb30cb3db, type: 2}
-  - {fileID: 11400000, guid: bbdec40fdf719e04286d1825b3bb5d89, type: 2}
-  - {fileID: 11400000, guid: 3208094d278cab6479602f635fbcb5c4, type: 2}
+  - {fileID: 11400000, guid: ec476ca6113f5704b93e70dcc5888c16, type: 2}
+  - {fileID: 11400000, guid: b0e47f9a5f2db034b90f7a4ef236e6e0, type: 2}
+  - {fileID: 11400000, guid: 7951c6e9fc24c4548bea209ea41e8bf0, type: 2}
+  - {fileID: 11400000, guid: 96ef06e508c99a541ae6fbe51b7302a4, type: 2}
   overlayLeftTiles:
-  - {fileID: 11400000, guid: 40c3630231c1fe748875616182b5e6c2, type: 2}
-  - {fileID: 11400000, guid: 6b4b8ad4f3afa19479553b8f86b3e8d9, type: 2}
-  - {fileID: 11400000, guid: edc94f6f400c47447ad0f1cbc3a70f71, type: 2}
-  - {fileID: 11400000, guid: 8876d78f0c14a7841834e38818170423, type: 2}
+  - {fileID: 11400000, guid: 59927ef057e0daa4a8df80a030e35383, type: 2}
+  - {fileID: 11400000, guid: 49052ede9c6e8fc48a1b8a1d9046d930, type: 2}
+  - {fileID: 11400000, guid: 3560678305722404f8a8cff19e3361de, type: 2}
+  - {fileID: 11400000, guid: 878043bd70994cd4aa5e4e0ad48f1c71, type: 2}
   overlayRightTiles:
-  - {fileID: 11400000, guid: 8ffd3be3d061a3f4bb5e8c2f60e66588, type: 2}
-  - {fileID: 11400000, guid: 5194187103e096b41bbc3ae3f28e7503, type: 2}
-  - {fileID: 11400000, guid: a7fe5c1cbf4570d40b8e796be3ba4a0a, type: 2}
-  - {fileID: 11400000, guid: 0ca1cb3a83110b343935744420eb1ef2, type: 2}
+  - {fileID: 11400000, guid: aeb843c400275394ea5103ac0c30bfb6, type: 2}
+  - {fileID: 11400000, guid: 7ebe04ab0eb168649b1ee2f9ea899b4d, type: 2}
+  - {fileID: 11400000, guid: 6e32c5f3f9969384ca150817a01e03e7, type: 2}
+  - {fileID: 11400000, guid: d2c2fdf0456bf934a8fd3f614c971b62, type: 2}
   overlayTile: {fileID: 11400000, guid: 1f06eff0308280c469d61f3bc4889309, type: 2}
-  overlayCornerTL: {fileID: 11400000, guid: 18ecbf0eab3d4474e870f5b13e478041, type: 2}
-  overlayCornerTR: {fileID: 11400000, guid: 5a61e86bf7264a742b5fd235063c1cc2, type: 2}
-  overlayCornerBL: {fileID: 11400000, guid: 0030167bbb014ea4ea285eeefd7036d1, type: 2}
-  overlayCornerBR: {fileID: 11400000, guid: f00bc7d945d64e3489d7fb21edad26ec, type: 2}
-  overlayInnerCornerTL: {fileID: 11400000, guid: 9c39a6141da04c5488e16411baa216ae,
+  overlayCornerTL: {fileID: 11400000, guid: c56cfc6861bb3694daae765fb3a7c8b2, type: 2}
+  overlayCornerTR: {fileID: 11400000, guid: 9d422e33302085e49a431478f3d523bc, type: 2}
+  overlayCornerBL: {fileID: 11400000, guid: da647ac9f50192045978a621201b130c, type: 2}
+  overlayCornerBR: {fileID: 11400000, guid: 380169a9b33eef14bacb750531d0a815, type: 2}
+  overlayInnerCornerTL: {fileID: 11400000, guid: 9c204441f39f00244b35db70e10358e1,
     type: 2}
-  overlayInnerCornerTR: {fileID: 11400000, guid: 75ff1700c8387db4983649e13e37014a,
+  overlayInnerCornerTR: {fileID: 11400000, guid: 727d237715e167b4e9b0faba7d62e59a,
     type: 2}
-  overlayInnerCornerBL: {fileID: 11400000, guid: 3e4648a5a5f2cb14ca34467327efdff9,
+  overlayInnerCornerBL: {fileID: 11400000, guid: 24a2ac3831d27ae409a0c15e300a7d55,
     type: 2}
-  overlayInnerCornerBR: {fileID: 11400000, guid: 8d35d9ec9793d914cb1077de017ab4e5,
+  overlayInnerCornerBR: {fileID: 11400000, guid: e4235f4744b6e464face360cd3222b62,
     type: 2}
-  overlayWeirdCornerL: {fileID: 11400000, guid: 21a19bd317370c54faa9f3944caedc11,
+  overlayWeirdCornerL: {fileID: 11400000, guid: 1cf380089d6aa6e419cf7bb8e06e59a5,
     type: 2}
-  overlayWeirdCornerR: {fileID: 11400000, guid: 0dbc92f7147b3e04a858653f091fad7c,
+  overlayWeirdCornerR: {fileID: 11400000, guid: 16161d963c13fd441bfaff98e3dc9955,
     type: 2}
   roots:
-  - {fileID: 5494990759576955991, guid: 4b3082c64784b0f498df8c6f1c8d5e9d, type: 3}
-  - {fileID: 5494990759576955991, guid: d93ff0eb8afa1f8448a2f904dfc6b6a0, type: 3}
-  - {fileID: 5494990759576955991, guid: ea426669350b7dc4da3aa753c4fccc2b, type: 3}
-  - {fileID: 5494990759576955991, guid: b521885598d7124479865b0665171a35, type: 3}
-  - {fileID: 5494990759576955991, guid: 09d71e79b64c31644844e86e041b809f, type: 3}
-  - {fileID: 5494990759576955991, guid: 6209026b24086b44698686a5e7b442d6, type: 3}
-  - {fileID: 5494990759576955991, guid: 9b69858ebfbe4a74fb723592fc0a8191, type: 3}
-  - {fileID: 5494990759576955991, guid: 3e07f0b56ff3b8d428215a44c3b284ae, type: 3}
+  - {fileID: 5494990759576955991, guid: d434ca70811445b49b31c1a2e5e9708c, type: 3}
+  - {fileID: 5494990759576955991, guid: 5131d12aed90bb64b8ce97093777ba6f, type: 3}
+  - {fileID: 5494990759576955991, guid: 8275a68ff8d3b11458e218a7aad8016b, type: 3}
+  - {fileID: 5494990759576955991, guid: fb156f837405f364289bd54f48832fc0, type: 3}
+  - {fileID: 5494990759576955991, guid: 1e5fbb9ab22f1df469beb9d47c3ef470, type: 3}
+  - {fileID: 5494990759576955991, guid: ac1c27e622ac3814aaccb8a5e5b76081, type: 3}
+  keepRootScale: 1
   wallDecor: {fileID: 736357262}
   wallExtraDecor: {fileID: 1279519451}
   floorDecor: {fileID: 1645577488}
   wallDecorTiles:
-  - {fileID: 11400000, guid: 472f8ba621b5714408be6bf76b14d945, type: 2}
-  - {fileID: 11400000, guid: 57deb1ddf72554c438bddd4b9ae84c01, type: 2}
-  - {fileID: 11400000, guid: 0382c1e737450f5498182fcc945bebeb, type: 2}
-  - {fileID: 11400000, guid: ec70e38598271884a99041f1fda7dd6b, type: 2}
-  - {fileID: 11400000, guid: 0489b941f4fd9d04ab506e836ca5b375, type: 2}
-  - {fileID: 11400000, guid: f07f8ee2323fd844eb0ccdf93af46a09, type: 2}
-  - {fileID: 11400000, guid: bc7fe9f9173954a40a5c09324a393bfd, type: 2}
-  - {fileID: 11400000, guid: f7211e0fc1cd58e46971616cccb355f3, type: 2}
+  - {fileID: 11400000, guid: 7a354bfc54dd36649addb1e0bc823ce7, type: 2}
+  - {fileID: 11400000, guid: 7d6801911e57e534d9d5e63c19be6658, type: 2}
+  - {fileID: 11400000, guid: dfdc54920b3f77f40a95c25266746f72, type: 2}
+  - {fileID: 11400000, guid: deb87d4ae87e0804f95d7137e91ebf28, type: 2}
+  - {fileID: 11400000, guid: a790238579d5c52418f34e04cd169fbc, type: 2}
+  - {fileID: 11400000, guid: f23ecfca2d29e1b49bed50d9339d625d, type: 2}
+  - {fileID: 11400000, guid: 0de15dbe9d808c941a52aa19b312b738, type: 2}
+  - {fileID: 11400000, guid: 3ca443939d5dd8546be89903e12c5546, type: 2}
   extraWallDecorTiles:
-  - {fileID: 11400000, guid: dc6e9e2f98fbc514d9d8236e6cafe27f, type: 2}
-  - {fileID: 11400000, guid: 92646c02243127f4da1ccac37bafc03b, type: 2}
-  - {fileID: 11400000, guid: 915c1c1833601a14986c6bce41ec9838, type: 2}
-  - {fileID: 11400000, guid: 9a7f8162a0598fb4db556d5fb80dbc7f, type: 2}
+  - {fileID: 11400000, guid: c2f7ed6c829b9f148b346ec02d32906b, type: 2}
+  - {fileID: 11400000, guid: f29e80fb721251848bb156a3bde3e163, type: 2}
+  - {fileID: 11400000, guid: dac88e12bbfcecb44847b91591a59516, type: 2}
+  - {fileID: 11400000, guid: 91ce18a4e1ed50b4d844b09bd0afda1f, type: 2}
   floorDecorTiles:
-  - {fileID: 11400000, guid: c02eb2aef7f9dba4ea5157ab2281735e, type: 2}
-  - {fileID: 11400000, guid: 3c66d4933657551459722c304e4cbe89, type: 2}
-  - {fileID: 11400000, guid: 55fcc9d738181c3439c4cac95c1a52a6, type: 2}
-  - {fileID: 11400000, guid: 68589c1315c9be748a52e2bea31df2b3, type: 2}
-  - {fileID: 11400000, guid: a01f4092151672f4ea313e542d4949c3, type: 2}
-  - {fileID: 11400000, guid: da2f3cdf4e880ea4080ffedff385b265, type: 2}
-  - {fileID: 11400000, guid: 5c824fc02901bea48a4612150dbfa4ce, type: 2}
-  - {fileID: 11400000, guid: 5a0844c78316a254587aebbefce70b0f, type: 2}
-  - {fileID: 11400000, guid: 1bc9e398ed874e0429dd26326284fe19, type: 2}
-  - {fileID: 11400000, guid: 6432729426a41f14cb9271907b541fd6, type: 2}
-  - {fileID: 11400000, guid: d2522c67b5b79ce4fa0e97ba7ff3e123, type: 2}
-  - {fileID: 11400000, guid: 89f237b7c4013a04cab6b181cec93557, type: 2}
-  extraLight: {fileID: 8473375291736799579, guid: ad790fb735a46f64c8430dcd544a0f84,
+  - {fileID: 11400000, guid: ec14fdba3077b7f479b9e6e82a413f15, type: 2}
+  - {fileID: 11400000, guid: bca41ba847926364cb717a70a8300cd3, type: 2}
+  - {fileID: 11400000, guid: 7969b979e23c9004faa1355c1372e1c1, type: 2}
+  - {fileID: 11400000, guid: c03e0d0feb7e9a646af0d5e37115b102, type: 2}
+  extraLight: {fileID: 8473375291736799579, guid: c35036e8a0443794ea8783094c244dd9,
     type: 3}
   enviroParticles:
-  - {fileID: 2113860491424219430, guid: f348ca89187c1bb4ebe5bc92d5d50bab, type: 3}
-  - {fileID: 6709994241807378270, guid: 144aa62bcf997f0479e952081e5e8635, type: 3}
-  - {fileID: 428893639994084096, guid: 1a1450249d94e1e439715df79f509ccd, type: 3}
-  tallVegetation: {fileID: 8926900561012607218, guid: b0b91f17338511340b2344f46c0b247a,
+  - {fileID: 8510148004516283671, guid: e896391468aa41945bd0448df8a66eed, type: 3}
+  - {fileID: 8510148004516283671, guid: c5abeffd3d52c5a499b4f9ad8c7d471f, type: 3}
+  - {fileID: 8510148004516283671, guid: 1b244b7fbff36c1499e55838137f6717, type: 3}
+  tallVegetation: {fileID: 8926900561012607218, guid: 323007295664cf343ae22a16ff99540a,
     type: 3}
-  smallVegetation: {fileID: 2383037059398100042, guid: 6d2e400c11fc2ea4ebf6043a25f162c9,
+  smallVegetation: {fileID: 2383037059398100042, guid: 191935f05486b4441a8ced8f0c2d0ad8,
     type: 3}
   tiledFloor: {fileID: 1379655688}
   tiledFloorTiles:
-  - {fileID: 11400000, guid: 53da36c4ffe3d6d45ab6fdfda33c5c49, type: 2}
-  - {fileID: 11400000, guid: e1b9098084fb98244a76cd2e1f60eafb, type: 2}
-  - {fileID: 11400000, guid: 88719b5df0c640349a0773204e87a09b, type: 2}
-  - {fileID: 11400000, guid: c128c79c4f6ec844baceb3594b9fa494, type: 2}
+  - {fileID: 11400000, guid: a98fd8125728de74ba3625ea66b6db59, type: 2}
+  - {fileID: 11400000, guid: a876acb125b8d5c4dbbe5dbf07fc76f0, type: 2}
+  - {fileID: 11400000, guid: d07507d141ef38e40b689a63a761aae4, type: 2}
+  - {fileID: 11400000, guid: f7d0ce519173e3640920e9e8ff3e8260, type: 2}
+  - {fileID: 11400000, guid: 5b76cd123eff07a4fabc528082018ac5, type: 2}
+  - {fileID: 11400000, guid: 8c76310e30f5c63478bd8a98ac62ba70, type: 2}
+  - {fileID: 11400000, guid: 228427f48d1145c4a88fa03a8c05808b, type: 2}
+  - {fileID: 11400000, guid: 3f19428e5d6cd054b813333643a9dbe6, type: 2}
   tiledFloorEdgeTiles:
-  - {fileID: 11400000, guid: 88719b5df0c640349a0773204e87a09b, type: 2}
-  - {fileID: 11400000, guid: c128c79c4f6ec844baceb3594b9fa494, type: 2}
+  - {fileID: 11400000, guid: 5b76cd123eff07a4fabc528082018ac5, type: 2}
+  - {fileID: 11400000, guid: 8c76310e30f5c63478bd8a98ac62ba70, type: 2}
+  - {fileID: 11400000, guid: 228427f48d1145c4a88fa03a8c05808b, type: 2}
+  - {fileID: 11400000, guid: 3f19428e5d6cd054b813333643a9dbe6, type: 2}
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
   overlayPreset: {fileID: 11400000, guid: cd7f350f4e80c0c49b9196faf119ae64, type: 2}
@@ -268,15 +265,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 11
   startWithRandomSeed: 1
-  floorID: 6
+  floorID: 11
   exit: {fileID: 5713198309748566241, guid: d868c26c9cf4eac4b8646a6c19a72239, type: 3}
   playerStartPos: {x: 0, y: 0}
-  minRoomSize: 3
-  maxRoomSize: 6
-  minRoomClusterAmount: 20
-  maxRoomClusterAmount: 40
-  minDistanceFromStart: 15
-  maxDistanceFromStart: 45
+  minRoomSize: 2
+  maxRoomSize: 8
+  minRoomClusterAmount: 5
+  maxRoomClusterAmount: 7
+  minDistanceFromStart: 10
+  maxDistanceFromStart: 25
   minCorner: {x: 0, y: 0}
   maxCorner: {x: 0, y: 0}
   width: 0
@@ -285,30 +282,30 @@ MonoBehaviour:
   walls0: {fileID: 1873010918}
   walls1: {fileID: 1382506013}
   checkerboard: {fileID: 142722926}
-  groundTileBase: {fileID: 11400000, guid: c4790fe8d14f6854592153e0f9151c20, type: 2}
-  wallTileBase: {fileID: 11400000, guid: 904d1e971b4382d40b7d410fb1ac8ab0, type: 2}
+  groundTileBase: {fileID: 11400000, guid: 01ed573f9a3fa5e45a4d890331d75338, type: 2}
+  wallTileBase: {fileID: 11400000, guid: c183ab09c2d549344897dae7d5f55d87, type: 2}
   wallBottomTiles:
-  - {fileID: 11400000, guid: 00fcf08e14d328d4a94c1b0503af910b, type: 2}
-  - {fileID: 11400000, guid: b6ebb0d96102ebe47884984c5ca68201, type: 2}
-  - {fileID: 11400000, guid: 00ccd8fd546a5c5419176d4d7c2103e4, type: 2}
-  - {fileID: 11400000, guid: 1591e62175054304083d9c400b16c89d, type: 2}
+  - {fileID: 11400000, guid: 27162e01c7928b04591ef425ca752756, type: 2}
+  - {fileID: 11400000, guid: 31ea08eb6e8f6254aa66cc1f187a4cec, type: 2}
+  - {fileID: 11400000, guid: 52c6819e8b67bd44d970ac7b69ae77b4, type: 2}
+  - {fileID: 11400000, guid: adc7595c5ecb4094eb4588cd82eadb40, type: 2}
   wallTopTiles:
-  - {fileID: 11400000, guid: 2a5e53bd14113544db70c7f62dde52db, type: 2}
-  - {fileID: 11400000, guid: a3028b0be9652eb47a99ef70fa00495d, type: 2}
-  - {fileID: 11400000, guid: 89d09555c9090c1429ad7e1cc8679586, type: 2}
-  - {fileID: 11400000, guid: a72c92e1b64bc4f4499b6f6ca985ded2, type: 2}
+  - {fileID: 11400000, guid: 59cf088c41380ff4381fd44207666b00, type: 2}
+  - {fileID: 11400000, guid: ece4ebaa4f24dc44182a822a368ac124, type: 2}
+  - {fileID: 11400000, guid: 5de60dbf38a03f54290259d23cebde83, type: 2}
+  - {fileID: 11400000, guid: ab6c98f4c3744c3479628cb74305b9b4, type: 2}
   checkerboardTile: {fileID: 11400000, guid: 8dc1785c04a41e8439a7a72fd508eae4, type: 2}
   specialRoomData: {fileID: 11400000, guid: a3be68b10bee5e44eb23cd18f3a99845, type: 2}
-  specialRoomMinAmount: 12
-  specialRoomMaxAmount: 16
+  specialRoomMinAmount: 2
+  specialRoomMaxAmount: 3
   specialRoomMinDistance: 8
-  specialRoomMaxDistance: 32
+  specialRoomMaxDistance: 18
   spRoomAmount: 0
   dropTable: {fileID: 11400000, guid: df999c87ccdfa0c49baf5a82a54e92a3, type: 2}
-  minItems: 4
-  maxItems: 8
-  minEnemies: 6
-  maxEnemies: 11
+  minItems: 0
+  maxItems: 0
+  minEnemies: 0
+  maxEnemies: 0
   enemyPool: 050000000600000007000000
   enemyWeightPool: 070000000400000002000000
   giveStarterItem: 0
@@ -503,7 +500,7 @@ PrefabInstance:
     - target: {fileID: 6458202566825076962, guid: 7c60492e450cb2f41921aa14036f7c10,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 6458202566825076962, guid: 7c60492e450cb2f41921aa14036f7c10,
         type: 3}
@@ -1048,7 +1045,7 @@ PrefabInstance:
     - target: {fileID: 1299924165744906230, guid: 75d21d13b5b3c864f957df11dba20ac7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 16
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1299924165744906230, guid: 75d21d13b5b3c864f957df11dba20ac7,
         type: 3}
@@ -6325,7 +6322,7 @@ PrefabInstance:
     - target: {fileID: 6458202566825076962, guid: 7c60492e450cb2f41921aa14036f7c10,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6458202566825076962, guid: 7c60492e450cb2f41921aa14036f7c10,
         type: 3}
@@ -6400,7 +6397,7 @@ PrefabInstance:
     - target: {fileID: 1299924165744906230, guid: 75d21d13b5b3c864f957df11dba20ac7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 1299924165744906230, guid: 75d21d13b5b3c864f957df11dba20ac7,
         type: 3}
@@ -6507,7 +6504,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Floor 6
+  m_Text: Floor 11
 --- !u!222 &697579228
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6811,7 +6808,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: The Chasm
+  m_Text: The Mound
 --- !u!222 &1047624473
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6829,7 +6826,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 678460628, guid: 0cb8ad650033c3346a1acd167dc83698, type: 3}
       propertyPath: currentFloor
-      value: 6
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 678460628, guid: 0cb8ad650033c3346a1acd167dc83698, type: 3}
+      propertyPath: mapRevealed
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 680545202734677517, guid: 0cb8ad650033c3346a1acd167dc83698,
         type: 3}
@@ -7900,7 +7901,7 @@ MonoBehaviour:
   priority: 1
   blendDistance: 0
   weight: 1
-  sharedProfile: {fileID: 11400000, guid: 7ec58b6d426594b46b25e497c356af75, type: 2}
+  sharedProfile: {fileID: 11400000, guid: 7ca1b42f5315bac428439bdb0175fa6e, type: 2}
 --- !u!4 &1298876626
 Transform:
   m_ObjectHideFlags: 0
@@ -8726,90 +8727,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
---- !u!1 &1900538008
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1900538009}
-  - component: {fileID: 1900538010}
-  m_Layer: 0
-  m_Name: SecondaryDecorator
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1900538009
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900538008}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1900538010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1900538008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd8da2a1fd96f8c49b5aeb415e4e0009, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generator: {fileID: 9677105}
-  drawOverlay: 0
-  generateParticles: 0
-  drawDecor: 1
-  blackOverlay: {fileID: 0}
-  overlayBottomTiles: []
-  overlayTopTiles: []
-  overlayLeftTiles: []
-  overlayRightTiles: []
-  overlayTile: {fileID: 0}
-  overlayCornerTL: {fileID: 0}
-  overlayCornerTR: {fileID: 0}
-  overlayCornerBL: {fileID: 0}
-  overlayCornerBR: {fileID: 0}
-  overlayInnerCornerTL: {fileID: 0}
-  overlayInnerCornerTR: {fileID: 0}
-  overlayInnerCornerBL: {fileID: 0}
-  overlayInnerCornerBR: {fileID: 0}
-  overlayWeirdCornerL: {fileID: 0}
-  overlayWeirdCornerR: {fileID: 0}
-  roots: []
-  wallDecor: {fileID: 0}
-  wallExtraDecor: {fileID: 566740332}
-  floorDecor: {fileID: 0}
-  wallDecorTiles: []
-  extraWallDecorTiles:
-  - {fileID: 11400000, guid: 8993354e00e06744abb520dc593f782a, type: 2}
-  - {fileID: 11400000, guid: 2acd49c6c5052a740aaf3d1a1f52a5d8, type: 2}
-  - {fileID: 11400000, guid: 74a210f8384ee474dbd36b52d4723c22, type: 2}
-  floorDecorTiles: []
-  extraLight: {fileID: 8473375291736799579, guid: c35036e8a0443794ea8783094c244dd9,
-    type: 3}
-  enviroParticles: []
-  tallVegetation: {fileID: 0}
-  smallVegetation: {fileID: 0}
-  tiledFloor: {fileID: 0}
-  tiledFloorTiles: []
-  tiledFloorEdgeTiles: []
-  minCorner: {x: 0, y: 0}
-  maxCorner: {x: 0, y: 0}
-  overlayPreset: {fileID: 0}
 --- !u!1001 &5166720658612762492
 PrefabInstance:
   m_ObjectHideFlags: 0

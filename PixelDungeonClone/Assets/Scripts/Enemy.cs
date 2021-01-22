@@ -105,6 +105,9 @@ public class Enemy : Entity
     public bool isByAltar;
     public AltarArea nearbyAltarArea;
 
+    [SerializeField]
+    private string deathCauseText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -409,7 +412,7 @@ public class Enemy : Entity
         actionState = ActionState.ACTIVE;       
         yield return new WaitForSeconds(0.5f);
         Debug.LogWarning("Attackin");
-        Player.stats.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position, out bool dodged);
+        Player.stats.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position, out bool dodged, deathCauseText);
         for (int i = Player.stats.statusEffects.Count - 1; i >= 0; i--)
         {
             if (Player.stats.statusEffects[i].effectID == 3)
@@ -454,7 +457,7 @@ public class Enemy : Entity
             actionState = ActionState.ACTIVE;
             yield return new WaitForSeconds(0.5f);
             Debug.LogWarning("Attackin");
-            attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position, out bool dodged);
+            attackTarget.TakeDamage(damage + dmgModifier, accuracy + accModifier, transform.position, out bool dodged, deathCauseText);
             for (int i = attackTarget.statusEffects.Count - 1; i >= 0; i--)
             {
                 if (attackTarget.statusEffects[i].effectID == 3)
@@ -488,7 +491,7 @@ public class Enemy : Entity
         
     }
 
-    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged)
+    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged, string cause)
     {
         if(behaviourState != AIState.AMOK && behaviourState != AIState.ALERTED)
         {
@@ -545,7 +548,7 @@ public class Enemy : Entity
         }        
     }
 
-    public override void TakeTrueDamage(int damage)
+    public override void TakeTrueDamage(int damage, int cause)
     {
         if (!healthBar.gameObject.activeInHierarchy)
         {
@@ -584,6 +587,7 @@ public class Enemy : Entity
     private void Die(float angle)
     {
         TurnManager.instance.nearbyEnemies.Remove(this);
+        TurnManager.instance.enemies.Remove(this);
         Instantiate(deathFX, transform.position, Quaternion.AngleAxis(angle - 45, Vector3.forward)).GetComponent<ParticleSystem>().Play();
 
         SpawnManager.instance.PlaySound(deathSound);
@@ -682,6 +686,16 @@ public class Enemy : Entity
         health = maxHealth;
         behaviourState = AIState.SLEEPING;
         sleepFX.Play();
+        healthBar.gameObject.SetActive(false);
+        path = null;
+        attackTarget = null;
+        if(statusEffects.Count > 0)
+        {
+            for (int i = statusEffects.Count - 1; i >= 0; i--)
+            {
+                EndStatusEffect(i);
+            }
+        }          
     }
 
     public void PlayHitSound(AudioClip clip)

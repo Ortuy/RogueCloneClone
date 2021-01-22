@@ -30,6 +30,11 @@ public class FloorExit : InteractibleObject
             transitionStarted = false;
             //Player.instance.transform.position = new Vector2(0.5f, 0.5f);
             Player.movement.StopMovement();
+            TurnManager.instance.ReturnEnemiesToPools();
+            if(GameManager.instance.currentFloor > 10)
+            {
+                Player.stats.CreateSuccessLog();
+            }
             SceneManager.LoadScene(FindObjectOfType<LevelGenerator>().floorID + 1);
         }
     }

@@ -82,7 +82,7 @@ public class PoisonEffect : StatusEffect
 
     public override void OnEffectTick()
     {
-        targetEntity.TakeTrueDamage(Mathf.RoundToInt(effectValue));
+        targetEntity.TakeTrueDamage(Mathf.RoundToInt(effectValue), 0);
         /**
         if (targetEntity != null)
         {
@@ -427,7 +427,7 @@ public class StarvationEffect : StatusEffect
         {
             if(Random.Range(0, 5) == 0)
             {
-                Player.stats.TakeTrueDamage(Mathf.RoundToInt(Player.stats.GetMaxHealth() / 30));
+                Player.stats.TakeTrueDamage(Mathf.RoundToInt(Player.stats.GetMaxHealth() / 30), 1);
             }            
         }
     }

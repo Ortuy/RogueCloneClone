@@ -445,6 +445,7 @@ MonoBehaviour:
   spawnSpirit: 0
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: stabbed repeatedly by a Furtive Scion.
 --- !u!50 &6977649515691734084
 Rigidbody2D:
   serializedVersion: 4

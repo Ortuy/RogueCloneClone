@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 public class PlayerStatistics : Entity
 {
@@ -197,7 +199,7 @@ public class PlayerStatistics : Entity
         UIManager.instance.playerHealthBar.value = value;
     }
 
-    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged)
+    public override void TakeDamage(int damage, float attackerAccuracy, Vector3 attackerPos, out bool dodged, string cause)
     {
         
         //Evasion chance
@@ -236,12 +238,12 @@ public class PlayerStatistics : Entity
 
             if (health <= 0)
             {
-                Die();
+                Die(cause);
             }
         }
     }
 
-    private void Die()
+    private void Die(string cause)
     {
         bool deathPrevented = false;
         if (InventoryManager.instance.ringEquipped[0] == 10)
@@ -252,7 +254,7 @@ public class PlayerStatistics : Entity
         if (InventoryManager.instance.ringEquipped[1] == 10 && !deathPrevented)
         {
             deathPrevented = true;
-            InventoryManager.instance.ringEquipped[0] = -1;
+            InventoryManager.instance.ringEquipped[1] = -1;
         }
 
         if (!deathPrevented)
@@ -260,9 +262,11 @@ public class PlayerStatistics : Entity
             UIManager.instance.ToggleDeathScreen();
             Debug.LogError("DEATH!");
             PlayHitSound(deathSound);
-            Camera.main.transform.SetParent(null);
-            hitPlayer.transform.SetParent(null);
-            gameObject.SetActive(false);
+            //Camera.main.transform.SetParent(null);
+            //hitPlayer.transform.SetParent(null);
+            //gameObject.SetActive(false);
+
+            CreateDeathLog(cause);           
         }
         else
         {
@@ -271,6 +275,51 @@ public class PlayerStatistics : Entity
             PlayHitSound(spiritStoneSound);
             spiritStoneFX.Play();
         }
+    }
+
+    
+    public void CreateDeathLog(string cause)
+    {
+        //Creates a new RunLog containing the current state of everything
+        RunLog log = new RunLog(cause, true);
+
+        List<RunLog> runLogs = new List<RunLog>();
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        if(File.Exists(Application.persistentDataPath + "/scoreboard.pr"))
+        {
+            FileStream file0 = File.Open(Application.persistentDataPath + "/scoreboard.pr", FileMode.Open);
+            runLogs = (List<RunLog>)formatter.Deserialize(file0);
+            file0.Close();
+        }
+
+        runLogs.Add(log);
+
+        FileStream file = File.Create(Application.persistentDataPath + "/scoreboard.pr");
+        formatter.Serialize(file, runLogs);
+        file.Close();
+    }
+    
+    public void CreateSuccessLog()
+    {
+        //Creates a new RunLog containing the current state of everything
+        RunLog log = new RunLog(null, false);
+
+        List<RunLog> runLogs = new List<RunLog>();
+
+        BinaryFormatter formatter = new BinaryFormatter();
+        if (File.Exists(Application.persistentDataPath + "/scoreboard.pr"))
+        {
+            FileStream file0 = File.Open(Application.persistentDataPath + "/scoreboard.pr", FileMode.Open);
+            runLogs = (List<RunLog>)formatter.Deserialize(file0);
+            file0.Close();
+        }
+
+        runLogs.Add(log);
+
+        FileStream file = File.Create(Application.persistentDataPath + "/scoreboard.pr");
+        formatter.Serialize(file, runLogs);
+        file.Close();
     }
 
     public void CheckForWrathRingModifiers(float currentHP, float oldHP)
@@ -299,7 +348,7 @@ public class PlayerStatistics : Entity
         }
     }
 
-    public override void TakeTrueDamage(int damage)
+    public override void TakeTrueDamage(int damage, int cause)
     {
         //hitFX.transform.rotation = Quaternion.AngleAxis(angle - 120, Vector3.forward);
         //hitFX.transform.Rotate(new Vector3(-90, 0, 0));
@@ -316,7 +365,23 @@ public class PlayerStatistics : Entity
 
         if (health <= 0)
         {
-            Die();
+            string temp = "";
+            switch(cause)
+            {
+                case 0:
+                    temp = "succumbed to malignant venom.";
+                    break;
+                case 1:
+                    temp = "fallen victim to starvation.";
+                    break;
+                case 2:
+                    temp = "suffocated in a foul gas.";
+                    break;
+                case 3:
+                    temp = "disintegrated by an arcane energy.";
+                    break;
+            }
+            Die(temp);
         }
     }
 

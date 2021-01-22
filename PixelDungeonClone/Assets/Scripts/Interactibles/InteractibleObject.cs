@@ -23,6 +23,15 @@ public class InteractibleObject : MonoBehaviour
 
     protected void InitChoiceButtons()
     {
+        choiceButtons.Clear();
+        choiceTexts.Clear();
+        var temp = choiceMenu.GetComponentsInChildren<Button>();
+        for(int i = 0; i < temp.Length; i++)
+        {
+            choiceButtons.Add(temp[i]);
+            choiceTexts.Add(temp[i].GetComponentInChildren<Text>());
+        }
+
         /**
         for(int i = 0; i < choiceButtons.Count; i++)
         {

@@ -45,7 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 6977649515691734089, guid: 05cdc6f6a0d6ec946b59af65c19491b6,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &1041042286
 GameObject:
   m_ObjectHideFlags: 0
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 706842450304035936, guid: f1119caff49930848998ad3d0968185f,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &1117447723
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 706842450304035936, guid: 413d31fea4b39544489bb7bb66dbb4e2,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &1561983694
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 706842450304035936, guid: 007f426bc30d7db4197701c0a383d8b3,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &1663406030
 GameObject:
   m_ObjectHideFlags: 0
@@ -229,7 +229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 706842450304035936, guid: fd7febbf18aafd346907f6ced2b6acb0,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &1895365806
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,7 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 6310370882643204986, guid: 726d8aa3b2282124d9d5830a081910bf,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &2832489858715029113
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,6 +321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnState: 0
   enemies: []
+  nearbyEnemies: []
   playerFrozen: 0
   playerExtraTurns: 0
   gases: []
@@ -412,7 +413,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 6977649515691734089, guid: ab045c62ef88f4146a4f516fa9b31f57,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &5008872583576647898
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,7 +459,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 8032959415794150057, guid: ed5c1a573585f56469baac2393ce8525,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &5008872584448082726
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +525,8 @@ AudioSource:
   m_GameObject: {fileID: 5008872584448082726}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 0.8
@@ -656,7 +658,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 706842450304035936, guid: 188308702203bd74e9be99e05f75c34d,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &5008872584926456891
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 1258276678666822265, guid: d89a539c90fb29547a3a54345b322d02,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15
 --- !u!1 &5008872585125444271
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,4 +750,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectToPool: {fileID: 6310370882643204986, guid: 20c9a49899412714d9445704a533ddfb,
     type: 3}
-  amountToPool: 20
+  amountToPool: 15

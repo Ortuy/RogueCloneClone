@@ -406,6 +406,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 2
   mapImage: {fileID: 8266646461508428510}
   actionState: 0
@@ -444,6 +445,7 @@ MonoBehaviour:
   spawnSpirit: 0
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: defeated by a Burrower
 --- !u!50 &6977649515691734084
 Rigidbody2D:
   serializedVersion: 4
