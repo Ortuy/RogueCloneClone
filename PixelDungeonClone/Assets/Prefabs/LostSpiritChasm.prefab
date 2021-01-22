@@ -665,6 +665,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 3
   mapImage: {fileID: 9040594680382183919}
   actionState: 0
@@ -700,6 +701,7 @@ MonoBehaviour:
   spawnSpirit: 0
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: haunted by a Lost Spirit.
 --- !u!50 &6310370882643204983
 Rigidbody2D:
   serializedVersion: 4

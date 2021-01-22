@@ -19,6 +19,8 @@ public class LevelDecorator : MonoBehaviour
 
     public GameObject[] roots;
 
+    public bool keepRootScale;
+
     [Header("Wall and Floor Decor")]
     public Tilemap wallDecor;
     public Tilemap wallExtraDecor, floorDecor;
@@ -569,7 +571,15 @@ public class LevelDecorator : MonoBehaviour
 
             var scaleFactor = rootLine.magnitude / 3;
 
-            root.transform.localScale = new Vector3(scaleFactor, scaleFactor * Random.Range(0.8f, 1.3f), 1);
+            
+            if(keepRootScale)
+            {
+                root.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
+            }
+            else
+            {
+                root.transform.localScale = new Vector3(scaleFactor, scaleFactor * Random.Range(0.8f, 1.3f), 1);
+            }
         }
     }
 
@@ -586,7 +596,15 @@ public class LevelDecorator : MonoBehaviour
 
             var scaleFactor = rootLine.magnitude / 3;
 
-            root.transform.localScale = new Vector3(scaleFactor, scaleFactor * yScale * Random.Range(0.8f, 1.3f), 1);
+            
+            if (keepRootScale)
+            {
+                root.transform.localScale = new Vector3(scaleFactor, scaleFactor, 1);
+            }
+            else
+            {
+                root.transform.localScale = new Vector3(scaleFactor, scaleFactor * yScale * Random.Range(0.8f, 1.3f), 1);
+            }
         }
     }
 

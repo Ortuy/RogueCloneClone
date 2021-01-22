@@ -243,6 +243,7 @@ MonoBehaviour:
   accModifier: 0
   damagePopupText: {fileID: 1818089454950414189, guid: 8685a75b8e9556f46b4783c7e6c35f98,
     type: 3}
+  healingPopupText: {fileID: 0}
   xpDrop: 3
   mapImage: {fileID: 8706824587234372128}
   actionState: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
   spawnSpirit: 1
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: torn to shreds by a Spirit Jar.
 --- !u!50 &1258276678666822260
 Rigidbody2D:
   serializedVersion: 4
@@ -326,7 +328,8 @@ AudioSource:
   m_GameObject: {fileID: 1258276678666822265}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8
@@ -756,7 +759,8 @@ AudioSource:
   m_GameObject: {fileID: 3761599908137167060}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1366273088014817365, guid: 744a5ff1a56386e4bb1a9216edafbb0b,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 0.8

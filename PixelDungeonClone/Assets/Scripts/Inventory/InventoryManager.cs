@@ -339,7 +339,7 @@ public class InventoryManager : MonoBehaviour
                     var enemy = nearbyEnemies[i].GetComponent<Enemy>();
                     if(enemy != null)
                     {
-                        enemy.TakeTrueDamage(damage);
+                        enemy.TakeTrueDamage(damage, 0);
                     }
                 }
                 Player.stats.AddStatusEffect(new WeaknessEffect(0, 12, Player.stats));

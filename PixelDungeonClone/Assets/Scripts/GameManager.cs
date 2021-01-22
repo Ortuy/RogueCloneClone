@@ -33,6 +33,13 @@ public class GameManager : MonoBehaviour
     private Dropdown resolutionDropdown;
     private Resolution[] resolutions;
 
+    [SerializeField]
+    private DecorativeObject playerDesc;
+    private string playerName;
+
+    public string[] playerPronouns;
+    public int playerPronounID;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -105,6 +112,11 @@ public class GameManager : MonoBehaviour
 
         bool fullscreenOn = PlayerPrefs.GetInt("fullscreen") == 1 ? true : false;
         Screen.fullScreen = fullscreenOn;
+
+        playerName = PlayerPrefs.GetString("lastName");
+        playerDesc.objectName = playerName;
+
+        playerPronounID = PlayerPrefs.GetInt("pronouns");
     }
 
     public void SetPostProcessing(Toggle toggle)
@@ -146,10 +158,5 @@ public class GameManager : MonoBehaviour
         PlayerPrefs.SetInt("resX", res.width);
         PlayerPrefs.SetInt("resY", res.height);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

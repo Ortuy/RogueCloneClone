@@ -113,7 +113,7 @@ public class WishingWell : InteractibleObject
                 break;
             case 3:
                 Player.stats.IncreaseMaxHP(-4);
-                Player.stats.TakeTrueDamage(4);
+                Player.stats.TakeTrueDamage(4, 3);
                 Player.stats.IncreaseStrength(2);
                 break;
             case 4:

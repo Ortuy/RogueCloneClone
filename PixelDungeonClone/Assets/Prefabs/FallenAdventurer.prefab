@@ -301,6 +301,7 @@ MonoBehaviour:
   spawnSpirit: 0
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: gored by a Fallen Adventurer.
 --- !u!50 &706842450304035949
 Rigidbody2D:
   serializedVersion: 4

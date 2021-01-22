@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6580,6 +6580,7 @@ MonoBehaviour:
   - {fileID: 541020491587974640, guid: 5bd1142e6a4cbae439f5abbcf0ac6a6c, type: 3}
   - {fileID: 1014815209352904650, guid: 1142dbc803c1f3f4699a7715e04ea118, type: 3}
   - {fileID: 1833107353577013730, guid: 4bdfc57a2096cf440b0dfb9f85873fd5, type: 3}
+  keepRootScale: 0
   wallDecor: {fileID: 995247482}
   wallExtraDecor: {fileID: 1280278537}
   floorDecor: {fileID: 69033333}
@@ -8990,6 +8991,7 @@ MonoBehaviour:
   overlayWeirdCornerL: {fileID: 0}
   overlayWeirdCornerR: {fileID: 0}
   roots: []
+  keepRootScale: 0
   wallDecor: {fileID: 0}
   wallExtraDecor: {fileID: 0}
   floorDecor: {fileID: 0}
@@ -9512,34 +9514,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 878121272, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1041042288, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1117447725, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1561983696, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1663406032, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 1895365808, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
     - target: {fileID: 5008872583177269708, guid: c0910b4186fcdf64892c0ea0a448350e,
         type: 3}
       propertyPath: m_Name
       value: Poolers
+      objectReference: {fileID: 0}
+    - target: {fileID: 5008872583177269708, guid: c0910b4186fcdf64892c0ea0a448350e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5008872583177269711, guid: c0910b4186fcdf64892c0ea0a448350e,
         type: 3}
@@ -9595,31 +9578,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008872583463589630, guid: c0910b4186fcdf64892c0ea0a448350e,
-        type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008872583576647901, guid: c0910b4186fcdf64892c0ea0a448350e,
-        type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008872584730540340, guid: c0910b4186fcdf64892c0ea0a448350e,
-        type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008872584926456890, guid: c0910b4186fcdf64892c0ea0a448350e,
-        type: 3}
-      propertyPath: amountToPool
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5008872585125444270, guid: c0910b4186fcdf64892c0ea0a448350e,
-        type: 3}
-      propertyPath: amountToPool
-      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c0910b4186fcdf64892c0ea0a448350e, type: 3}

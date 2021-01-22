@@ -301,6 +301,7 @@ MonoBehaviour:
   spawnSpirit: 1
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: pulverized by a Servant.
 --- !u!50 &706842450304035949
 Rigidbody2D:
   serializedVersion: 4

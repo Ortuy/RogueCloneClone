@@ -299,6 +299,7 @@ MonoBehaviour:
   spawnSpirit: 0
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
+  deathCauseText: maimed by a Bonebeast.
 --- !u!50 &706842450304035949
 Rigidbody2D:
   serializedVersion: 4

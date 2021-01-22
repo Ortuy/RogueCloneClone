@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using System.Linq;
 
 public class TitleScreenMenu : MonoBehaviour
 {
@@ -13,11 +16,29 @@ public class TitleScreenMenu : MonoBehaviour
     private bool buttonUnFade;
     private Text startButtonText;
 
+    [SerializeField]
+    private GameObject credits;
+    [SerializeField]
+    private GameObject nameSelect;
+    [SerializeField]
+    private InputField nameInputField;
+    [SerializeField]
+    private GameObject scoreboard;
+    [SerializeField]
+    private Transform scoreList;
+    [SerializeField]
+    private RunLogDisplay runLogPrefab;
+    [SerializeField]
+    private Dropdown pronounSelect;
+
+    public List<RunLog> runLogs;
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(ShowStartButton());
         startButtonText = startButton.GetComponentInChildren<Text>();
+        LoadRunLogs();
     }
 
     IEnumerator ShowStartButton()
@@ -40,6 +61,62 @@ public class TitleScreenMenu : MonoBehaviour
         }
     }
 
+    public void ToggleCredits()
+    {
+        if(credits.activeInHierarchy)
+        {
+            credits.SetActive(false);
+        }
+        else
+        {
+            credits.SetActive(true);
+        }
+    }
+
+    public void ToggleNameSelect()
+    {
+        if (nameSelect.activeInHierarchy)
+        {
+            nameSelect.SetActive(false);
+        }
+        else
+        {
+            nameSelect.SetActive(true);
+            if(!PlayerPrefs.HasKey("lastName"))
+            {
+                PlayerPrefs.SetString("lastName", "Knight Errant");
+            }
+            if(!PlayerPrefs.HasKey("pronouns"))
+            {
+                PlayerPrefs.SetInt("pronouns", 2);
+            }
+            nameInputField.text = PlayerPrefs.GetString("lastName");
+            pronounSelect.value = PlayerPrefs.GetInt("pronouns");
+        }
+    }
+
+    public void ToggleScoreboard()
+    {
+        if (scoreboard.activeInHierarchy)
+        {
+            scoreboard.SetActive(false);
+        }
+        else
+        {
+            scoreboard.SetActive(true);            
+        }
+    }
+
+    public void SetName(string value)
+    {
+        PlayerPrefs.SetString("lastName", value);
+    }
+
+    public void SetPronouns(int value)
+    {
+        PlayerPrefs.SetInt("pronouns", value);
+    }
+
     public void StartGame()
     {
         SceneManager.LoadScene(1);
@@ -49,4 +126,88 @@ public class TitleScreenMenu : MonoBehaviour
     {
         Application.Quit();
     }
+
+    /**
+    public void SaveGame()
+    {
+        //Creates a new SaveData containing the current state of everything
+        SaveData saveData = CreateSaveState();
+
+        //Shoves it into a file
+        BinaryFormatter formatter = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/savefile.cps");
+        formatter.Serialize(file, saveData);
+        file.Close();
+    }
+    **/
+    
+    public void LoadRunLogs()
+    {
+        if (File.Exists(Application.persistentDataPath + "/scoreboard.pr"))
+        {
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream file = File.Open(Application.persistentDataPath + "/scoreboard.pr", FileMode.Open);
+            runLogs = (List<RunLog>)formatter.Deserialize(file);
+            file.Close();
+
+            runLogs.Sort((l1, l2) => l1.maxFloor.CompareTo(l2.maxFloor));
+
+            for(int i = runLogs.Count-1; i >= 0; i--)
+            {
+                Instantiate(runLogPrefab, scoreList).SetLog(runLogs[i]);
+            }
+
+             /**
+            flags = saveData.flags;
+            lootStates = saveData.lootStates;
+            breakableWallStates = saveData.breakableWallStates;
+            PlayerController.instance.latchUnlocked = saveData.latchUnlocked;
+            PlayerController.instance.doubleJumpUnlocked = saveData.doubleJumpUnlocked;
+            PlayerController.instance.SwitchWeapon(saveData.playerWeaponID);
+            PlayerStatisticsHandler.instance.placeholderLoot = saveData.placeholderLootAmount;
+            PlayerStatisticsHandler.instance.lastRestingSpot = saveData.currentRestSpot;
+            Debug.Log(saveData.currentRestSpot);
+            if (SceneManager.GetActiveScene().name != saveData.currentScene)
+            {
+                SceneManager.LoadScene(saveData.currentScene);
+            }
+            **/
+        }
+        else
+        {
+            Debug.Log("No scoreboard file!");
+        }
+    }
+    /**
+    //Saves everything needed from the game manager into a SaveData
+    private SaveData CreateSaveState()
+    {
+        SaveData saveData = new SaveData();
+
+        for (int i = 0; i < flags.Count; i++)
+        {
+            saveData.flags.Add(flags[i]);
+        }
+
+        for (int i = 0; i < lootStates.Count; i++)
+        {
+            saveData.lootStates.Add(lootStates[i]);
+        }
+
+        for (int i = 0; i < breakableWallStates.Count; i++)
+        {
+            saveData.breakableWallStates.Add(breakableWallStates[i]);
+        }
+
+        saveData.latchUnlocked = PlayerController.instance.latchUnlocked;
+        saveData.doubleJumpUnlocked = PlayerController.instance.doubleJumpUnlocked;
+        saveData.playerWeaponID = PlayerController.instance.weaponID;
+        saveData.placeholderLootAmount = PlayerStatisticsHandler.instance.placeholderLoot;
+        saveData.currentRestSpot = PlayerStatisticsHandler.instance.lastRestingSpot;
+        saveData.currentScene = SceneManager.GetActiveScene().name;
+        Debug.Log(saveData.currentRestSpot);
+
+        return saveData;
+    }
+    **/
 }

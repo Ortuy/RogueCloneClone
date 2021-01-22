@@ -53,7 +53,7 @@ public class Gas : MonoBehaviour
             switch(effectID)
             {
                 case 1:
-                    target.TakeTrueDamage(Mathf.CeilToInt(target.GetMaxHealth() * 0.05f));
+                    target.TakeTrueDamage(Mathf.CeilToInt(target.GetMaxHealth() * 0.05f), 2);
                     break;
                 case 2:
                     if(target == Player.stats)

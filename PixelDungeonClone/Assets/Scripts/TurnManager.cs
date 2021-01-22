@@ -10,8 +10,8 @@ public class TurnManager : MonoBehaviour
 
     public TurnState turnState = TurnState.PLAYER;
 
-    //public List<Enemy> enemies;
-    public List<Enemy> nearbyEnemies;
+    public List<Enemy> enemies = new List<Enemy>();
+    public List<Enemy> nearbyEnemies = new List<Enemy>();
 
     private int currentActingEnemy;
 
@@ -114,7 +114,7 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator ManageTurns()
     {
-        while(true)
+        while (true)
         {
             yield return null;
             if (Pathfinding.instance != null)
@@ -152,7 +152,7 @@ public class TurnManager : MonoBehaviour
                         //nearbyEnemies[currentActingEnemy].DoTurn();
 
                         yield return nearbyEnemies[currentActingEnemy].StartCoroutine(nearbyEnemies[currentActingEnemy].DoTurn());
-                        
+
                         PassToNextEnemy();
                     }
                     else
@@ -165,16 +165,16 @@ public class TurnManager : MonoBehaviour
                     SwitchTurn();
                 }
             }
-        }        
+        }
     }
 
     IEnumerator SearchForEnemiesNearPlayer()
     {
-        while(true)
+        while (true)
         {
             yield return new WaitForSeconds(0.5f);
 
-            if(turnState == TurnState.PLAYER)
+            if (turnState == TurnState.PLAYER)
             {
                 var temp = Physics2D.OverlapCircleAll(Player.instance.transform.position, 7f, LayerMask.GetMask("Enemies"));
 
@@ -191,20 +191,20 @@ public class TurnManager : MonoBehaviour
                 {
                     doEnemyTurns = false;
                 }
-            }          
-        }        
+            }
+        }
     }
 
     public void PassToNextEnemy()
-    {        
-        if(Vector2.Distance(Player.instance.transform.position, nearbyEnemies[currentActingEnemy].transform.position) < 7f)
+    {
+        if (Vector2.Distance(Player.instance.transform.position, nearbyEnemies[currentActingEnemy].transform.position) < 7f)
         {
-            if(nearbyEnemies[currentActingEnemy].statusEffects.Count > 0)
+            if (nearbyEnemies[currentActingEnemy].statusEffects.Count > 0)
             {
                 nearbyEnemies[currentActingEnemy].TickStatusEffects();
-            }           
+            }
 
-            if(gases.Count > 0)
+            if (gases.Count > 0)
             {
                 var gasNearEnemy = Physics2D.OverlapCircle(nearbyEnemies[currentActingEnemy].transform.position, 0.2f, LayerMask.GetMask("Gases"));
 
@@ -212,7 +212,7 @@ public class TurnManager : MonoBehaviour
                 {
                     gasNearEnemy.GetComponent<GasTile>().parentGas.DoGasEffect(nearbyEnemies[currentActingEnemy]);
                 }
-            }           
+            }
         }
 
         currentActingEnemy++;
@@ -233,9 +233,9 @@ public class TurnManager : MonoBehaviour
     public bool EnemiesAlerted()
     {
         var temp = false;
-        for(int i =0; i < nearbyEnemies.Count; i++)
+        for (int i = 0; i < nearbyEnemies.Count; i++)
         {
-            if(nearbyEnemies[i].gameObject.activeInHierarchy && nearbyEnemies[i].behaviourState == AIState.ALERTED)
+            if (nearbyEnemies[i].gameObject.activeInHierarchy && nearbyEnemies[i].behaviourState == AIState.ALERTED)
             {
                 temp = true;
                 break;
@@ -250,7 +250,7 @@ public class TurnManager : MonoBehaviour
         {
             Player.stats.TickStatusEffects();
 
-            if(gases.Count > 0)
+            if (gases.Count > 0)
             {
                 var gasNearPlayer = Physics2D.OverlapCircle(Player.instance.transform.position, 0.2f, LayerMask.GetMask("Gases"));
 
@@ -263,9 +263,9 @@ public class TurnManager : MonoBehaviour
                 {
                     gases[i].TickGas();
                 }
-            }            
+            }
         }
-        if(playerExtraTurns == 0)
+        if (playerExtraTurns == 0)
         {
             turnState = (turnState == TurnState.PLAYER) ? TurnState.ENEMY : TurnState.PLAYER;
             currentActingEnemy = 0;
@@ -273,7 +273,7 @@ public class TurnManager : MonoBehaviour
         else
         {
             playerExtraTurns--;
-        }       
+        }
     }
 
     public void SwitchTurn(TurnState turn)
@@ -306,5 +306,17 @@ public class TurnManager : MonoBehaviour
         {
             playerExtraTurns--;
         }
+    }
+
+    public void ReturnEnemiesToPools()
+    {
+        foreach (Enemy enemy in enemies)
+        {
+            enemy.ResetState();
+            enemy.gameObject.SetActive(false);
+        }
+        enemies.Clear();
+        nearbyEnemies.Clear();
+        currentActingEnemy = 0;
     }
 }

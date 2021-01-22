@@ -15,7 +15,7 @@ MonoBehaviour:
   itemName: Spirit Stone
   description: A long-forgotten artifact of the ancients who once roamed the halls
     below. Countless spirits fill the trinket, resonating when touched. $nIt holds
-    a faint reminder of the cure for death - the power will be enough to save you
+    a faint remainder of the cure for death - the power will be enough to save you
     once. That is, if you decide to wear it beforehand. $nOnce equipped, the Spirit
     Stone cannot be taken off.
   itemImage: {fileID: 21300000, guid: 91fc949c55cded747a9d59e1c74e598e, type: 3}
