@@ -20,6 +20,7 @@ public class Vegetation : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        rustled = true;
         animator = GetComponent<Animator>();
         audioSource = GetComponent<AudioSource>();
 
@@ -40,7 +41,7 @@ public class Vegetation : MonoBehaviour
 
     IEnumerator WaitAndUnrustle()
     {
-        yield return null;
+        yield return new WaitForSeconds(1f);
         Unrustle();
     }
 
