@@ -278,7 +278,7 @@ MonoBehaviour:
   spawnSpirit: 1
   isByAltar: 0
   nearbyAltarArea: {fileID: 0}
-  deathCauseText: torn to shreds by a Spirit Jar.
+  deathCauseText: torn to shreds by a Spirit-in-a-Jar.
 --- !u!50 &1258276678666822260
 Rigidbody2D:
   serializedVersion: 4

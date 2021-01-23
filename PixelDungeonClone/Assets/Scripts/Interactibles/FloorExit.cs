@@ -35,7 +35,15 @@ public class FloorExit : InteractibleObject
             {
                 Player.stats.CreateSuccessLog();
             }
-            SceneManager.LoadScene(FindObjectOfType<LevelGenerator>().floorID + 1);
+            else if(GameManager.instance.currentFloor > 5)
+            {
+                FindObjectOfType<LoadObject>().GetComponent<Animator>().SetTrigger("Chasm");
+            }
+            else
+            {
+                FindObjectOfType<LoadObject>().GetComponent<Animator>().SetTrigger("Burrow");
+            }
+            SceneManager.LoadSceneAsync(FindObjectOfType<LevelGenerator>().floorID + 1);
         }
     }
 
@@ -57,6 +65,7 @@ public class FloorExit : InteractibleObject
     public void Descend()
     {
         Player.instance.transform.position = transform.position;
+        Player.movement.SetSortingOrder();
         transitionStarted = true;
         UIManager.instance.StartFadeOut();
         audioSource.Play();

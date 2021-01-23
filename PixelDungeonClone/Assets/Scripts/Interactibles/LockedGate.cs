@@ -15,6 +15,8 @@ public class LockedGate : InteractibleObject
     [SerializeField]
     private AudioClip lockedSound, openSound;
 
+    private bool open;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,7 +33,10 @@ public class LockedGate : InteractibleObject
 
     public override void StartInteraction()
     {
-        DoInteraction();
+        if(!open)
+        {
+            DoInteraction();
+        }       
     }
 
     public override void DoInteraction()
@@ -44,6 +49,7 @@ public class LockedGate : InteractibleObject
             animator.SetTrigger("Open");
             openParticle.Play();
             PlaySound(openSound);
+            open = true;
         }
         else
         {

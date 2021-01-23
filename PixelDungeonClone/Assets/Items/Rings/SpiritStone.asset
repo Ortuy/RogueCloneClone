@@ -28,4 +28,4 @@ MonoBehaviour:
   statChangeMax: 1
   effectID: 10
   identified: 1
-  goldPrice: 400
+  goldPrice: 1000

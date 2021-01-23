@@ -174,6 +174,8 @@ public class LevelGenerator : MonoBehaviour
         decorator = GetComponent<LevelDecorator>();
 
         GenerateLevel(LevelLayoutType.BASIC);
+
+        FindObjectOfType<LoadObject>().GetComponent<Animator>().SetTrigger("Done");
         //DrawCorridor(rooms[0], rooms[1]);
     }
 
@@ -332,9 +334,9 @@ public class LevelGenerator : MonoBehaviour
 
             var clust = candidateClusters[randomCluster];
 
-            var count = 500;
+            var count = 100;
 
-            while (!roomPlaceFound || count > 0)
+            while (!roomPlaceFound && count > 0)
             {
                 count--;
                 var dirSphere = Random.onUnitSphere;
@@ -571,9 +573,9 @@ public class LevelGenerator : MonoBehaviour
 
         var startRoom = rooms[0];
 
-        var count = 500;
+        var count = 100;
 
-        while (!roomPlaceFound || count > 0)
+        while (!roomPlaceFound && count > 0)
         {
             count--;
             var dirSphere = Random.onUnitSphere;
