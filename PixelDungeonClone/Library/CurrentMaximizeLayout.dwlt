@@ -21,10 +21,10 @@ MonoBehaviour:
     y: 30
     width: 2048
     height: 1019
-  m_MinSize: {x: 677, y: 471}
+  m_MinSize: {x: 678, y: 471}
   m_MaxSize: {x: 14000, y: 14021}
   vertical: 0
-  controlID: 19455
+  controlID: 4706
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -135,10 +135,10 @@ MonoBehaviour:
     y: 0
     width: 1490
     height: 1019
-  m_MinSize: {x: 402, y: 471}
+  m_MinSize: {x: 403, y: 471}
   m_MaxSize: {x: 10000, y: 14021}
   vertical: 1
-  controlID: 19456
+  controlID: 4707
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -160,10 +160,10 @@ MonoBehaviour:
     y: 0
     width: 1490
     height: 656
-  m_MinSize: {x: 402, y: 221}
-  m_MaxSize: {x: 8002, y: 4021}
+  m_MinSize: {x: 403, y: 221}
+  m_MaxSize: {x: 8003, y: 4021}
   vertical: 0
-  controlID: 19457
+  controlID: 4708
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -221,7 +221,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 2678f4ff9e78f4ffc279f4ff7689f4ff2a99f4ffdea8f4ff92b8f4ff8cc8f4ffa6d7f4ffc0e6f4ffdaf5f4fff404f5ff1014f5ff1614f5ff82ccf6ff92ccf6ff0efefaff6efefaff94fffaff400ffbffec1efbff982efbff443efbff364efbff485dfbff5a6cfbff6c7bfbff7e8afbff9099fbff9699fbff38b6feff10b9feff88b9feffaebafeff5acafeff06dafeffb2e9feff5ef9feff5009ffff6218ffff7427ffff8636ffff9845ffffaa54ffffb054ffffac58ffff8a5affff025bffff2c5cffff365cffffe66bffff967bffff468bffff3a9bffff50aaffff66b9ffff7cc8ffff92d7ffff80e6ffff48e7ffff6efbfffff4ffffff54cf0000
+      m_ExpandedIDs: 0e67fbffacfbfbff90fdfbff08fefbff0afefbffbe0dfcff721dfcff262dfcffda3cfcffca4cfcffe45bfcfffe6afcff187afcff3289fcff2298fcff2898fcff66d6fcff62d9fcffdad9fcffdcd9fcff90e9fcff44f9fcfff808fdffac18fdffb218fdffcc27fdffe636fdff0046fdff1a55fdff0a64fdffc864fdff607afdff447cfdffbc7cfdffbe7cfdff728cfdff269cfdffdaabfdff8ebbfdff84cbfdff9edafdffb8e9fdffd2f8fdffec07feffdc16feffe216feffac19feff241afeff261afeffda29feff8e39feff4249fefff658feffec68feff0678feff2087feff3a96feff54a5feff44b4feff4ab4feffb4b8feff2cb9feff2eb9feffe2c8feff96d8feff4ae8fefffef7fefff407ffff0e17ffff2826ffff4235ffff5c44ffff4c53ffff5253fffff655ffff6e56ffff9657ffff4a67fffffe76ffffb286ffff6696ffff60a6ffff7ab5ffff94c4ffffaed3ffffc8e2ffffe2f1ffffe8f1ffff6efbfffff63d0000944000002c410000a2ae000032b2000060b20000c61501008e160100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -310,9 +310,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 44.050365, y: -1.8769236, z: -14658.767}
+    m_Target: {x: 1151.2063, y: 594.044, z: -16053.272}
     speed: 2
-    m_Value: {x: 44.050365, y: -1.8769236, z: -14658.767}
+    m_Value: {x: 1151.2063, y: 594.044, z: -16053.272}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -362,9 +362,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 101.99643
+    m_Target: 1759.3834
     speed: 2
-    m_Value: 101.99643
+    m_Value: 1759.3834
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1728,20 +1728,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Scenes
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\mimix\OneDrive\Dokumenty\GitHub\RogueCloneClone\PixelDungeonClone
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: fa680000
-    m_LastClickedID: 26874
-    m_ExpandedIDs: 00000000543c0000a467000000ca9a3b
+    m_SelectedIDs: b84b0000
+    m_LastClickedID: 19384
+    m_ExpandedIDs: 00000000563c0000664a000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1769,7 +1769,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 40efffff
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000543c0000a467000000ca9a3b
+    m_ExpandedIDs: 00000000563c0000664a000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1794,9 +1794,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ec2d0000
-    m_LastClickedInstanceID: 11756
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300006e360000ca360000c6390000cabfffffe4380000ae390000343e00002e3b00005a4400003e470000be3d01002ec50100b6500000225c0000e8dfffff52980000d23b0000a83a0000fe3b0000b63500009c3900006857030000000000fe5100008e490000ce3d00002e530000061e01003c3f00003a570000a05f0000cc960100f8a001002c3e03000cdf000088420000ac5c0000b055040010f405008857000086570000b857000040480000f66e000066480000b450000030510000fcc40100ae600000b0600000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1821,7 +1821,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 5}
+    m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 115
@@ -1853,7 +1853,7 @@ MonoBehaviour:
   m_ViewDataDictionary: {fileID: 0}
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -353268
+  m_LastSelectedObjectID: 16546
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1873,8 +1873,8 @@ MonoBehaviour:
     y: 0
     width: 558
     height: 1019
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
@@ -1918,7 +1918,7 @@ MonoBehaviour:
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
   m_PreviewWindow: {fileID: 0}
-  m_LastInspectedObjectInstanceID: 11756
+  m_LastInspectedObjectInstanceID: -1
   m_LastVerticalScrollValue: 0
 --- !u!114 &17
 MonoBehaviour:
@@ -1941,9 +1941,9 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 1438.4
+    x: 1490.4
     y: 73.6
-    width: 609
+    width: 557
     height: 998
   m_ViewDataDictionary: {fileID: 0}
   m_PosLeft: {x: 0, y: 0}
